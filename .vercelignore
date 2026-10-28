@@ -1,0 +1,21 @@
+# Hanya kode aplikasi dan berkas build yang diperlukan untuk deployment.
+.env*
+.git/
+.next/
+.vercel/
+node_modules/
+test-results/
+playwright-report/
+coverage/
+tests/
+scripts/
+docs/
+supabase/
+*.tsbuildinfo
+*.docx
+*.log
+index.html
+ai.md
+desain.md
+fitur.md
+playwright*.config.ts

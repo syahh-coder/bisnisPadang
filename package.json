@@ -1,0 +1,52 @@
+{
+  "name": "web-bisnis-padang",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test:e2e": "playwright test",
+    "test:e2e:compat": "playwright test --config playwright.compat.config.ts",
+    "test:db": "node --test tests/database/*.test.mjs",
+    "db:start": "node scripts/local-db.mjs start",
+    "db:stop": "node scripts/local-db.mjs stop",
+    "db:status": "node scripts/local-db.mjs status",
+    "db:migrate": "node scripts/local-db.mjs migrate",
+    "db:env": "node scripts/local-db.mjs env",
+    "db:verify": "node scripts/verify-local-db.mjs",
+    "auth:setup": "node scripts/setup-local-auth.mjs",
+    "auth:verify": "node scripts/verify-local-auth.mjs",
+    "admin:verify": "node scripts/verify-local-admin.mjs",
+    "owner:verify": "node scripts/verify-local-owner.mjs",
+    "qr:verify": "node scripts/verify-local-qr.mjs",
+    "visits:verify": "node scripts/verify-local-visits.mjs"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.0.0",
+    "next": "^16.0.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.12",
+    "@playwright/test": "^1.0.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "jsqr": "^1.4.0",
+    "pngjs": "^5.0.0",
+    "supabase": "^2.122.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

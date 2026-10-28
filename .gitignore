@@ -1,0 +1,19 @@
+node_modules/
+.next/
+out/
+dist/
+coverage/
+playwright-report/
+test-results/
+.env*
+!.env.example
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+.DS_Store
+supabase/.temp/
+supabase/.branches/
+supabase/.env
+# Dokumen pribadi di workspace, bukan bagian kode marketplace.
+/Take Home Quiz PSWD 2627 - TK 4803.docx

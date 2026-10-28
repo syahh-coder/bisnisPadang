@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prototype Landing Toko</title>
+<style>
+:root{--ac:#0F766E;--ac2:#115E59;--am:#F59E0B;--bg:#FAFAF9;--card:#fff;--tx:#1C1917;--tx2:#78716C;--ln:#E7E5E4;--r:8px}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--card:#1E1D1C;--tx:#F5F5F4;--tx2:#A8A29E;--ln:#2E2C2A}}
+*{box-sizing:border-box;margin:0}
+body{font:15px/1.45 Inter,system-ui,sans-serif;background:var(--bg);color:var(--tx);padding-bottom:110px}
+button,input,select,textarea{font:inherit;color:inherit}
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--ln);display:flex;align-items:center;gap:8px;padding:12px 16px}
+.logo{font-weight:700;font-size:18px;color:var(--ac);margin-right:auto;letter-spacing:-.3px}
+.btn{border:1px solid var(--ln);background:var(--card);padding:8px 14px;border-radius:var(--r);cursor:pointer;font-weight:600;font-size:14px}
+.btn.join{background:var(--am);border-color:var(--am);color:#1C1917}
+.btn.pri{background:var(--ac);border-color:var(--ac);color:#fff;width:100%;padding:12px}
+.btn.pri:hover{background:var(--ac2)}
+main{max-width:720px;margin:0 auto;padding:16px}
+.view{display:none}.view.on{display:block;animation:in .2s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.search{display:flex;gap:8px;align-items:center;background:var(--card);border:1px solid var(--ln);border-radius:var(--r);padding:0 12px}
+.search input{flex:1;border:0;background:none;padding:12px 0;outline:0}
+.search svg{width:20px;height:20px;stroke:var(--tx2)}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:14px 0;scrollbar-width:none}
+.chip{white-space:nowrap;border:1px solid var(--ln);background:var(--card);border-radius:99px;padding:7px 14px;cursor:pointer;font-size:14px}
+.chip.on{background:var(--ac);border-color:var(--ac);color:#fff}
+h2{font-size:16px;margin:6px 0 10px}
+.list{display:flex;flex-direction:column;gap:10px}
+.store{display:flex;gap:12px;background:var(--card);border:1px solid var(--ln);border-radius:var(--r);padding:12px;cursor:pointer;transition:border-color .15s}
+.store:hover{border-color:var(--ac)}
+.thumb{width:56px;height:56px;border-radius:var(--r);background:var(--ac);color:#fff;display:grid;place-items:center;font-weight:700;font-size:20px;flex:none}
+.store b{display:block}.store small{color:var(--tx2)}
+.empty{color:var(--tx2);padding:24px 0;text-align:center}
+/* sheet */
+.dim{position:fixed;inset:0;background:#0006;opacity:0;pointer-events:none;transition:.2s;z-index:40}
+.dim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-width:720px;margin:auto;background:var(--bg);border-radius:16px 16px 0 0;max-height:88vh;overflow:auto;padding:20px 16px 28px;transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);z-index:50}
+.sheet.on{transform:none}
+.row{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln)}
+.row span:first-child{width:84px;color:var(--tx2);flex:none}
+.actions{display:flex;gap:8px;margin:14px 0}
+.actions a{flex:1;text-align:center;text-decoration:none;color:inherit}
+iframe{width:100%;height:160px;border:1px solid var(--ln);border-radius:var(--r);margin:10px 0;background:var(--card)}
+ul.menu{list-style:none;padding:0}ul.menu li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--ln)}
+label{display:block;font-size:13px;color:var(--tx2);margin:12px 0 4px}
+input.f,select.f,textarea.f{width:100%;background:var(--card);border:1px solid var(--ln);border-radius:var(--r);padding:10px 12px}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.slot{border:1px solid var(--ln);background:var(--card);border-radius:var(--r);padding:9px 0;text-align:center;cursor:pointer;font-size:14px}
+.slot.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.slot.off{opacity:.35;text-decoration:line-through;cursor:not-allowed}
+.note{color:var(--tx2);font-size:13px;margin-top:8px}
+.ok{background:var(--card);border:1px solid var(--ac);border-radius:var(--r);padding:14px;margin-top:14px}
+/* bottom bar */
+nav{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(360px,calc(100% - 32px));height:64px;background:var(--card);border:1px solid var(--ln);border-radius:32px;box-shadow:0 6px 24px #0002;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;z-index:30}
+nav button{background:none;border:0;cursor:pointer;display:grid;place-items:center;gap:2px;color:var(--tx2);height:100%;transition:color .25s;font-size:11px;position:relative}
+nav button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+nav button.on{color:var(--ac)}
+nav button.on svg{transform:translateY(-1px) scale(1.08)}
+nav button.mid{height:auto}
+nav .mid span.fab{width:60px;height:60px;border-radius:50%;background:var(--ac);color:#fff;display:grid;place-items:center;margin-top:-26px;box-shadow:0 6px 16px #0F766E66,0 0 0 5px var(--bg);transition:transform .15s,background .25s}
+nav .mid svg{width:28px;height:28px;stroke:#fff}
+nav .mid:active span.fab{transform:scale(.92)}
+nav .mid.on span.fab{background:var(--ac2)}
+nav .mid.on svg{animation:spin .5s ease-out}
+@keyframes spin{from{transform:rotate(-90deg) scale(.8)}to{transform:none}}
+.dot{position:absolute;bottom:6px;left:50%;width:4px;height:4px;border-radius:50%;background:var(--ac);transform:translateX(-50%) scale(0);transition:transform .25s}
+nav button.on .dot{transform:translateX(-50%) scale(1)}
+nav .mid .dot{display:none}
+@media (min-width:1024px){body{padding-bottom:40px}nav{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">NamaWeb</div>
+  <button class="btn">Masuk</button>
+  <button class="btn join" id="joinTop">Join Afiliasi</button>
+</header>
+
+<main>
+  <section class="view on" id="v-home">
+    <div class="search" id="fakeSearch">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input placeholder="Cari toko atau menu" readonly>
+    </div>
+    <div class="cats" id="cats"></div>
+    <h2 id="homeTitle">Toko terbaru</h2>
+    <div class="list" id="homeList"></div>
+  </section>
+
+  <section class="view" id="v-search">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" placeholder="Cari toko atau menu" autocomplete="off">
+    </div>
+    <h2 style="margin-top:16px" id="sTitle">Semua toko</h2>
+    <div class="list" id="searchList"></div>
+  </section>
+
+  <section class="view" id="v-acc">
+    <h2>Akun</h2>
+    <div class="list">
+      <button class="btn" style="text-align:left;padding:14px">Masuk sebagai toko</button>
+      <button class="btn" style="text-align:left;padding:14px">Masuk sebagai admin</button>
+      <button class="btn join" style="text-align:left;padding:14px" id="joinAcc">Join Afiliasi (gratis)</button>
+    </div>
+  </section>
+</main>
+
+<div class="dim" id="dim"></div>
+<div class="sheet" id="sheet"></div>
+
+<nav>
+  <button data-v="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>Beranda<i class="dot"></i></button>
+  <button data-v="search" class="mid"><span class="fab"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span></button>
+  <button data-v="acc"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg>Akun<i class="dot"></i></button>
+</nav>
+
+<script>
+const CATS=['Semua','Makanan','Minuman','Jasa','Belanja'];
+const STORES=[
+ {id:1,n:'Warung Bu Ani',c:'Makanan',hp:'081234567801',al:'Jl. Raya Cibatu No. 12, Garut',dl:'Ya, radius 5 km',m:[['Nasi liwet','Rp 18.000'],['Ayam goreng','Rp 15.000'],['Es teh','Rp 4.000']],lat:-7.1,lng:107.9},
+ {id:2,n:'Kopi Sudut',c:'Minuman',hp:'081234567802',al:'Jl. Ahmad Yani No. 5, Garut',dl:'Ya, via ojol',m:[['Kopi susu','Rp 16.000'],['Americano','Rp 14.000']],lat:-7.2,lng:107.9},
+ {id:3,n:'Laundry Cepat',c:'Jasa',hp:'081234567803',al:'Jl. Merdeka No. 20, Garut',dl:'Antar jemput gratis',m:[['Cuci kiloan','Rp 7.000/kg'],['Setrika','Rp 5.000/kg']],lat:-7.21,lng:107.91},
+ {id:4,n:'Toko Sembako Jaya',c:'Belanja',hp:'081234567804',al:'Jl. Pasar Baru No. 3, Cibatu',dl:'Tidak',m:[['Beras 5 kg','Rp 68.000'],['Minyak 1 L','Rp 17.000']],lat:-7.15,lng:107.93},
+ {id:5,n:'Bakso Mang Ujang',c:'Makanan',hp:'081234567805',al:'Jl. Siliwangi No. 8, Garut',dl:'Ya, radius 3 km',m:[['Bakso urat','Rp 15.000'],['Mie ayam','Rp 13.000']],lat:-7.22,lng:107.9}
+];
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let cat='Semua';
+const card=s=>`<div class="store" data-id="${s.id}"><div class="thumb">${s.n[0]}</div><div><b>${s.n}</b><small>${s.c} · ${s.al}</small></div></div>`;
+function renderCats(){$('#cats').innerHTML=CATS.map(c=>`<button class="chip ${c===cat?'on':''}" data-c="${c}">${c}</button>`).join('')}
+function renderHome(){const l=STORES.filter(s=>cat==='Semua'||s.c===cat);$('#homeTitle').textContent=cat==='Semua'?'Toko terbaru':cat;$('#homeList').innerHTML=l.map(card).join('')||'<p class="empty">Belum ada toko.</p>'}
+function renderSearch(){const q=$('#q').value.toLowerCase().trim();const l=STORES.filter(s=>!q||s.n.toLowerCase().includes(q)||s.m.some(x=>x[0].toLowerCase().includes(q)));$('#sTitle').textContent=q?`${l.length} hasil`:'Semua toko';$('#searchList').innerHTML=l.map(card).join('')||'<p class="empty">Tidak ditemukan.</p>'}
+function go(v){$$('.view').forEach(e=>e.classList.toggle('on',e.id==='v-'+v));$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='search')setTimeout(()=>$('#q').focus(),50);scrollTo(0,0)}
+function openSheet(h){$('#sheet').innerHTML=h;$('#sheet').classList.add('on');$('#dim').classList.add('on')}
+function closeSheet(){$('#sheet').classList.remove('on');$('#dim').classList.remove('on')}
+function detail(id){const s=STORES.find(x=>x.id==id);
+ openSheet(`<h2 style="font-size:20px">${s.n}</h2><small style="color:var(--tx2)">${s.c}</small>
+ <div class="actions"><a class="btn pri" href="tel:${s.hp}">Telepon</a><a class="btn" href="https://wa.me/62${s.hp.slice(1)}" target="_blank">WhatsApp</a></div>
+ <div class="row"><span>Nomor HP</span><span>${s.hp}</span></div>
+ <div class="row"><span>Delivery</span><span>${s.dl}</span></div>
+ <div class="row"><span>Alamat</span><span>${s.al}</span></div>
+ <iframe loading="lazy" title="Peta" src="https://maps.google.com/maps?q=${s.lat},${s.lng}&z=15&output=embed"></iframe>
+ <h2>Menu</h2><ul class="menu">${s.m.map(m=>`<li><span>${m[0]}</span><b>${m[1]}</b></li>`).join('')}</ul>`)}
+const TAKEN={};
+function join(){
+ const days=[];const d=new Date();for(let i=1;days.length<14;i++){const x=new Date(d);x.setDate(d.getDate()+i);if(x.getDay()!==0)days.push(x)}
+ const iso=x=>x.toISOString().slice(0,10);
+ // contoh slot sudah terisi (demo)
+ TAKEN[iso(days[0])]=['09:00','13:00'];
+ openSheet(`<h2 style="font-size:20px">Join Afiliasi</h2><p class="note">Gratis, tanpa biaya.</p>
+ <form id="jf">
+ <label>Nama pengelola</label><input class="f" name="nama" required>
+ <label>Nomor WhatsApp</label><input class="f" name="hp" inputmode="tel" placeholder="08xxxxxxxxxx" pattern="08[0-9]{8,12}" required>
+ <label>Alamat toko</label><textarea class="f" name="alamat" rows="2" required></textarea>
+ <label>Tanggal janji temu</label>
+ <select class="f" id="tgl">${days.map(x=>`<option value="${iso(x)}">${x.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long'})}</option>`).join('')}</select>
+ <label>Jam (WIB)</label><div class="slots" id="slots"></div>
+ <label>Catatan (opsional)</label><textarea class="f" name="cat" rows="2" maxlength="200"></textarea>
+ <div style="margin-top:16px"><button class="btn pri" type="submit">Kirim permohonan</button></div>
+ </form><div id="res"></div>`);
+ let jam='';
+ const draw=()=>{const t=TAKEN[$('#tgl').value]||[];jam='';$('#slots').innerHTML=['09:00','11:00','13:00','15:00'].map(j=>`<div class="slot ${t.includes(j)?'off':''}" data-j="${j}">${j}</div>`).join('')};
+ draw();$('#tgl').onchange=draw;
+ $('#slots').onclick=e=>{const el=e.target.closest('.slot');if(!el||el.classList.contains('off'))return;$$('.slot').forEach(x=>x.classList.remove('on'));el.classList.add('on');jam=el.dataset.j};
+ $('#jf').onsubmit=e=>{e.preventDefault();if(!jam){alert('Pilih jam janji temu');return}
+  const f=new FormData(e.target);
+  $('#res').innerHTML=`<div class="ok"><b>Permohonan terkirim</b><p class="note">Janji temu ${$('#tgl').selectedOptions[0].text}, pukul ${jam} WIB. Admin akan konfirmasi lewat WhatsApp ke ${f.get('hp')}.</p></div>`;e.target.style.display='none'}
+}
+document.addEventListener('click',e=>{
+ const c=e.target.closest('[data-c]');if(c){cat=c.dataset.c;renderCats();renderHome();return}
+ const s=e.target.closest('.store');if(s){detail(s.dataset.id);return}
+ const n=e.target.closest('nav button');if(n){go(n.dataset.v);return}
+});
+$('#q').oninput=renderSearch;
+$('#fakeSearch').onclick=()=>go('search');
+$('#dim').onclick=closeSheet;
+$('#joinTop').onclick=join;$('#joinAcc').onclick=join;
+renderCats();renderHome();renderSearch();
+</script>
+</body>
+</html>
