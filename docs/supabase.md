@@ -2,6 +2,8 @@
 
 Pengembangan memakai Supabase lokal lewat Docker. Jalankan `npm run db:start`; migrasi dan `.env.local` diatur otomatis. Lihat [panduan lokal](local-database.md).
 
+Untuk langkah mengambil key dari dashboard, menyiapkan delapan migrasi, membuat admin pertama, dan berpindah antara lokal/remote, ikuti [cara pakai Supabase hosted/remote](cara-pakai.md#8-memakai-supabase-hostedremote).
+
 Langkah manual di bawah berlaku untuk Supabase remote. Login/role dan kebijakan tulis pemilik/admin sudah tersedia pada langkah 4; lihat [panduan auth](auth.md). Belum ada konfigurasi/deployment remote.
 
 1. Buka proyek Supabase yang akan digunakan.

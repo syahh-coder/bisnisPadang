@@ -2,6 +2,8 @@
 
 Database pengembangan memakai PostgreSQL 17 dari Supabase lokal. Supabase dipilih agar database, Auth, Storage, PostgREST, dan RLS tetap memakai stack yang sama sampai tahap portal dan deployment.
 
+Untuk langkah instalasi dan penggunaan pertama, ikuti [cara pakai dari nol](cara-pakai.md). Dokumen ini merinci perintah dan alamat layanan.
+
 ## Menjalankan
 
 Aktifkan Docker Desktop dengan engine Linux. Dari root proyek:
@@ -9,10 +11,11 @@ Aktifkan Docker Desktop dengan engine Linux. Dari root proyek:
 ```sh
 npm ci
 npm run db:start
+npm run auth:setup
 npm run dev
 ```
 
-Di PowerShell dengan pembatasan `npm.ps1`, gunakan `npm.cmd`. Pengoperasian Docker memerlukan akses ke Docker engine; pada lingkungan agent bersandbox perintah database mungkin memerlukan izin eksekusi di luar sandbox.
+Di PowerShell dengan pembatasan `npm.ps1`, gunakan `npm.cmd`. Buka Docker Desktop terlebih dahulu dan tunggu engine Linux siap; periksa dengan `docker info --format '{{.OSType}}'`. `auth:setup` hanya diperlukan saat menyiapkan akun lokal.
 
 `db:start` mengunduh image pada pemakaian pertama, menjalankan container proyek `web-bisnis-padang`, menerapkan migrasi tertunda, dan mengisi `.env.local` dengan URL serta publishable/anon key lokal. Service-role key tidak ditulis ke aplikasi atau ditampilkan oleh skrip. Nilai environment lain yang sudah ada dipertahankan; skrip menolak mengganti koneksi Supabase remote secara otomatis.
 
@@ -45,9 +48,9 @@ Data tersimpan di volume Docker, bukan di berkas proyek yang di-commit. `.env.lo
 
 Migrasi awal menyediakan kategori Makanan, Minuman, Jasa, dan Belanja. Tabel toko/menu kosong sampai diisi dengan data sungguhan. Tidak ada seed toko fiktif otomatis.
 
-Gunakan Table Editor di Studio untuk menambahkan data sementara portal Admin belum dibuat. Isi `category_id` dari tabel kategori; `stores.owner_id` boleh kosong sampai akun pemilik disiapkan. Baris di `products` harus menunjuk ke ID toko dan memiliki harga. Perubahan terlihat pada permintaan halaman berikutnya.
+Tambahkan toko melalui **Kelola toko** di Portal Admin, lalu pilih **Akun pemilik** untuk menautkannya. Studio tetap dapat digunakan untuk inspeksi data. Jika mengisi tabel langsung, gunakan `category_id` dari tabel kategori; `stores.owner_id` boleh kosong sampai akun pemilik disiapkan. Baris di `products` harus menunjuk ke ID toko dan memiliki harga. Perubahan terlihat pada permintaan halaman berikutnya.
 
-Foto toko memakai bucket publik `store-media`. Unggah melalui Storage di Studio lalu simpan path relatifnya ke `stores.photo_path`. Lihat [panduan detail toko](store-details.md). Tidak ada izin unggah anonim. Pada langkah 4, RLS memberi pemilik hak mengelola foto di `stores/<id-toko>/`; formulir upload menyusul di portal toko.
+Foto toko memakai bucket publik `store-media`. Form unggah Admin/Toko menerima foto maksimal 4 MiB. Untuk unggahan langsung melalui Storage di Studio, simpan path relatifnya ke `stores.photo_path`. Lihat [panduan detail toko](store-details.md). Tidak ada izin unggah anonim; RLS membatasi foto pemilik ke `stores/<id-toko>/` miliknya.
 
 Untuk mencoba tampilan tanpa mengisi database, mode `CATALOG_MODE=demo` tetap tersedia. Data tersebut terpisah dari PostgreSQL. `db:env` mengembalikan mode aplikasi menjadi `supabase`; jalankan ulang server Next.js setelah mengganti environment.
 

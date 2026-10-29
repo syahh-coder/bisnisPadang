@@ -4,6 +4,8 @@ Marketplace UMKM dengan Next.js App Router, TypeScript, Tailwind CSS, Supabase, 
 
 Repositori: [syahh-coder/bisnisPadang](https://github.com/syahh-coder/bisnisPadang).
 
+**Baru mulai? Baca [cara pakai dari nol](docs/cara-pakai.md)** untuk instalasi, menyalakan Docker, konfigurasi Supabase/key, login, menambahkan toko, dan mengatasi error.
+
 ## Status
 
 Langkah 1–8: setup, token desain, landing page, detail toko, login/role, Portal Admin, reservasi afiliasi, Portal Toko, QR statis/dinamis, serta tracking kunjungan. Pencarian mengabaikan kapital, bekerja langsung saat mengetik di halaman Pencarian, dan tersimpan di URL. Kategori dapat digabung dengan kata kunci. Daftar memakai 20 toko per halaman agar tidak memuat seluruh katalog sekaligus.
@@ -26,7 +28,16 @@ Sumber kebenaran: `ai.md`, `desain.md`, dan `fitur.md`. Prototipe yang tersedia 
 
 ## Menjalankan
 
-Gunakan Node.js 24, npm, dan Docker Desktop dengan engine Linux aktif. Versi Node dikunci ke `24.x` agar pengembangan dan build Vercel konsisten.
+Siapkan Git, Node.js 24 beserta npm, dan Docker Desktop. Versi Node dikunci ke `24.x` agar pengembangan dan build Vercel konsisten. Di Windows, buka **Docker Desktop** dari Start Menu, tunggu engine berjalan, dan gunakan Linux containers. Detail: [menyalakan Docker](docs/cara-pakai.md#2-nyalakan-docker).
+
+Jika belum mengunduh proyek:
+
+```sh
+git clone https://github.com/syahh-coder/bisnisPadang.git
+cd bisnisPadang
+```
+
+Jalankan perintah berikut dari folder proyek. **Di Windows PowerShell**, gunakan `npm.cmd` jika `npm.ps1` diblokir; misalnya `npm.cmd run db:start`.
 
 ```sh
 npm ci
@@ -35,15 +46,34 @@ npm run auth:setup
 npm run dev
 ```
 
-Buka http://localhost:3000. Di PowerShell yang memblokir `npm.ps1`, gunakan `npm.cmd`, misalnya `npm.cmd run dev`.
+Buka http://localhost:3000. Biarkan terminal `npm run dev` tetap terbuka. Supabase CLI sudah termasuk dependency proyek; tidak perlu memasangnya secara global atau membuat proyek di dashboard Supabase untuk mode lokal.
 
 `db:start` menjalankan stack Supabase dalam Docker, menerapkan migrasi yang belum dijalankan, dan mengisi `.env.local` otomatis tanpa menampilkan key. Data tersimpan di volume Docker. Studio tersedia di http://127.0.0.1:55323 untuk mengelola isi database lokal. Lihat [panduan database lokal](docs/local-database.md) untuk port dan perintah start/stop/status.
 
 `auth:setup` membuat akun admin dan toko lokal. Email/kata sandi acak tersimpan di `.env.accounts.local`, yang diabaikan Git; menjalankan ulang tidak mengganti kata sandi. Akun toko awal belum terhubung ke toko. Signup publik Supabase dinonaktifkan; Join Afiliasi tetap menjadi alur pendaftaran publik.
 
+Untuk mulai mengisi data, buka `.env.accounts.local` di editor dan gunakan `LOCAL_ADMIN_EMAIL` serta `LOCAL_ADMIN_PASSWORD` untuk login di http://localhost:3000/akun. Masuk ke **Kelola toko**, tambahkan toko, lalu pilih **Pemilik Toko Lokal** pada **Akun pemilik** agar akun toko awal dapat mengelolanya. Kredensial akun toko memakai `LOCAL_STORE_EMAIL` dan `LOCAL_STORE_PASSWORD`. Lihat [alur penggunaan pertama](docs/cara-pakai.md#5-login-dan-tambahkan-toko-pertama).
+
+Untuk pemakaian berikutnya, buka Docker Desktop, lalu jalankan `npm run db:start` dan `npm run dev`. Saat selesai, hentikan Next.js dengan **Ctrl+C**, kemudian jalankan `npm run db:stop`; data tetap tersimpan. `npm ci` dan `auth:setup` tidak perlu diulang setiap kali membuka aplikasi.
+
 Untuk pratinjau tanpa Docker, ubah `CATALOG_MODE=demo` di `.env.local`. Lima toko fiktif tersedia dengan label data contoh. Mode ini tidak menulis ke Supabase dan tidak mengimpor toko contoh ke database. `db:start`/`db:env` mengembalikan aplikasi ke database lokal.
 
-Untuk server Supabase remote, ikuti [setup katalog Supabase](docs/supabase.md). Tanpa konfigurasi atau saat backend gagal, halaman menampilkan pesan daftar tidak tersedia beserta tautan coba lagi. Tidak ada perpindahan otomatis ke data demo saat Supabase gagal.
+### Mengisi Supabase key
+
+**Docker lokal:** `npm run db:start` membuat `.env.local` dengan URL dan publishable/anon key lokal secara otomatis. Jika hanya perlu memperbarui koneksi stack yang sudah aktif, jalankan `npm run db:env`, lalu mulai ulang Next.js. Tidak perlu menyalin key dari dashboard hosted.
+
+**Supabase hosted/remote:** siapkan schema melalui delapan migrasi, lalu isi `.env.local` memakai URL API dan publishable key milik proyek remote yang sama:
+
+```dotenv
+CATALOG_MODE=supabase
+NEXT_PUBLIC_SUPABASE_URL=https://PROJECT_REF_ANDA.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=PASTE_PUBLISHABLE_KEY_DI_SINI
+SITE_URL=http://localhost:3000
+```
+
+Salin key dari **Settings → API Keys** di dashboard Supabase; gunakan **Publishable key**, bukan Secret/service-role key. Alur lengkap, lokasi URL, pembuatan admin, dan pergantian backend ada di [panduan Supabase remote](docs/cara-pakai.md#8-memakai-supabase-hostedremote). Mulai ulang `npm run dev` setelah mengubah environment. Untuk deployment, ganti `SITE_URL` dengan domain HTTPS situs.
+
+Tanpa konfigurasi atau saat backend gagal, halaman menampilkan pesan daftar tidak tersedia beserta tautan coba lagi. Tidak ada perpindahan otomatis ke data demo saat Supabase gagal.
 
 Jangan commit `.env.local` atau menaruh secret pada variabel `NEXT_PUBLIC_*`. Pembacaan katalog menggunakan publishable key dan RLS; service-role key tidak diperlukan.
 

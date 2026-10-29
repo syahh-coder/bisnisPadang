@@ -16,7 +16,7 @@ Buka http://localhost:3000/akun. Email dan kata sandi ada di `.env.accounts.loca
 - Akun toko awal: `toko@tokolokal.test`.
 - Kata sandi acak tidak ditampilkan di terminal/chat.
 - Menjalankan ulang `auth:setup` mempertahankan kata sandi dan memakai ID akun tersimpan. Akun yang tidak cocok tidak ditimpa otomatis.
-- Akun toko awal tidak membuat toko fiktif. Hubungkan `stores.owner_id` ke ID akun toko melalui Studio sebelum portal Admin tersedia.
+- Akun toko awal tidak membuat toko fiktif. Login Admin, tambahkan/edit toko melalui **Kelola toko**, lalu pilih **Pemilik Toko Lokal** pada **Akun pemilik**. Panduan lengkap ada di [cara pakai](cara-pakai.md#5-login-dan-tambahkan-toko-pertama).
 
 Skrip hanya dapat menggunakan Supabase lokal yang dikonfirmasi lewat CLI. Pembuatan akun memakai Auth Admin API; promosi admin dilakukan oleh pengelola database. Service-role key hanya berada di memori skrip, bukan di `.env.local` atau bundle aplikasi. Skrip tidak mereset akun/data yang sudah ada.
 
