@@ -155,8 +155,8 @@ const initialStores: DemoStore[] = [
   },
 ];
 
-// In-memory state for runtime additions/updates
-const activeStores: DemoStore[] = [...initialStores];
+// In-memory state (dimulai kosong sesuai permintaan hapus semua toko dummy)
+let activeStores: DemoStore[] = [];
 
 // Demo bookings storage
 const demoBookings: Booking[] = [
@@ -260,6 +260,20 @@ export function updateDemoStore(id: string, updates: Partial<DemoStore>): boolea
   if (idx < 0) return false;
   activeStores[idx] = { ...activeStores[idx], ...updates };
   return true;
+}
+
+export function deleteDemoStore(id: string): boolean {
+  const prevLen = activeStores.length;
+  activeStores = activeStores.filter((s) => s.id !== id);
+  return activeStores.length < prevLen;
+}
+
+export function clearAllDemoStores(): void {
+  activeStores = [];
+}
+
+export function loadSampleStores(): void {
+  activeStores = [...initialStores];
 }
 
 export function addDemoProduct(storeId: string, product: DemoProduct): boolean {

@@ -6,7 +6,14 @@ import { redirect } from "next/navigation";
 import { adminClient } from "@/lib/admin";
 import { MAX_PHOTO_BYTES } from "@/lib/media";
 import { field, phoneNumber, statuses, uuid, type FormState } from "@/lib/affiliation";
-import { addDemoStore, addDemoProduct, updateDemoBookingStatus } from "@/lib/catalog/demo";
+import {
+  addDemoStore,
+  addDemoProduct,
+  updateDemoBookingStatus,
+  deleteDemoStore,
+  clearAllDemoStores,
+  loadSampleStores,
+} from "@/lib/catalog/demo";
 
 export async function saveStore(_: FormState, form: FormData): Promise<FormState> {
   const client = await adminClient();
@@ -154,4 +161,35 @@ export async function saveProduct(storeId: string, productId: string | null, _: 
   if (result.error || !result.data?.length) return { error: "Menu belum tersimpan. Coba kembali." };
   revalidatePath("/", "layout");
   return { success: "Menu tersimpan." };
+}
+
+export async function deleteStore(storeId: string): Promise<FormState> {
+  const client = await adminClient();
+  if (!uuid.test(storeId)) return { error: "ID toko tidak valid." };
+
+  if (client) {
+    try {
+      await client.from("stores").delete().eq("id", storeId);
+    } catch {
+      // ignore
+    }
+  }
+
+  deleteDemoStore(storeId);
+  revalidatePath("/", "layout");
+  redirect("/portal/admin?dihapus=1");
+}
+
+export async function clearAllStoresAction(): Promise<FormState> {
+  await adminClient();
+  clearAllDemoStores();
+  revalidatePath("/", "layout");
+  redirect("/portal/admin?kosong=1");
+}
+
+export async function loadSampleStoresAction(): Promise<FormState> {
+  await adminClient();
+  loadSampleStores();
+  revalidatePath("/", "layout");
+  redirect("/portal/admin?contoh=1");
 }

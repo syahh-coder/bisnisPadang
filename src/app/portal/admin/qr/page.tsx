@@ -132,11 +132,16 @@ export default async function QRPage({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-6 pt-2">
-            <img
-              className="w-48 h-48 rounded-2xl border border-slate-200 p-2 bg-white shadow-xs"
-              src={`/portal/admin/qr/${selected.id}/gambar`}
-              alt="QR Code Toko"
-            />
+            <div className="p-3 bg-white rounded-2xl border border-slate-200/90 shadow-sm flex flex-col items-center">
+              <img
+                className="w-48 h-48 rounded-xl object-contain"
+                src={`/portal/admin/qr/${selected.id}/gambar?target=${encodeURIComponent(target)}`}
+                alt={`QR Code ${stores.find((s) => s.id === selected?.store_id)?.name ?? "Toko"}`}
+                width={192}
+                height={192}
+              />
+              <span className="text-[10px] text-slate-400 font-mono mt-1">Scan via Kamera / Google Lens</span>
+            </div>
             <div className="space-y-3 text-xs flex-1">
               <div>
                 <span className="text-slate-400 font-medium block">Tautan Tujuan:</span>
@@ -157,10 +162,11 @@ export default async function QRPage({
               <p className="text-slate-400">
                 <span>Dibuat:</span> {qrDate(selected.created_at)}
               </p>
-              <div className="pt-2">
+              <div className="pt-2 flex items-center gap-2">
                 <a
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold text-xs shadow-xs transition-colors"
-                  href={`/portal/admin/qr/${selected.id}/gambar?unduh=1`}
+                  href={`/portal/admin/qr/${selected.id}/gambar?target=${encodeURIComponent(target)}&unduh=1`}
+                  download={`qr-${selected.id}.png`}
                 >
                   <Icon name="check" size={15} />
                   <span>Unduh Gambar PNG</span>

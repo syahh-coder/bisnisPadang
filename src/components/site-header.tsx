@@ -34,9 +34,11 @@ export function SiteHeader() {
         <div className="flex items-center gap-2.5">
           <Link
             href="/akun"
-            className="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+            className="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors inline-flex items-center gap-1.5"
+            title="Portal Toko & Admin"
           >
-            Masuk
+            <Icon name="account" size={16} className="text-slate-500" />
+            <span>Portal Mitra</span>
           </Link>
           <Link
             href="/join-afiliasi"

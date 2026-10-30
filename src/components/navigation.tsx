@@ -7,7 +7,7 @@ import { Icon, type IconName } from "@/components/icon";
 const items: { href: string; label: string; icon: IconName }[] = [
   { href: "/", label: "Beranda", icon: "home" },
   { href: "/pencarian", label: "Pencarian", icon: "search" },
-  { href: "/akun", label: "Akun", icon: "account" },
+  { href: "/kategori", label: "Kategori", icon: "layoutGrid" },
 ];
 
 export function Navigation({ variant }: { variant: "header" | "bottom" }) {
