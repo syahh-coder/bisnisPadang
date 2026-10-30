@@ -155,8 +155,8 @@ const initialStores: DemoStore[] = [
   },
 ];
 
-// In-memory state (dimulai kosong sesuai permintaan hapus semua toko dummy)
-let activeStores: DemoStore[] = [];
+// In-memory state (berisi toko contoh UMKM nasional; admin dapat mengosongkan via dashboard)
+let activeStores: DemoStore[] = [...initialStores];
 
 // Demo bookings storage
 const demoBookings: Booking[] = [

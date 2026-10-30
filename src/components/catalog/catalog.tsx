@@ -35,7 +35,7 @@ export function Catalog({
     : "Semua Toko Terdaftar";
 
   return (
-    <div className="w-full pb-16">
+    <div className="w-full pb-28 sm:pb-16 min-h-[70vh]">
       {catalog.mode === "demo" && (
         <NoticeBanner
           type="info"
@@ -155,7 +155,7 @@ export function Catalog({
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" aria-label="Daftar toko">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch" aria-label="Daftar toko">
           {catalog.stores.map((store) => {
             const detailUrl = `/toko/${encodeURIComponent(store.slug)}?${new URLSearchParams({
               kembali: catalogHref(path, filters),
@@ -166,7 +166,7 @@ export function Catalog({
             return (
               <article
                 key={store.id}
-                className="group bg-white rounded-2xl border border-slate-200/90 hover:border-teal-500/50 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden"
+                className="group bg-white rounded-2xl border border-slate-200/90 hover:border-teal-500/50 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col h-full overflow-hidden"
               >
                 {/* Store Photo / Thumbnail */}
                 <Link href={detailUrl} className="relative block w-full aspect-[16/10] bg-slate-100 overflow-hidden">

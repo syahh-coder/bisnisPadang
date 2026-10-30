@@ -225,7 +225,8 @@ export default async function AdminPage({
           </div>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-xs text-left">
                 <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
                   <tr>
@@ -309,6 +310,75 @@ export default async function AdminPage({
                   })}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Responsive Store Cards (md:hidden) */}
+            <div className="md:hidden divide-y divide-slate-100">
+              {stores.map((store) => {
+                const catName = categories.find((c) => c.id === store.category_id)?.name ?? "Toko";
+                return (
+                  <div key={store.id} className="p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <Link
+                          className="font-bold text-slate-900 text-sm hover:text-teal-700 transition-colors block"
+                          href={`/toko/${store.slug}`}
+                          target="_blank"
+                        >
+                          {store.name}
+                        </Link>
+                        <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-teal-50 text-teal-800 border border-teal-100">
+                          {catName}
+                        </span>
+                      </div>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                        <span>Aktif</span>
+                      </span>
+                    </div>
+
+                    <div className="text-xs text-slate-600 space-y-1">
+                      <div className="flex items-center gap-1.5 text-slate-700">
+                        <Icon name="account" size={13} className="text-slate-400" />
+                        <span>{store.manager_name || "Pemilik Toko"}</span>
+                        {store.phone && (
+                          <a
+                            href={`https://wa.me/${store.phone.replace(/[^0-9]/g, "")}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-emerald-700 hover:underline font-mono font-medium ml-1 flex items-center gap-0.5"
+                          >
+                            <Icon name="chat" size={11} />
+                            <span>{store.phone}</span>
+                          </a>
+                        )}
+                      </div>
+                      <p className="flex items-start gap-1.5 text-slate-500 text-[11px]">
+                        <Icon name="mapPin" size={13} className="text-slate-400 shrink-0 mt-0.5" />
+                        <span className="line-clamp-2">{store.address}</span>
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
+                      <Link
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-semibold"
+                        href={`/portal/admin/kelola?toko=${store.id}`}
+                      >
+                        <Icon name="edit" size={13} />
+                        <span>Edit</span>
+                      </Link>
+                      <Link
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100 text-xs font-semibold"
+                        href={`/portal/admin/qr?qr=${store.id}`}
+                      >
+                        <Icon name="qrCode" size={13} />
+                        <span>QR</span>
+                      </Link>
+                      <DeleteStoreButton storeId={store.id} storeName={store.name} />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Pagination footer */}
