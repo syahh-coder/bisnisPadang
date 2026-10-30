@@ -151,7 +151,7 @@ export default async function StorePage({ params, searchParams }: Props) {
             href={maps.open}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold shadow-2xs transition-colors ml-auto"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold shadow-2xs transition-colors"
           >
             <Icon name="externalLink" size={15} />
             <span>Buka Google Maps</span>
@@ -316,21 +316,24 @@ export default async function StorePage({ params, searchParams }: Props) {
 
       {/* Interactive Map Section */}
       <section className="mt-10" aria-labelledby="lokasi-toko">
-        <div className="flex items-center justify-between mb-3">
-          <h2 id="lokasi-toko" className="text-lg font-bold text-slate-900 tracking-tight">
-            Lokasi & Rute
-          </h2>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div>
+            <h2 id="lokasi-toko" className="text-lg font-bold text-slate-900 tracking-tight">
+              Lokasi & Rute
+            </h2>
+            <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{store.address}</p>
+          </div>
           <a
             href={maps.open}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-semibold text-teal-800 hover:underline flex items-center gap-1"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-teal-800 text-xs font-semibold transition-colors shrink-0"
           >
             <span>Petunjuk Arah</span>
             <Icon name="externalLink" size={13} />
           </a>
         </div>
-        <div className="w-full aspect-[16/9] sm:aspect-[21/9] rounded-2xl overflow-hidden border border-slate-200/90 shadow-xs">
+        <div className="w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden border border-slate-200/90 shadow-xs relative bg-slate-100">
           <iframe
             className="w-full h-full border-0"
             src={maps.embed}

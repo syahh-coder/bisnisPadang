@@ -12,9 +12,9 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md transition-all duration-200">
-      <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between gap-3 sm:gap-4">
-        {/* Brand & Desktop Location */}
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-2 sm:gap-3 md:gap-4">
+        {/* Brand & Desktop Location Indicator */}
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink">
           <Link
             href="/"
             className="flex items-center gap-2 sm:gap-2.5 text-slate-900 font-bold text-base sm:text-lg tracking-tight hover:opacity-90 transition-opacity shrink-0"
@@ -32,13 +32,13 @@ export function SiteHeader() {
           </Link>
 
           {/* Desktop Location Bar (Hidden on Mobile) */}
-          <div className="hidden sm:block">
+          <div className="hidden sm:block shrink min-w-0">
             <LocationBar />
           </div>
         </div>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:block">
+        <div className="hidden md:block shrink-0">
           <Navigation variant="header" />
         </div>
 
@@ -46,19 +46,19 @@ export function SiteHeader() {
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           <Link
             href="/akun"
-            className="p-2 sm:px-3 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors inline-flex items-center gap-1.5"
+            className="px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors inline-flex items-center gap-1.5"
             title="Portal Toko & Admin"
             aria-label="Portal Mitra"
           >
-            <Icon name="account" size={18} className="text-slate-500" />
-            <span className="hidden sm:inline">Portal Mitra</span>
+            <Icon name="account" size={17} className="text-slate-500" />
+            <span className="hidden lg:inline">Portal Mitra</span>
           </Link>
 
           <Link
             href="/join-afiliasi"
-            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-xs hover:shadow active:scale-[0.98] transition-all"
+            className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-xs hover:shadow active:scale-[0.98] transition-all shrink-0"
           >
-            <Icon name="sparkles" size={15} />
+            <Icon name="sparkles" size={14} />
             <span className="whitespace-nowrap">Join Afiliasi</span>
           </Link>
         </div>

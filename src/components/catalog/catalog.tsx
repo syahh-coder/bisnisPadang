@@ -211,17 +211,17 @@ export function Catalog({
                       </div>
                     </Link>
 
-                    <p className="text-xs text-slate-500 flex items-start gap-1.5 mt-2 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-slate-500 flex items-start gap-1.5 mt-2 line-clamp-2 leading-relaxed min-h-[2.5rem]">
                       <Icon name="mapPin" size={15} className="shrink-0 text-slate-400 mt-0.5" />
-                      <span>{store.address}</span>
+                      <span className="line-clamp-2">{store.address}</span>
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
+                    <div className="flex flex-wrap items-center gap-1.5 mt-2.5 min-h-[28px]">
                       <StoreDistanceBadge lat={store.latitude} lon={store.longitude} />
                       {store.delivery_info && (
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/60">
-                          <Icon name="truck" size={13} className="text-emerald-700" />
-                          <span className="line-clamp-1">{store.delivery_info}</span>
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/60 max-w-full">
+                          <Icon name="truck" size={13} className="text-emerald-700 shrink-0" />
+                          <span className="truncate">{store.delivery_info}</span>
                         </div>
                       )}
                     </div>

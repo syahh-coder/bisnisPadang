@@ -18,21 +18,21 @@ export function Navigation({ variant }: { variant: "header" | "bottom" }) {
 
   if (variant === "header") {
     return (
-      <nav className="flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl" aria-label="Navigasi utama desktop">
+      <nav className="flex items-center gap-1 bg-slate-100/90 p-1 rounded-xl border border-slate-200/60" aria-label="Navigasi utama desktop">
         {items.map(({ href, label, icon }) => {
           const isActive = activePath === href;
           return (
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 isActive
                   ? "bg-white text-teal-800 shadow-xs"
                   : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
               }`}
               aria-current={isActive ? "page" : undefined}
             >
-              <Icon name={icon} size={16} />
+              <Icon name={icon} size={15} />
               <span>{label}</span>
             </Link>
           );
@@ -41,9 +41,9 @@ export function Navigation({ variant }: { variant: "header" | "bottom" }) {
     );
   }
 
-  // variant === "bottom" (Mobile dock bar)
+  // variant === "bottom" (Mobile & Tablet dock bar < 768px)
   return (
-    <div className="sm:hidden fixed bottom-3 inset-x-0 z-40 px-4 pointer-events-none">
+    <div className="md:hidden fixed bottom-3 inset-x-0 z-40 px-4 pointer-events-none">
       <nav
         className="pointer-events-auto max-w-xs mx-auto h-14 bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl shadow-slate-900/10 rounded-2xl flex items-center justify-around px-1.5 gap-1"
         aria-label="Navigasi utama seluler"

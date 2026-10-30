@@ -159,6 +159,21 @@ export function useLocation() {
   return ctx;
 }
 
+function formatLocationDisplay(fullName: string | null | undefined): string {
+  if (!fullName) return "Pilih Lokasi";
+  const parts = fullName.split(",").map((s) => s.trim());
+  if (parts.length >= 2) {
+    const p1 = parts[0];
+    const p2 = parts[1]
+      .replace(/Kabupaten/i, "Kab.")
+      .replace(/Kecamatan/i, "Kec.")
+      .replace(/Provinsi/i, "")
+      .trim();
+    return `${p1}, ${p2}`;
+  }
+  return fullName;
+}
+
 /**
  * Top location indicator bar (desktop or responsive sub-bar)
  */
@@ -171,7 +186,7 @@ export function LocationBar({ fullWidth = false }: { fullWidth?: boolean }) {
         type="button"
         onClick={() => setModalOpen(true)}
         className="w-full flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-white border border-slate-200/90 text-slate-800 text-xs font-semibold shadow-2xs hover:bg-slate-50 transition-all cursor-pointer"
-        title="Ubah lokasi / cari toko terdekat"
+        title={location ? `Lokasi Aktif: ${location.name} (Klik untuk ubah)` : "Ubah lokasi / cari toko terdekat"}
       >
         <div className="flex items-center gap-1.5 min-w-0">
           <Icon name="mapPin" size={14} className={location ? "text-emerald-600 shrink-0" : "text-slate-400 shrink-0"} />
@@ -191,16 +206,16 @@ export function LocationBar({ fullWidth = false }: { fullWidth?: boolean }) {
     <button
       type="button"
       onClick={() => setModalOpen(true)}
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200/80 text-slate-700 hover:text-slate-900 text-xs font-medium transition-all max-w-[200px] sm:max-w-xs truncate cursor-pointer"
-      title="Ubah lokasi / cari toko terdekat"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100/90 hover:bg-slate-200/80 text-slate-700 hover:text-slate-900 text-xs font-semibold transition-all max-w-[130px] sm:max-w-[150px] md:max-w-[180px] lg:max-w-[210px] cursor-pointer shrink border border-slate-200/70"
+      title={location ? `Lokasi Aktif: ${location.name} (Klik untuk ubah)` : "Ubah lokasi / cari toko terdekat"}
     >
       <Icon name="mapPin" size={14} className={location ? "text-emerald-600 shrink-0" : "text-slate-400 shrink-0"} />
       <span className="truncate">
         {detecting
-          ? "Mendeteksi GPS…"
+          ? "Mendeteksi…"
           : location
-          ? location.name
-          : "Pilih Lokasi Terdekat"}
+          ? formatLocationDisplay(location.name)
+          : "Pilih Lokasi"}
       </span>
       <Icon name="chevronDown" size={12} className="text-slate-400 shrink-0" />
     </button>
