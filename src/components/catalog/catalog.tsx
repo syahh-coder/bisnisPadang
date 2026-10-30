@@ -48,10 +48,6 @@ export function Catalog({
 
       {view === "home" && !filtered && (
         <section className="text-center py-6 sm:py-10 max-w-2xl mx-auto px-2">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-teal-100/90 text-teal-900 mb-3 shadow-2xs">
-            <Icon name="sparkles" size={14} className="text-teal-700" />
-            <span>Pilihan Toko & Jajanan di Dekatmu</span>
-          </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
             Mau Jajan Apa Hari Ini?
           </h1>
