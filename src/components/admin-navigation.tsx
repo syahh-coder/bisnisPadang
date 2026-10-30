@@ -2,12 +2,37 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Icon, type IconName } from "@/components/icon";
+
+const adminTabs: { href: string; label: string; icon: IconName }[] = [
+  { href: "/portal/admin", label: "Daftar Toko", icon: "store" },
+  { href: "/portal/admin/kelola", label: "Kelola & Afiliasi", icon: "edit" },
+  { href: "/portal/admin/qr", label: "Pembuat QR", icon: "qrCode" },
+];
 
 export function AdminNavigation() {
   const pathname = usePathname();
-  return <nav className="admin-nav" aria-label="Menu admin">{[
-    ["/portal/admin/qr", "Pembuat QR"],
-    ["/portal/admin", "Daftar toko"],
-    ["/portal/admin/kelola", "Kelola toko"],
-  ].map(([href, label]) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined}>{label}</Link>)}</nav>;
+
+  return (
+    <nav className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-2xl max-w-md mx-auto my-4" aria-label="Menu portal admin">
+      {adminTabs.map(({ href, label, icon }) => {
+        const isActive = pathname === href;
+        return (
+          <Link
+            key={href}
+            href={href}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition-all ${
+              isActive
+                ? "bg-white text-teal-800 shadow-xs"
+                : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+            }`}
+            aria-current={isActive ? "page" : undefined}
+          >
+            <Icon name={icon} size={15} />
+            <span>{label}</span>
+          </Link>
+        );
+      })}
+    </nav>
+  );
 }

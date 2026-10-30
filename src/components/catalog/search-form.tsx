@@ -20,9 +20,8 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
     const queryChanged = previousQuery.current !== filters.query;
     previousCategory.current = filters.category;
     previousQuery.current = filters.query;
-    // Hydration tidak boleh mengganti ketikan yang sudah masuk ke input server.
+
     if (!categoryChanged && !queryChanged) return;
-    // Respons pencarian sebelumnya tidak boleh menimpa ketikan yang lebih baru.
     if (!categoryChanged && requestedQueries.current.delete(filters.query)) return;
     setValue(filters.query);
     requestedQueries.current.clear();
@@ -36,6 +35,7 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
       if (live) search(typed, true);
     }
     if (live) input.current?.focus({ preventScroll: true });
+
     function restoreHistory() {
       requestedQueries.current.clear();
       if (timeout.current) clearTimeout(timeout.current);
@@ -59,40 +59,77 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
     });
   }
 
+  function handleClear() {
+    setValue("");
+    if (timeout.current) clearTimeout(timeout.current);
+    input.current?.focus();
+    search("", true);
+  }
+
   return (
     <form
       action="/pencarian"
       role="search"
-      aria-label="Cari toko atau menu"
-      className="catalog-search"
+      aria-label="Cari toko, makanan, atau produk"
+      className="relative w-full max-w-2xl mx-auto my-4"
       aria-busy={pending}
       onSubmit={(event) => {
         event.preventDefault();
-        // Nilai DOM juga mencakup ketikan sebelum hydration/event React selesai.
         search(String(new FormData(event.currentTarget).get("q") ?? ""), false);
       }}
     >
-      <label className="sr-only" htmlFor="pencarian-toko">Cari toko atau menu</label>
-      <span className="search-decoration"><Icon name="search" /></span>
-      <input
-        id="pencarian-toko"
-        ref={input}
-        name="q"
-        type="search"
-        placeholder="Cari toko atau menu"
-        maxLength={MAX_QUERY_LENGTH}
-        autoComplete="off"
-        enterKeyHint="search"
-        value={value}
-        onInput={(event) => {
-          const query = event.currentTarget.value;
-          setValue(query);
-          if (timeout.current) clearTimeout(timeout.current);
-          if (live) timeout.current = setTimeout(() => search(query, true), 350);
-        }}
-      />
-      {filters.category && <input type="hidden" name="kategori" value={filters.category} />}
-      <button type="submit" className="search-submit">Cari</button>
+      <label className="sr-only" htmlFor="pencarian-toko">
+        Cari toko, makanan, atau produk di Padang
+      </label>
+      <div className="relative flex items-center bg-white rounded-2xl border border-slate-200/90 shadow-sm focus-within:ring-2 focus-within:ring-teal-600 focus-within:border-teal-600 transition-all">
+        <span className="pl-4 pr-2 text-slate-400 shrink-0">
+          <Icon name="search" size={20} />
+        </span>
+        <input
+          id="pencarian-toko"
+          ref={input}
+          name="q"
+          type="search"
+          placeholder="Cari toko, makanan, minuman, jasa di Padang..."
+          maxLength={MAX_QUERY_LENGTH}
+          autoComplete="off"
+          enterKeyHint="search"
+          value={value}
+          onInput={(event) => {
+            const query = event.currentTarget.value;
+            setValue(query);
+            if (timeout.current) clearTimeout(timeout.current);
+            if (live) timeout.current = setTimeout(() => search(query, true), 300);
+          }}
+          className="w-full py-3.5 pr-2 text-slate-900 placeholder:text-slate-400 text-sm bg-transparent focus:outline-none"
+        />
+
+        {value && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="p-1.5 mr-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+            aria-label="Hapus pencarian"
+          >
+            <Icon name="close" size={16} />
+          </button>
+        )}
+
+        {pending && (
+          <span className="pr-3 text-teal-600 shrink-0">
+            <span className="block w-4 h-4 border-2 border-teal-600/30 border-t-teal-600 rounded-full animate-spin" />
+          </span>
+        )}
+
+        {filters.category && <input type="hidden" name="kategori" value={filters.category} />}
+
+        <button
+          type="submit"
+          className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 mr-1.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold shadow-xs transition-colors shrink-0"
+        >
+          <span>Cari</span>
+        </button>
+      </div>
     </form>
   );
 }

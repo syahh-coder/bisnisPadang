@@ -17,3 +17,4 @@ supabase/.branches/
 supabase/.env
 # Dokumen pribadi di workspace, bukan bagian kode marketplace.
 /Take Home Quiz PSWD 2627 - TK 4803.docx
+AGENTS.md
