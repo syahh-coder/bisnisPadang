@@ -26,7 +26,7 @@ export function SiteHeader() {
             <div className="flex flex-col">
               <span className="font-extrabold text-slate-900 leading-none">Toko Lokal</span>
               <span className="text-[10px] uppercase font-semibold tracking-wider text-teal-700 mt-0.5 hidden sm:inline">
-                Direktori UMKM
+                Pilihan Dekatmu
               </span>
             </div>
           </Link>
@@ -59,7 +59,7 @@ export function SiteHeader() {
             className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-xs hover:shadow active:scale-[0.98] transition-all shrink-0"
           >
             <Icon name="sparkles" size={14} />
-            <span className="whitespace-nowrap">Join Afiliasi</span>
+            <span className="whitespace-nowrap">Daftar Toko</span>
           </Link>
         </div>
       </div>

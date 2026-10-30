@@ -3,7 +3,7 @@ import { PAGE_SIZE, type CatalogFilters, type CatalogResult, type Category, type
 import type { StoreDetail } from "@/lib/stores/types";
 import type { Booking } from "@/lib/affiliation";
 
-// Kategori UMKM Universal Indonesia
+// Kategori Usaha & Toko Lokal Indonesia
 export const demoCategories: Category[] = [
   { id: "00000000-0000-4000-8000-000000000001", name: "Makanan", slug: "makanan" },
   { id: "00000000-0000-4000-8000-000000000002", name: "Minuman", slug: "minuman" },
@@ -155,7 +155,7 @@ const initialStores: DemoStore[] = [
   },
 ];
 
-// In-memory state (berisi toko contoh UMKM nasional; admin dapat mengosongkan via dashboard)
+// In-memory state (berisi data contoh toko; admin dapat mengosongkan via dashboard)
 let activeStores: DemoStore[] = [...initialStores];
 
 // Demo bookings storage

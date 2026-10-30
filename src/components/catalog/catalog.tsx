@@ -31,7 +31,7 @@ export function Catalog({
     : category?.name
     ? `Kategori: ${category.name}`
     : view === "home"
-    ? "Toko & Usaha Pilihan Nusantara"
+    ? "Rekomendasi Toko & Usaha Pilihan"
     : "Semua Toko Terdaftar";
 
   return (
@@ -42,20 +42,21 @@ export function Catalog({
           storageKey="demo_catalog_banner"
           title="Mode Pratinjau Toko Lokal"
         >
-          Menampilkan data contoh UMKM Indonesia. Anda dapat menjelajahi menu, mencoba simulasi WhatsApp order, dan menguji semua fitur secara interaktif.
+          Coba simulasi jelajah toko terdekat, pilih menu favorit, dan tes kirim pesanan langsung ke WhatsApp!
         </NoticeBanner>
       )}
 
       {view === "home" && !filtered && (
         <section className="text-center py-6 sm:py-10 max-w-2xl mx-auto px-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300 mb-3">
-            <Icon name="sparkles" size={14} /> Direktori UMKM Indonesia
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-teal-100/90 text-teal-900 mb-3 shadow-2xs">
+            <Icon name="sparkles" size={14} className="text-teal-700" />
+            <span>Pilihan Toko & Jajanan di Dekatmu</span>
           </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
-            Temukan Usaha Lokal & Kuliner Terbaik
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
+            Mau Jajan Apa Hari Ini?
           </h1>
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-lg mx-auto">
-            Cari toko terdekat, cek menu dan harga terupdate, serta pesan langsung via WhatsApp tanpa perantara.
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
+            Temukan kuliner favorit, cek menu & perkiraan jarak toko dari posisimu, lalu pesan langsung ke WhatsApp tanpa biaya admin.
           </p>
         </section>
       )}

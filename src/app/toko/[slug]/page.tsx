@@ -80,7 +80,7 @@ export default async function StorePage({ params, searchParams }: Props) {
 
       {result.mode === "demo" && (
         <NoticeBanner type="info" storageKey="demo_store_banner" title="Data Toko Contoh">
-          Informasi toko dan menu ini merupakan data pratinjau. Anda dapat mencoba simulasi kirim pesanan ke WhatsApp secara langsung.
+          Informasi toko dan menu ini merupakan data pratinjau. Kamu bisa coba langsung simulasi pilih menu favorit dan kirim pesanan ke WhatsApp!
         </NoticeBanner>
       )}
 

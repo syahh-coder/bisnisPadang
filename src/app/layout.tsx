@@ -7,9 +7,9 @@ import { ToastProvider } from "@/components/toast";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Toko Lokal — Direktori Bisnis & UMKM Indonesia", template: "%s | Toko Lokal" },
+  title: { default: "Toko Lokal — Temukan Toko & Kuliner Favorit di Sekitarmu", template: "%s | Toko Lokal" },
   description:
-    "Temukan toko, kuliner, dan usaha lokal terpercaya di sekitarmu. Cek menu, lokasi Google Maps, dan pesan langsung via WhatsApp gratis.",
+    "Cari kuliner lezat, kedai kopi, kebutuhan harian, dan jasa terbaik di sekitarmu. Cek menu, hitung jarak toko, dan pesan langsung via WhatsApp tanpa ribet.",
 };
 
 export const viewport: Viewport = {

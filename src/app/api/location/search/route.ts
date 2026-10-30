@@ -232,7 +232,7 @@ export async function GET(request: Request) {
     const res = await fetch(nominatimUrl, {
       signal: controller.signal,
       headers: {
-        "User-Agent": "TokoLokal-Direktori/1.0 (admin@tokolokal.id)",
+        "User-Agent": "TokoLokal-App/1.0 (halo@tokolokal.id)",
         "Accept-Language": "id,en;q=0.9",
       },
       next: { revalidate: 3600 },

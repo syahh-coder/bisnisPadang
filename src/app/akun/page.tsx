@@ -69,9 +69,9 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
       </div>
 
       <p className="text-center mt-6 text-xs text-slate-500">
-        Belum memiliki toko terdaftar?{" "}
+        Punya usaha dan ingin tokomu tampil di sini?{" "}
         <Link href="/join-afiliasi" className="font-semibold text-teal-700 hover:underline">
-          Join Afiliasi Gratis
+          Buka Toko Online Gratis
         </Link>
       </p>
     </div>

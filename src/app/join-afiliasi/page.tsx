@@ -5,8 +5,8 @@ import { generateAvailableSlots, type Slot } from "@/lib/affiliation";
 import { Icon } from "@/components/icon";
 
 export const metadata: Metadata = {
-  title: "Join Afiliasi UMKM — Gratis",
-  description: "Daftarkan toko dan usaha lokal Anda di Toko Lokal secara gratis tanpa biaya.",
+  title: "Daftarkan Usahamu — Gratis & Tanpa Potongan",
+  description: "Buka profil toko online dan dapatkan QR code eksklusif untuk usahamu secara gratis di Toko Lokal.",
 };
 
 export const dynamic = "force-dynamic";
@@ -34,14 +34,15 @@ export default async function JoinPage() {
   return (
     <div className="max-w-2xl mx-auto py-4 sm:py-8 px-4 sm:px-0">
       <div className="text-center mb-8">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 mb-3">
-          <Icon name="sparkles" size={14} /> 100% Gratis Tanpa Biaya
+        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900 mb-3 shadow-2xs">
+          <Icon name="sparkles" size={14} className="text-emerald-700" />
+          <span>100% Gratis Tanpa Biaya Apapun</span>
         </span>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
-          Bergabung Sebagai Afiliasi
+          Buka Toko Online & Jangkau Pelanggan Dekatmu
         </h1>
         <p className="text-slate-600 text-sm sm:text-base max-w-lg mx-auto">
-          Dapatkan profil toko online, QR code eksklusif, dan jangkau lebih banyak pelanggan di daerah Anda.
+          Dapatkan katalog menu digital, QR code siap cetak untuk kasir/meja, dan terima pesanan langsung via WhatsApp tanpa potongan komisi!
         </p>
       </div>
 
