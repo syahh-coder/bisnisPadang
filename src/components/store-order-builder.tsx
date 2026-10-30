@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ProductThumbnail } from "@/components/product-thumbnail";
 import { Icon } from "@/components/icon";
 import { useLocation } from "@/components/location-context";
+import { useDialog } from "@/components/dialog";
 
 export interface OrderProduct {
   id: string;
@@ -47,6 +48,7 @@ export function StoreOrderBuilder({
   const [orderNotes, setOrderNotes] = useState("");
 
   const { getDistanceTo } = useLocation();
+  const { alert: dialogAlert } = useDialog();
   const distance = getDistanceTo(latitude, longitude);
 
   const addToCart = (id: string) => {
@@ -73,7 +75,12 @@ export function StoreOrderBuilder({
 
   const handleCheckoutWA = () => {
     if (!whatsappUrl) {
-      alert("Nomor WhatsApp toko belum tersedia.");
+      dialogAlert({
+        title: "Nomor WhatsApp Belum Tersedia",
+        message: "Toko ini belum menyertakan kontak WhatsApp aktif. Silakan kunjungi alamat toko langsung atau cek info pada ulasan Google Maps.",
+        variant: "warning",
+        confirmText: "Mengerti",
+      });
       return;
     }
 

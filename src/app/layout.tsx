@@ -4,6 +4,7 @@ import { Navigation } from "@/components/navigation";
 import { MainContainer } from "@/components/main-container";
 import { LocationProvider } from "@/components/location-context";
 import { ToastProvider } from "@/components/toast";
+import { DialogProvider } from "@/components/dialog";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -23,16 +24,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="id">
       <body className="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-teal-700 selection:text-white">
-        <ToastProvider>
-          <LocationProvider>
-            <a className="skip-link" href="#konten">
-              Langsung ke konten
-            </a>
-            <SiteHeader />
-            <MainContainer>{children}</MainContainer>
-            <Navigation variant="bottom" />
-          </LocationProvider>
-        </ToastProvider>
+        <DialogProvider>
+          <ToastProvider>
+            <LocationProvider>
+              <a className="skip-link" href="#konten">
+                Langsung ke konten
+              </a>
+              <SiteHeader />
+              <MainContainer>{children}</MainContainer>
+              <Navigation variant="bottom" />
+            </LocationProvider>
+          </ToastProvider>
+        </DialogProvider>
       </body>
     </html>
   );

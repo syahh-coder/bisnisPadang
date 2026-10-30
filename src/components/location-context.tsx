@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, useTransition, useCallback } from "react";
 import { calculateDistance, defaultCities, formatDistance, type UserLocation } from "@/lib/location";
 import { Icon } from "@/components/icon";
+import { showAlert } from "@/components/dialog";
 import type { LocationSearchResult } from "@/app/api/location/search/route";
 
 interface LocationContextType {
@@ -53,7 +54,12 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
 
   const detectGpsLocation = () => {
     if (typeof window === "undefined" || !navigator.geolocation) {
-      alert("Browser Anda belum mendukung pendeteksian lokasi GPS.");
+      showAlert({
+        title: "GPS Tidak Didukung",
+        message: "Browser atau perangkat kamu belum mendukung pendeteksian lokasi GPS otomatis. Kamu bisa memilih wilayah secara manual.",
+        variant: "warning",
+        confirmText: "Mengerti",
+      });
       return;
     }
 
@@ -76,7 +82,12 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
       },
       () => {
         setDetecting(false);
-        alert("Tidak dapat mengakses GPS. Pastikan izin lokasi aktif di browser atau pilih wilayah secara manual.");
+        showAlert({
+          title: "Izin Akses GPS Belum Aktif",
+          message: "Tidak dapat mengakses GPS. Pastikan izin lokasi aktif di browsermu, atau pilih nama wilayah/kota secara manual.",
+          variant: "warning",
+          confirmText: "Pilih Manual",
+        });
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
     );

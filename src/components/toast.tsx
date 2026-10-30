@@ -84,7 +84,7 @@ export function useToast() {
     // Return fallback noop if outside provider
     return {
       toast: (msg: string) => {
-        if (typeof window !== "undefined") alert(msg);
+        if (typeof window !== "undefined") console.warn("[Toast]", msg);
       },
       removeToast: () => {},
     };
