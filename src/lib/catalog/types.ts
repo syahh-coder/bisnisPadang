@@ -12,6 +12,10 @@ export type StoreSummary = {
   photo_path: string | null;
   category_name: string;
   category_slug: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  rating?: number | null;
+  reviews_count?: number | null;
 };
 
 export type CatalogFilters = { query: string; category: string; page: number };

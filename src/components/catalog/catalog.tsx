@@ -3,6 +3,7 @@ import { EmptyState } from "@/components/empty-state";
 import { SearchForm } from "./search-form";
 import { NoticeBanner } from "@/components/notice-banner";
 import { Icon, type IconName } from "@/components/icon";
+import { StoreDistanceBadge } from "@/components/location-context";
 import { catalogHref, PAGE_SIZE, type CatalogFilters, type CatalogResult } from "@/lib/catalog/types";
 
 const categoryIcons: Record<string, IconName> = {
@@ -215,12 +216,15 @@ export function Catalog({
                       <span>{store.address}</span>
                     </p>
 
-                    {store.delivery_info && (
-                      <div className="mt-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/60">
-                        <Icon name="truck" size={13} className="text-emerald-700" />
-                        <span className="line-clamp-1">{store.delivery_info}</span>
-                      </div>
-                    )}
+                    <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
+                      <StoreDistanceBadge lat={store.latitude} lon={store.longitude} />
+                      {store.delivery_info && (
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/60">
+                          <Icon name="truck" size={13} className="text-emerald-700" />
+                          <span className="line-clamp-1">{store.delivery_info}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Action Buttons */}
