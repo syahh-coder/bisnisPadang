@@ -2,14 +2,14 @@ import Link from "next/link";
 import { EmptyState } from "@/components/empty-state";
 import { SearchForm } from "./search-form";
 import { NoticeBanner } from "@/components/notice-banner";
-import { Icon } from "@/components/icon";
+import { Icon, type IconName } from "@/components/icon";
 import { catalogHref, PAGE_SIZE, type CatalogFilters, type CatalogResult } from "@/lib/catalog/types";
 
-const categoryIcons: Record<string, string> = {
-  makanan: "🍛",
-  minuman: "☕",
-  jasa: "🧺",
-  belanja: "🛍️",
+const categoryIcons: Record<string, IconName> = {
+  makanan: "utensils",
+  minuman: "coffee",
+  jasa: "briefcase",
+  belanja: "shoppingBag",
 };
 
 export function Catalog({
@@ -74,13 +74,13 @@ export function Catalog({
             }`}
             aria-current={!filters.category ? "true" : undefined}
           >
-            <span>✨</span>
+            <Icon name="layoutGrid" size={14} />
             <span>Semua</span>
           </Link>
 
           {catalog.categories.map(({ id, name, slug }) => {
             const isCurrent = filters.category === slug;
-            const emoji = categoryIcons[slug] || "🏪";
+            const iconName = categoryIcons[slug] || "tag";
             return (
               <Link
                 key={id}
@@ -92,7 +92,7 @@ export function Catalog({
                 }`}
                 aria-current={isCurrent ? "true" : undefined}
               >
-                <span>{emoji}</span>
+                <Icon name={iconName} size={14} />
                 <span>{name}</span>
               </Link>
             );
@@ -160,6 +160,7 @@ export function Catalog({
               kembali: catalogHref(path, filters),
               ...(view === "search" ? { src: "search" } : {}),
             })}`;
+            const catIcon = categoryIcons[store.category_slug] || "tag";
 
             return (
               <article
@@ -185,8 +186,9 @@ export function Catalog({
                   )}
 
                   {/* Category Pill Tag */}
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white/90 backdrop-blur-md text-slate-800 shadow-xs">
-                    {categoryIcons[store.category_slug] ?? "🏷️"} {store.category_name}
+                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white/90 backdrop-blur-md text-slate-800 shadow-xs flex items-center gap-1.5">
+                    <Icon name={catIcon} size={12} className="text-teal-700" />
+                    <span>{store.category_name}</span>
                   </span>
 
                   {/* Rating Tag */}
@@ -215,7 +217,7 @@ export function Catalog({
 
                     {store.delivery_info && (
                       <div className="mt-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/60">
-                        <span>🛵</span>
+                        <Icon name="truck" size={13} className="text-emerald-700" />
                         <span className="line-clamp-1">{store.delivery_info}</span>
                       </div>
                     )}

@@ -77,8 +77,9 @@ export function LoginForm({ available }: { available: boolean }) {
 
       {/* 1-Click Demo Buttons for Testing */}
       <div className="pt-4 border-t border-slate-200">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-center mb-3">
-          ⚡ Akses Cepat Mode Uji Coba (Demo)
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-center mb-3 flex items-center justify-center gap-1.5">
+          <Icon name="zap" size={13} className="text-amber-500" />
+          <span>Akses Cepat Mode Uji Coba (Demo)</span>
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           <button

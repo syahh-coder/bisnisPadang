@@ -261,17 +261,19 @@ export default async function StorePortalPage({
             {visitSources.map((source) => {
               const count = Number(visits.find((v) => v.source === source)?.visits ?? 0);
               const percentage = totalVisits > 0 ? Math.round((count / totalVisits) * 100) : 0;
-              const sourceIcons: Record<string, string> = {
-                google_maps: "🗺️",
-                qr: "📱",
-                search: "🔍",
-                direct: "🔗",
+              const sourceIcons: Record<string, "mapPin" | "qrCode" | "search" | "link"> = {
+                google_maps: "mapPin",
+                qr: "qrCode",
+                search: "search",
+                direct: "link",
               };
 
               return (
                 <div key={source} className="p-3.5 rounded-xl border border-slate-100 bg-slate-50/60 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5">
-                    <span className="text-lg">{sourceIcons[source] || "📌"}</span>
+                    <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-teal-700 flex items-center justify-center shrink-0">
+                      <Icon name={sourceIcons[source] || "info"} size={16} />
+                    </div>
                     <div>
                       <p className="text-xs font-bold text-slate-800">{sourceLabels[source]}</p>
                       <p className="text-[10px] text-slate-400">{percentage}% dari total</p>

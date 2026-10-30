@@ -31,7 +31,18 @@ export type IconName =
   | "copy"
   | "chevronRight"
   | "chevronDown"
-  | "arrowRight";
+  | "arrowRight"
+  | "utensils"
+  | "coffee"
+  | "briefcase"
+  | "layoutGrid"
+  | "truck"
+  | "link"
+  | "tag"
+  | "trendingUp"
+  | "wallet"
+  | "zap"
+  | "refresh";
 
 const paths: Record<IconName, React.ReactNode> = {
   home: (
@@ -209,9 +220,89 @@ const paths: Record<IconName, React.ReactNode> = {
       <polyline points="12 5 19 12 12 19" />
     </>
   ),
+  utensils: (
+    <>
+      <path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2" />
+      <path d="M15 2v18" />
+      <path d="M6 2v8a3 3 0 0 0 3 3h1v7" />
+      <path d="M10 2v5" />
+    </>
+  ),
+  coffee: (
+    <>
+      <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+      <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+      <line x1="6" y1="2" x2="6" y2="4" />
+      <line x1="10" y1="2" x2="10" y2="4" />
+      <line x1="14" y1="2" x2="14" y2="4" />
+    </>
+  ),
+  briefcase: (
+    <>
+      <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+    </>
+  ),
+  layoutGrid: (
+    <>
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="14" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+    </>
+  ),
+  truck: (
+    <>
+      <path d="M10 17h4V5H2v12h3" />
+      <path d="M14 8h4l3 3v6h-4" />
+      <circle cx="7.5" cy="17.5" r="2.5" />
+      <circle cx="17.5" cy="17.5" r="2.5" />
+    </>
+  ),
+  link: (
+    <>
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </>
+  ),
+  tag: (
+    <>
+      <path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z" />
+      <path d="M7 7h.01" />
+    </>
+  ),
+  trendingUp: (
+    <>
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+      <polyline points="17 6 23 6 23 12" />
+    </>
+  ),
+  wallet: (
+    <>
+      <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
+      <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
+      <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
+    </>
+  ),
+  zap: (
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+  ),
+  refresh: (
+    <>
+      <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+      <path d="M3 3v5h5" />
+      <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+      <path d="M16 21h5v-5" />
+    </>
+  ),
 };
 
-export function Icon({ name, size = 20, ...props }: SVGProps<SVGSVGElement> & { name: IconName; size?: number }) {
+export function Icon({
+  name,
+  size = 20,
+  className = "",
+  ...props
+}: SVGProps<SVGSVGElement> & { name: IconName; size?: number; className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -222,6 +313,7 @@ export function Icon({ name, size = 20, ...props }: SVGProps<SVGSVGElement> & { 
       strokeLinejoin="round"
       width={size}
       height={size}
+      className={className}
       aria-hidden="true"
       {...props}
     >

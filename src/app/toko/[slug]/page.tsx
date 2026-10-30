@@ -91,8 +91,9 @@ export default async function StorePage({ params, searchParams }: Props) {
       {/* Store Info Header Card */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 mt-4">
         <div className="flex flex-wrap items-center gap-2 mb-2">
-          <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200/60">
-            {store.category_name}
+          <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200/60 flex items-center gap-1.5">
+            <Icon name="tag" size={13} className="text-teal-700" />
+            <span>{store.category_name}</span>
           </span>
           <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/60 flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
