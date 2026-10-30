@@ -90,7 +90,7 @@ export function AffiliationForm({ slots }: { slots: Slot[] }) {
           maxLength={500}
           autoComplete="street-address"
           rows={3}
-          placeholder="Jl. Nama Jalan No. XX, Kelurahan, Kecamatan, Kota Padang"
+          placeholder="Jl. Nama Jalan No. XX, Kelurahan, Kecamatan, Kota..."
           value={fields.address}
           onChange={(e) => change("address", e.target.value)}
           className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm resize-y"

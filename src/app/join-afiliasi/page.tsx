@@ -5,8 +5,8 @@ import { generateAvailableSlots, type Slot } from "@/lib/affiliation";
 import { Icon } from "@/components/icon";
 
 export const metadata: Metadata = {
-  title: "Join Afiliasi UMKM Padang — Gratis",
-  description: "Daftarkan toko dan usaha lokal Anda di Toko Lokal Padang secara gratis tanpa biaya.",
+  title: "Join Afiliasi UMKM — Gratis",
+  description: "Daftarkan toko dan usaha lokal Anda di Toko Lokal secara gratis tanpa biaya.",
 };
 
 export const dynamic = "force-dynamic";
@@ -41,7 +41,7 @@ export default async function JoinPage() {
           Bergabung Sebagai Afiliasi
         </h1>
         <p className="text-slate-600 text-sm sm:text-base max-w-lg mx-auto">
-          Dapatkan profil toko online, QR code eksklusif, dan jangkau lebih banyak pelanggan di Kota Padang.
+          Dapatkan profil toko online, QR code eksklusif, dan jangkau lebih banyak pelanggan di daerah Anda.
         </p>
       </div>
 

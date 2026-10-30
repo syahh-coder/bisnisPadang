@@ -30,7 +30,7 @@ export function Catalog({
     : category?.name
     ? `Kategori: ${category.name}`
     : view === "home"
-    ? "Toko & Usaha Unggulan Padang"
+    ? "Toko & Usaha Pilihan Nusantara"
     : "Semua Toko Terdaftar";
 
   return (
@@ -41,14 +41,14 @@ export function Catalog({
           storageKey="demo_catalog_banner"
           title="Mode Pratinjau Toko Lokal"
         >
-          Menampilkan data contoh UMKM di Kota Padang. Anda dapat menjelajahi menu, mencoba simulasi WhatsApp order, dan menguji semua fitur secara interaktif.
+          Menampilkan data contoh UMKM Indonesia. Anda dapat menjelajahi menu, mencoba simulasi WhatsApp order, dan menguji semua fitur secara interaktif.
         </NoticeBanner>
       )}
 
       {view === "home" && !filtered && (
         <section className="text-center py-6 sm:py-10 max-w-2xl mx-auto px-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300 mb-3">
-            <Icon name="sparkles" size={14} /> Direktori UMKM Kota Padang
+            <Icon name="sparkles" size={14} /> Direktori UMKM Indonesia
           </span>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
             Temukan Usaha Lokal & Kuliner Terbaik

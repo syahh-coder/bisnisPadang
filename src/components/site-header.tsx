@@ -22,7 +22,7 @@ export function SiteHeader() {
           </div>
           <div className="flex flex-col">
             <span className="font-extrabold text-slate-900 leading-none">Toko Lokal</span>
-            <span className="text-[10px] uppercase font-semibold tracking-wider text-teal-700 mt-0.5">Padang UMKM</span>
+            <span className="text-[10px] uppercase font-semibold tracking-wider text-teal-700 mt-0.5">Direktori UMKM</span>
           </div>
         </Link>
 

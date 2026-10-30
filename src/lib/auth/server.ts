@@ -14,14 +14,14 @@ export const getAccount = cache(async (): Promise<AuthState> => {
   const cookieStore = await cookies();
   const demoRole = cookieStore.get("demo_role")?.value;
 
-  // Mode demo auth untuk pengujian instan tanpa docker
+  // Mode akses demo untuk pengujian instan tanpa docker/database eksternal
   if (demoRole === "admin" || demoRole === "toko") {
     return {
       status: "ready",
       account: {
         id: demoRole === "admin" ? "00000000-0000-4000-8000-000000000099" : "00000000-0000-4000-8000-000000000101",
-        email: demoRole === "admin" ? "admin@bisnispadang.com" : "buani@bisnispadang.com",
-        name: demoRole === "admin" ? "Admin Pengelola (Demo)" : "Ibu Ani — Warung Bu Ani (Demo)",
+        email: demoRole === "admin" ? "admin@tokolokal.com" : "buani@tokolokal.com",
+        name: demoRole === "admin" ? "Admin Pengelola (Pusat)" : "Ibu Ani — Warung Bu Ani",
         role: demoRole,
       },
     };
@@ -29,9 +29,9 @@ export const getAccount = cache(async (): Promise<AuthState> => {
 
   try {
     const supabase = await createSessionSupabase();
-    if (!supabase) return { status: "guest" }; // Kembalikan guest agar form login selalu interaktif
+    if (!supabase) return { status: "guest" };
 
-    // getUser memverifikasi token di server Auth
+    // getUser memverifikasi token di server Auth; objek sesi/cookie tidak dipercaya.
     const { data, error } = await supabase.auth.getUser();
     if (error || !data.user) {
       return {

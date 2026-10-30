@@ -64,7 +64,7 @@ export default async function StorePortalPage({
       ]);
       visits = (visitsResult.data ?? []) as VisitSummary[];
       visitsFailed =
-        visitsResult.error ||
+        Boolean(visitsResult.error) ||
         visits.length !== 4 ||
         !visitSources.every(
           (source) =>

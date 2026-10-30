@@ -4,7 +4,7 @@ import { dateLabel, uuid, type Booking } from "@/lib/affiliation";
 import { StoreForm, PhotoForm, ProductForm, BookingStatusForm, type ProductRecord } from "@/components/admin-forms";
 import { StorePhoto } from "@/components/store-photo";
 import { publicPhotoUrl } from "@/lib/supabase/public";
-import { demoCategories } from "@/lib/catalog/demo";
+import { demoCategories, getAllDemoStores, getDemoBookings } from "@/lib/catalog/demo";
 import { Icon } from "@/components/icon";
 
 export default async function ManagePage({
@@ -29,95 +29,87 @@ export default async function ManagePage({
 
   try {
     const client = await adminClient();
-    const [storeResult, requestResult, catRes, reqRes] = await Promise.all([
-      storeId ? client.from("stores").select("*").eq("id", storeId).maybeSingle() : Promise.resolve(null),
-      requestId
-        ? client
-            .from("affiliation_requests")
-            .select("id,manager_name,whatsapp,address,appointment_date,appointment_time,notes,status,store_id")
-            .eq("id", requestId)
-            .maybeSingle()
-        : Promise.resolve(null),
-      client.from("categories").select("id,name").order("sort_order"),
-      client
-        .from("affiliation_requests")
-        .select("id,manager_name,whatsapp,address,appointment_date,appointment_time,notes,status,store_id", {
-          count: "exact",
-        })
-        .order("created_at", { ascending: false })
-        .order("id")
-        .range((page - 1) * 20, page * 20 - 1),
-    ]);
+    if (client) {
+      const [storeResult, requestResult, catRes, reqRes] = await Promise.all([
+        storeId ? client.from("stores").select("*").eq("id", storeId).maybeSingle() : Promise.resolve(null),
+        requestId
+          ? client
+              .from("affiliation_requests")
+              .select("id,manager_name,whatsapp,address,appointment_date,appointment_time,notes,status,store_id")
+              .eq("id", requestId)
+              .maybeSingle()
+          : Promise.resolve(null),
+        client.from("categories").select("id,name").order("sort_order"),
+        client
+          .from("affiliation_requests")
+          .select("id,manager_name,whatsapp,address,appointment_date,appointment_time,notes,status,store_id", {
+            count: "exact",
+          })
+          .order("created_at", { ascending: false })
+          .order("id")
+          .range((page - 1) * 20, page * 20 - 1),
+      ]);
 
-    if (storeResult?.data) store = storeResult.data as StoreRecord;
-    if (requestResult?.data) request = requestResult.data as Booking;
-    if (catRes?.data) categories = catRes.data;
-    if (reqRes?.data) {
-      requestsList = reqRes.data as Booking[];
-      requestsCount = reqRes.count ?? requestsList.length;
-    }
+      if (storeResult?.data) store = storeResult.data as StoreRecord;
+      if (requestResult?.data) request = requestResult.data as Booking;
+      if (catRes?.data) categories = catRes.data;
+      if (reqRes?.data) {
+        requestsList = reqRes.data as Booking[];
+        requestsCount = reqRes.count ?? requestsList.length;
+      }
 
-    // Load owners
-    for (let offset = 0; ; offset += 1000) {
-      const result = await client.from("profiles").select("id,name").eq("role", "toko").order("id").range(offset, offset + 999);
-      if (result.error) break;
-      owners.push(...result.data);
-      if (result.data.length < 1000) break;
-    }
+      // Load owners
+      for (let offset = 0; ; offset += 1000) {
+        const result = await client.from("profiles").select("id,name").eq("role", "toko").order("id").range(offset, offset + 999);
+        if (result.error) break;
+        owners.push(...result.data);
+        if (result.data.length < 1000) break;
+      }
 
-    if (store) {
-      const prodRes = await client.from("products").select("id,name,price,sort_order").eq("store_id", store.id).order("sort_order");
-      if (prodRes.data) products = prodRes.data;
+      if (store) {
+        const prodRes = await client.from("products").select("id,name,price,sort_order").eq("store_id", store.id).order("sort_order");
+        if (prodRes.data) products = prodRes.data;
+      }
     }
   } catch {
     // fallback
   }
 
-  // Fallback demo bookings if empty
+  // Fallback demo bookings
   if (requestsList.length === 0) {
-    requestsList = [
-      {
-        id: "00000000-0000-4000-8000-000000000201",
-        manager_name: "Pak Hendra Wijaya",
-        whatsapp: "6281234567899",
-        address: "Jl. Khatib Sulaiman No. 45, Padang",
-        appointment_date: "2026-11-02",
-        appointment_time: "10:00:00",
-        notes: "Usaha kuliner sate Padang dan minuman tradisional",
-        status: "menunggu",
-        store_id: null,
-      },
-      {
-        id: "00000000-0000-4000-8000-000000000202",
-        manager_name: "Ibu Rahmawati",
-        whatsapp: "6282199887766",
-        address: "Jl. Belakang Tangsi No. 12, Padang",
-        appointment_date: "2026-11-03",
-        appointment_time: "14:00:00",
-        notes: "Jasa jahit dan konveksi busana muslim",
-        status: "dikonfirmasi",
-        store_id: null,
-      },
-    ];
+    requestsList = getDemoBookings();
     requestsCount = requestsList.length;
+    if (requestId) {
+      request = requestsList.find((r) => r.id === requestId);
+    }
   }
 
   // Fallback demo store if editing
-  if (storeId && !store && storeId === "00000000-0000-4000-8000-000000000101") {
-    store = {
-      id: "00000000-0000-4000-8000-000000000101",
-      slug: "warung-bu-ani",
-      name: "Warung Bu Ani",
-      address: "Jl. Andalas No. 12, Padang",
-      delivery_info: "Delivery radius 5 km",
-      photo_path: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
-      category_id: "00000000-0000-4000-8000-000000000001",
-      owner_id: "00000000-0000-4000-8000-000000000101",
-      manager_name: "Ibu Ani",
-      phone: "081267891234",
-      latitude: -0.9412,
-      longitude: 100.3688,
-    };
+  if (storeId && !store) {
+    const demoStores = getAllDemoStores();
+    const found = demoStores.find((s) => s.id === storeId);
+    if (found) {
+      store = {
+        id: found.id,
+        slug: found.slug,
+        name: found.name,
+        address: found.address,
+        delivery_info: found.delivery_info,
+        photo_path: found.photo_path,
+        category_id: found.category_id || "00000000-0000-4000-8000-000000000001",
+        owner_id: found.id === "00000000-0000-4000-8000-000000000101" ? found.id : null,
+        manager_name: found.manager_name || "Pengelola",
+        phone: found.phone,
+        latitude: found.latitude,
+        longitude: found.longitude,
+      };
+      products = found.products.map((p, idx) => ({
+        id: p.id || `p-${idx}`,
+        name: p.name,
+        price: p.price,
+        sort_order: idx,
+      }));
+    }
   }
 
   return (

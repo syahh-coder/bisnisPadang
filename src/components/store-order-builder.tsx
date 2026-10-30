@@ -72,7 +72,7 @@ export function StoreOrderBuilder({
       })
       .join("\n");
 
-    const message = `Halo ${storeName},\nsaya ingin memesan dari Toko Lokal Padang:\n\n${itemsText}\n\n*Total Pesanan:* ${rupiah.format(
+    const message = `Halo ${storeName},\nsaya ingin memesan dari Toko Lokal:\n\n${itemsText}\n\n*Total Pesanan:* ${rupiah.format(
       totalPrice
     )}${customerName ? `\n*Nama Pemesan:* ${customerName}` : ""}${
       customerAddress ? `\n*Alamat Kirim:* ${customerAddress}` : ""

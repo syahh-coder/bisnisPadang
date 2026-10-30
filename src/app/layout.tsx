@@ -1,13 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { Navigation } from "@/components/navigation";
+import { MainContainer } from "@/components/main-container";
 import { ToastProvider } from "@/components/toast";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Toko Lokal Padang — Direktori UMKM & Kuliner", template: "%s | Toko Lokal Padang" },
+  title: { default: "Toko Lokal — Direktori Bisnis & UMKM Indonesia", template: "%s | Toko Lokal" },
   description:
-    "Temukan toko, kuliner, dan usaha lokal terbaik di Kota Padang. Cek menu, lokasi Google Maps, dan pesan langsung via WhatsApp gratis.",
+    "Temukan toko, kuliner, dan usaha lokal terpercaya di sekitarmu. Cek menu, lokasi Google Maps, dan pesan langsung via WhatsApp gratis.",
 };
 
 export const viewport: Viewport = {
@@ -26,9 +27,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             Langsung ke konten
           </a>
           <SiteHeader />
-          <main id="konten" tabIndex={-1} className="page-container flex-1">
-            {children}
-          </main>
+          <MainContainer>{children}</MainContainer>
           <Navigation variant="bottom" />
         </ToastProvider>
       </body>

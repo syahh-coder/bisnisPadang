@@ -79,7 +79,7 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
       }}
     >
       <label className="sr-only" htmlFor="pencarian-toko">
-        Cari toko, makanan, atau produk di Padang
+        Cari toko, makanan, atau produk lokal
       </label>
       <div className="relative flex items-center bg-white rounded-2xl border border-slate-200/90 shadow-sm focus-within:ring-2 focus-within:ring-teal-600 focus-within:border-teal-600 transition-all">
         <span className="pl-4 pr-2 text-slate-400 shrink-0">
@@ -90,7 +90,7 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
           ref={input}
           name="q"
           type="search"
-          placeholder="Cari toko, makanan, minuman, jasa di Padang..."
+          placeholder="Cari toko, makanan, minuman, jasa di sekitarmu..."
           maxLength={MAX_QUERY_LENGTH}
           autoComplete="off"
           enterKeyHint="search"

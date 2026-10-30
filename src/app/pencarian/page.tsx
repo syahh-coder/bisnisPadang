@@ -4,8 +4,8 @@ import { getCatalog } from "@/lib/catalog/server";
 import { readFilters, type CatalogSearchParams } from "@/lib/catalog/types";
 
 export const metadata: Metadata = {
-  title: "Pencarian Toko & Usaha Lokal Padang",
-  description: "Cari produk, makanan, minuman, dan layanan UMKM di Kota Padang dengan cepat.",
+  title: "Pencarian Toko & Usaha Lokal",
+  description: "Cari produk, makanan, minuman, dan layanan UMKM terpercaya di daerah Anda dengan cepat.",
 };
 
 export default async function SearchPage({

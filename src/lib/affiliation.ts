@@ -7,9 +7,8 @@ export type Booking = Slot & {
   notes: string;
   status: string;
   store_id?: string | null;
-  created_at?: string;
 };
-export type FormState = { error?: string; success?: string; bookingId?: string };
+export type FormState = { error?: string; success?: string };
 export const statuses = ["menunggu", "dikonfirmasi", "selesai", "dibatalkan"] as const;
 export const uuid = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 
@@ -42,7 +41,6 @@ export function generateAvailableSlots(): Slot[] {
   const times = ["09:00", "11:00", "13:00", "15:00"];
 
   const now = new Date();
-  // Mulai besok
   for (let i = 1; i <= 14; i++) {
     const d = new Date(now);
     d.setDate(d.getDate() + i);

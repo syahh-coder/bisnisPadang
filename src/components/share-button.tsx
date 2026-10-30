@@ -13,7 +13,7 @@ export function ShareButton({ title, url }: { title: string; url?: string }) {
       try {
         await navigator.share({
           title,
-          text: `Lihat profil ${title} di Toko Lokal Padang`,
+          text: `Lihat profil ${title} di Toko Lokal`,
           url: shareUrl,
         });
         return;

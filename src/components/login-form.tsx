@@ -37,7 +37,7 @@ export function LoginForm({ available }: { available: boolean }) {
             maxLength={254}
             required
             disabled={pending || demoPending}
-            placeholder="admin@bisnispadang.com / email toko"
+            placeholder="admin@tokolokal.com / email toko"
             className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm"
           />
         </div>

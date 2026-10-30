@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { createPublicSupabase } from "@/lib/supabase/public";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 import { field, phoneNumber, uuid, type FormState, type Booking } from "@/lib/affiliation";
+import { addDemoBooking, updateDemoBookingStatus } from "@/lib/catalog/demo";
 
 export async function submitBooking(_: FormState, form: FormData): Promise<FormState> {
   const manager = field(form, "manager");
@@ -25,11 +26,12 @@ export async function submitBooking(_: FormState, form: FormData): Promise<FormS
     !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
     !["09:00", "11:00", "13:00", "15:00"].includes(time)
   ) {
-    return { error: "Mohon periksa kembali nama, nomor WhatsApp (format 08...), alamat toko, serta pilihan tanggal dan jam janji temu." };
+    return { error: "Periksa nama, nomor WA, alamat, tanggal, dan jam janji temu." };
   }
 
-  const supabase = createPublicSupabase();
   const token = randomBytes(32).toString("hex");
+  const tokenHash = createHash("sha256").update(token).digest("hex");
+  const supabase = createPublicSupabase();
 
   if (supabase) {
     try {
@@ -41,14 +43,13 @@ export async function submitBooking(_: FormState, form: FormData): Promise<FormS
           booking_date: date,
           booking_time: time,
           note,
-          token_hash: createHash("sha256").update(token).digest("hex"),
+          token_hash: tokenHash,
         })
         .abortSignal(AbortSignal.timeout(8_000));
 
       if (!result.error && result.data && uuid.test(String(result.data))) {
         const id = String(result.data);
-        const cookieStore = await cookies();
-        cookieStore.set(`afiliasi-${id}`, token, {
+        (await cookies()).set(`afiliasi-${id}`, token, {
           httpOnly: true,
           sameSite: "lax",
           secure: process.env.NODE_ENV === "production" && (process.env.VERCEL === "1" || getSupabaseConfig().url?.startsWith("https://") === true),
@@ -58,85 +59,78 @@ export async function submitBooking(_: FormState, form: FormData): Promise<FormS
         redirect(`/join-afiliasi/${id}`);
       }
     } catch {
-      // Continue to demo fallback if Supabase errored
+      // Fallback to standalone local booking
     }
   }
 
-  // Fallback demo mode: Simpan booking secara aman di cookie sesi sehingga user bisa langsung melihat konfirmasi real
-  const demoId = randomUUID();
+  // Standalone / Offline fallback
+  const fallbackId = randomUUID();
   const demoBooking: Booking = {
-    id: demoId,
+    id: fallbackId,
     manager_name: manager,
     whatsapp: phone,
     address,
     appointment_date: date,
-    appointment_time: `${time}:00`,
+    appointment_time: time,
     notes: note,
     status: "menunggu",
-    created_at: new Date().toISOString(),
+    store_id: null,
   };
 
+  addDemoBooking(demoBooking);
+
   const cookieStore = await cookies();
-  cookieStore.set(`afiliasi-${demoId}`, token, {
+  cookieStore.set(`afiliasi-${fallbackId}`, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: `/join-afiliasi/${demoId}`,
+    path: `/join-afiliasi/${fallbackId}`,
+    maxAge: 15 * 24 * 60 * 60,
+  });
+  cookieStore.set(`afiliasi-data-${fallbackId}`, JSON.stringify(demoBooking), {
+    httpOnly: true,
+    sameSite: "lax",
+    path: `/join-afiliasi/${fallbackId}`,
     maxAge: 15 * 24 * 60 * 60,
   });
 
-  cookieStore.set(`afiliasi-data-${demoId}`, JSON.stringify(demoBooking), {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: `/join-afiliasi/${demoId}`,
-    maxAge: 15 * 24 * 60 * 60,
-  });
-
-  redirect(`/join-afiliasi/${demoId}`);
+  redirect(`/join-afiliasi/${fallbackId}`);
 }
 
 export async function cancelBooking(id: string, _: FormState): Promise<FormState> {
   if (!uuid.test(id)) return { error: "Pendaftaran tidak ditemukan." };
   const cookieStore = await cookies();
   const token = cookieStore.get(`afiliasi-${id}`)?.value;
-
-  if (!token) {
-    return { error: "Buka halaman ini dari browser yang digunakan saat mendaftar untuk membatalkan." };
-  }
+  if (!token) return { error: "Buka halaman ini dari browser yang digunakan saat mendaftar." };
 
   const supabase = createPublicSupabase();
   if (supabase) {
     try {
-      const result = await supabase
-        .rpc("cancel_affiliation", { request_id: id, token })
-        .abortSignal(AbortSignal.timeout(8_000));
+      const result = await supabase.rpc("cancel_affiliation", { request_id: id, token }).abortSignal(AbortSignal.timeout(8_000));
       if (!result.error && result.data) {
         redirect(`/join-afiliasi/${id}`);
       }
     } catch {
-      // fallback
+      // Fallback
     }
   }
 
-  // Handle demo cancellation
-  const demoDataRaw = cookieStore.get(`afiliasi-data-${id}`)?.value;
-  if (demoDataRaw) {
+  // Standalone fallback
+  updateDemoBookingStatus(id, "dibatalkan");
+  const rawDemo = cookieStore.get(`afiliasi-data-${id}`)?.value;
+  if (rawDemo) {
     try {
-      const demoData = JSON.parse(demoDataRaw) as Booking;
-      demoData.status = "dibatalkan";
-      cookieStore.set(`afiliasi-data-${id}`, JSON.stringify(demoData), {
+      const parsed = JSON.parse(rawDemo) as Booking;
+      parsed.status = "dibatalkan";
+      cookieStore.set(`afiliasi-data-${id}`, JSON.stringify(parsed), {
         httpOnly: true,
         sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
         path: `/join-afiliasi/${id}`,
         maxAge: 15 * 24 * 60 * 60,
       });
-      redirect(`/join-afiliasi/${id}`);
     } catch {
-      return { error: "Gagal memproses pembatalan." };
+      // ignore
     }
   }
 
-  return { error: "Pembatalan tidak dapat diproses. Janji temu mungkin sudah dikonfirmasi pengelola." };
+  redirect(`/join-afiliasi/${id}`);
 }

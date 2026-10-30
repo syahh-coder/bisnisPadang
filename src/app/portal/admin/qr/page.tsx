@@ -24,27 +24,29 @@ export default async function QRPage({
 
   try {
     const client = await adminClient();
-    for (let offset = 0; ; offset += 1000) {
-      const result = await client
-        .from("stores")
-        .select("id,name")
-        .order("name")
-        .order("id")
-        .range(offset, offset + 999);
-      if (result.error) break;
-      stores.push(...result.data);
-      if (result.data.length < 1000) break;
-    }
+    if (client) {
+      for (let offset = 0; ; offset += 1000) {
+        const result = await client
+          .from("stores")
+          .select("id,name")
+          .order("name")
+          .order("id")
+          .range(offset, offset + 999);
+        if (result.error) break;
+        stores.push(...result.data);
+        if (result.data.length < 1000) break;
+      }
 
-    const history = await client
-      .from("qr_codes")
-      .select(qrColumns, { count: "exact" })
-      .order("created_at", { ascending: false })
-      .order("id")
-      .range((page - 1) * 20, page * 20 - 1);
-    if (!history.error && history.data) {
-      historyData = history.data;
-      historyCount = history.count ?? historyData.length;
+      const history = await client
+        .from("qr_codes")
+        .select(qrColumns, { count: "exact" })
+        .order("created_at", { ascending: false })
+        .order("id")
+        .range((page - 1) * 20, page * 20 - 1);
+      if (!history.error && history.data) {
+        historyData = history.data;
+        historyCount = history.count ?? historyData.length;
+      }
     }
   } catch {
     // fallback
@@ -54,7 +56,7 @@ export default async function QRPage({
   if (stores.length === 0) {
     stores = [
       { id: "00000000-0000-4000-8000-000000000101", name: "Warung Bu Ani" },
-      { id: "00000000-0000-4000-8000-000000000102", name: "Kopi Sudut Padang" },
+      { id: "00000000-0000-4000-8000-000000000102", name: "Kopi Sudut Nusantara" },
       { id: "00000000-0000-4000-8000-000000000103", name: "Laundry Cepat Berkah" },
       { id: "00000000-0000-4000-8000-000000000104", name: "Toko Sembako Jaya" },
       { id: "00000000-0000-4000-8000-000000000105", name: "Bakso Mang Ujang" },
@@ -65,12 +67,25 @@ export default async function QRPage({
   if (params.qr && uuid.test(params.qr)) {
     try {
       const client = await adminClient();
-      const selectedResult = await client.from("qr_codes").select(qrColumns).eq("id", params.qr).maybeSingle();
-      if (!selectedResult.error && selectedResult.data) {
-        selected = selectedResult.data as QRRecord;
+      if (client) {
+        const selectedResult = await client.from("qr_codes").select(qrColumns).eq("id", params.qr).maybeSingle();
+        if (!selectedResult.error && selectedResult.data) {
+          selected = selectedResult.data as QRRecord;
+        }
+      } else {
+        selected = {
+          id: params.qr,
+          store_id: stores[0].id,
+          code: "DEMOQR",
+          target_slug: "warung-bu-ani",
+          kind: "static",
+          created_at: now,
+          expires_at: null,
+          site_origin: origin,
+        };
       }
     } catch {
-      // ignore
+      // fallback
     }
   }
 
