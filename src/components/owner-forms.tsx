@@ -15,6 +15,7 @@ import { parseDeliveryChannels } from "@/lib/stores/links";
 import { PhotoInput } from "@/components/photo-input";
 import { useDialog } from "@/components/dialog";
 import { useToast } from "@/components/toast";
+import { StoreLocationPicker } from "@/components/store-location-picker";
 
 function Feedback({ error, success }: { error?: string; success?: string }) {
   return (
@@ -125,20 +126,18 @@ export function OwnerInfoForm({ store, categories }: { store: StoreRecord; categ
           <input name="grabfood_url" type="url" maxLength={300} placeholder="https://food.grab.com/..." {...bind("grabfood_url")} />
         </label>
       </fieldset>
-      <fieldset>
-        <legend>Lokasi peta (opsional)</legend>
-        <p className="form-hint">Isi kedua koordinat untuk lokasi tepat. Jika kosong, peta memakai alamat toko.</p>
-        <div className="form-pair">
-          <label>
-            Lintang
-            <input name="latitude" type="number" step="any" min={-90} max={90} {...bind("latitude")} />
-          </label>
-          <label>
-            Bujur
-            <input name="longitude" type="number" step="any" min={-180} max={180} {...bind("longitude")} />
-          </label>
-        </div>
-      </fieldset>
+      <StoreLocationPicker
+        key={`${store.id}-${store.latitude}-${store.longitude}`}
+        initialLatitude={fields.latitude}
+        initialLongitude={fields.longitude}
+        initialAddress={fields.address}
+        onLocationChange={(lat, lon) => {
+          setFields((old) => ({ ...old, latitude: lat, longitude: lon }));
+        }}
+        onApplyAddress={(newAddr) => {
+          setFields((old) => ({ ...old, address: newAddr }));
+        }}
+      />
       <Feedback {...state} />
       <button className="button button--primary" disabled={pending}>
         {pending ? "Menyimpan…" : "Simpan info toko"}

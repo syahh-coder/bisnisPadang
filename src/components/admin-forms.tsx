@@ -6,6 +6,7 @@ import { statuses, type Booking } from "@/lib/affiliation";
 import type { StoreRecord, Choice } from "@/lib/admin";
 import { parseDeliveryChannels } from "@/lib/stores/links";
 import { PhotoInput } from "@/components/photo-input";
+import { StoreLocationPicker } from "@/components/store-location-picker";
 
 function Feedback({ error, success }: { error?: string; success?: string }) { return <>{error && <p role="alert">{error}</p>}{success && <p role="status">{success}</p>}</>; }
 
@@ -46,7 +47,18 @@ export function StoreForm({ store, request, categories, owners }: { store?: Stor
     <label>Jam operasional<input name="opening_hours" maxLength={120} placeholder="Contoh: 08:00 - 22:00 WIB (Setiap Hari)" {...bind("opening_hours")} /></label>
     <label>Info delivery<textarea name="delivery_info" rows={2} maxLength={1000} {...bind("delivery_info")} /></label>
     <fieldset><legend>Jembatan Aplikasi Food Delivery (Hanya muncul jika diisi)</legend><p className="form-hint">Kosongkan jika toko tidak memiliki akun ShopeeFood, GoFood, atau GrabFood.</p><label>Link ShopeeFood Toko<input name="shopeefood_url" type="url" maxLength={300} placeholder="https://shopee.co.id/..." {...bind("shopeefood_url")} /></label><label>Link GoFood Toko<input name="gofood_url" type="url" maxLength={300} placeholder="https://gofood.co.id/..." {...bind("gofood_url")} /></label><label>Link GrabFood Toko<input name="grabfood_url" type="url" maxLength={300} placeholder="https://food.grab.com/..." {...bind("grabfood_url")} /></label></fieldset>
-    <fieldset><legend>Lokasi peta (opsional)</legend><p className="form-hint">Isi kedua koordinat untuk lokasi tepat. Jika kosong, peta menggunakan alamat toko.</p><div className="form-pair"><label>Lintang<input name="latitude" type="number" step="any" min={-90} max={90} {...bind("latitude")} /></label><label>Bujur<input name="longitude" type="number" step="any" min={-180} max={180} {...bind("longitude")} /></label></div></fieldset>
+    <StoreLocationPicker
+      key={`${store?.id || "new"}-${fields.latitude}-${fields.longitude}`}
+      initialLatitude={fields.latitude}
+      initialLongitude={fields.longitude}
+      initialAddress={fields.address}
+      onLocationChange={(lat, lon) => {
+        setFields((old) => ({ ...old, latitude: lat, longitude: lon }));
+      }}
+      onApplyAddress={(newAddr) => {
+        setFields((old) => ({ ...old, address: newAddr }));
+      }}
+    />
     <Feedback {...state} /><button className="button button--primary" disabled={pending}>{pending ? "Menyimpan…" : "Simpan toko"}</button>
   </form>;
 }
