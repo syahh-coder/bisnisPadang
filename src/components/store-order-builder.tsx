@@ -41,11 +41,11 @@ const rupiah = new Intl.NumberFormat("id-ID", {
 });
 
 /**
- * Branded SVG Icons untuk jembatan ke GoFood, ShopeeFood, GrabFood, & WA Delivery
+ * Custom Vector SVG Icons untuk jembatan ke GoFood, ShopeeFood, GrabFood, & WhatsApp Delivery
  */
 export function FoodAgentIcon({
   agent,
-  size = 16,
+  size = 18,
 }: {
   agent: "gofood" | "shopeefood" | "grabfood" | "whatsapp";
   size?: number;
@@ -61,7 +61,12 @@ export function FoodAgentIcon({
           strokeLinejoin="round"
         />
         <path d="M9.5 9.5V8a2.5 2.5 0 0 1 5 0v1.5" stroke="#fff" strokeWidth="1.7" strokeLinecap="round" />
-        <path d="M10.5 13.5c.4-.5 1.2-.7 2-.4.8.3 1 1.1.3 1.6-.7.5-1.8.6-2.3 1.2" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" />
+        <path
+          d="M10.5 13.5c.4-.5 1.2-.7 2-.4.8.3 1 1.1.3 1.6-.7.5-1.8.6-2.3 1.2"
+          stroke="#fff"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
       </svg>
     );
   }
@@ -70,19 +75,8 @@ export function FoodAgentIcon({
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
         <rect width="24" height="24" rx="6" fill="#00AA13" />
-        <circle cx="12" cy="12" r="6" stroke="#fff" strokeWidth="2" />
-        <circle cx="12" cy="12" r="2.2" fill="#fff" />
-        <path d="M12 6v2M18 12h-2" stroke="#00AA13" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    );
-  }
-
-  if (agent === "grabfood") {
-    return (
-      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
-        <rect width="24" height="24" rx="6" fill="#00B14F" />
         <path
-          d="M7.5 14.5c0-2.5 2-4.5 4.5-4.5h4.5m-4.5 2.5h4.5m-7 2c.6 1.5 2 2.5 3.8 2.5 2.2 0 3.7-1.3 3.7-3.2V12"
+          d="M8.5 7v5a2 2 0 0 0 4 0V7M10.5 7v10M15.5 7v10M15.5 7c1.5 0 2.5 1.2 2.5 3v2h-2.5"
           stroke="#fff"
           strokeWidth="1.8"
           strokeLinecap="round"
@@ -92,11 +86,33 @@ export function FoodAgentIcon({
     );
   }
 
+  if (agent === "grabfood") {
+    return (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
+        <rect width="24" height="24" rx="6" fill="#00B14F" />
+        <path
+          d="M16.5 9.5A5 5 0 1 0 17 13h-4.5"
+          stroke="#fff"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
-      <rect width="24" height="24" rx="6" fill="#10B981" />
+      <rect width="24" height="24" rx="6" fill="#0F766E" />
       <path
-        d="M17.5 14.2c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-1 1.1-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-1-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"
+        d="M19 11.5a7 7 0 0 1-10.4 6.1L5 19l1.4-3.5A7 7 0 1 1 19 11.5Z"
+        stroke="#fff"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.5 10c.3 1.5 1.7 2.9 3.2 3.2l1.1-.8c.3-.2.7-.1.9.1l.8 1.1c.2.3.1.8-.2 1-.9.6-2.2.5-3.5-.2a7.6 7.6 0 0 1-3.1-3.1c-.7-1.3-.8-2.6-.2-3.5.2-.3.7-.4 1-.2l1.1.8c.2.2.3.6.1.9l-.8 1.1Z"
         fill="#fff"
       />
     </svg>
@@ -117,13 +133,18 @@ export function StoreOrderBuilder({
   const [itemNotes, setItemNotes] = useState<Record<string, string>>({});
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [orderMethod, setOrderMethod] = useState<"delivery" | "pickup">("delivery");
+
+  // Info Pemesan & Alamat Lengkap (Semua Wajib Diisi)
   const [customerName, setCustomerName] = useState("");
-  const [addressDetail, setAddressDetail] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
   const [manualAddressOverride, setManualAddressOverride] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
   const [orderNotes, setOrderNotes] = useState("");
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const { location, setModalOpen, detectGpsLocation, detecting, setCustomLocation, getDistanceTo } = useLocation();
+  const { location, setModalOpen, detectGpsLocation, detecting, setCustomLocation, getDistanceTo } =
+    useLocation();
   const { alert: dialogAlert } = useDialog();
   const distance = getDistanceTo(latitude, longitude);
 
@@ -143,10 +164,12 @@ export function StoreOrderBuilder({
         if (parsed.cart) setCart(parsed.cart);
         if (parsed.itemNotes) setItemNotes(parsed.itemNotes);
       }
-      const savedProfile = localStorage.getItem("toko_lokal_customer_v1");
+      const savedProfile = localStorage.getItem("toko_lokal_customer_v2");
       if (savedProfile) {
         const prof = JSON.parse(savedProfile);
         if (prof.name) setCustomerName(prof.name);
+        if (prof.phone) setCustomerPhone(prof.phone);
+        if (prof.streetAddress) setStreetAddress(prof.streetAddress);
         if (prof.addressDetail) setAddressDetail(prof.addressDetail);
       }
     } catch {
@@ -167,10 +190,22 @@ export function StoreOrderBuilder({
     }
   }, [cart, itemNotes, storageKey]);
 
-  // Persist customer name & detail patokan
-  const saveCustomerInfo = (name: string, detail: string) => {
+  const saveCustomerInfo = (
+    name: string,
+    phone: string,
+    street: string,
+    detail: string
+  ) => {
     try {
-      localStorage.setItem("toko_lokal_customer_v1", JSON.stringify({ name, addressDetail: detail }));
+      localStorage.setItem(
+        "toko_lokal_customer_v2",
+        JSON.stringify({
+          name,
+          phone,
+          streetAddress: street,
+          addressDetail: detail,
+        })
+      );
     } catch {
       // ignore
     }
@@ -205,23 +240,18 @@ export function StoreOrderBuilder({
     return sum + (Number(p?.price) || 0) * qty;
   }, 0);
 
-  // Alamat otomatis dari sistem (LocationContext di navbar atau input manual saat pesan)
+  // Alamat otomatis dari sistem (LocationContext di navbar atau input wilayah saat pesan)
   const systemBaseAddress = location?.name || manualAddressOverride.trim();
-  const fullResolvedAddress = [
-    systemBaseAddress,
-    addressDetail.trim() ? `(Patokan/Detail: ${addressDetail.trim()})` : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
 
   const userMapsPinUrl =
     location?.latitude != null && location?.longitude != null
       ? `https://www.google.com/maps?q=${location.latitude},${location.longitude}`
       : null;
 
-  // Pembuat template pesan WhatsApp otomatis bernomor 1, 2, 3 dst
+  // Pembuat template pesan WhatsApp otomatis bernomor 1, 2, 3 dst (Tanpa Emoji)
   const buildWhatsAppMessage = () => {
-    const cleanName = customerName.trim() || "Pelanggan";
+    const cleanName = customerName.trim() || "[Nama Pemesan]";
+    const cleanPhone = customerPhone.trim() || "[Nomor HP]";
     const numberedItems = Object.entries(cart)
       .map(([id, qty], index) => {
         const p = products.find((item) => item.id === id);
@@ -232,25 +262,29 @@ export function StoreOrderBuilder({
       .join("\n");
 
     const lines: (string | null)[] = [
-      `Halo kak, saya *${cleanName}*, pengen pesan menu ini di *${storeName}*:`,
+      `Halo kak, saya *${cleanName}* (${cleanPhone}), pengen pesan menu ini di *${storeName}*:`,
       ``,
       numberedItems,
       ``,
       `*Total Pesanan:* ${rupiah.format(totalPrice)} (${totalItems} item)`,
       `*Metode Pesanan:* ${
         orderMethod === "delivery"
-          ? "🛵 Delivery Toko (Diantar ke Alamat)"
-          : "🏪 Ambil Sendiri di Toko (Pickup)"
+          ? "Delivery Kurir Toko (Diantar ke Alamat)"
+          : "Ambil Sendiri di Toko (Pickup)"
       }`,
+      `*Nama Pemesan:* ${cleanName}`,
+      `*No. HP / WA Pemesan:* ${cleanPhone}`,
     ];
 
     if (orderMethod === "delivery") {
       lines.push(
         ``,
-        `*Alamat Pengiriman (Otomatis Sistem):*`,
-        `${fullResolvedAddress || "-"}`,
-        distance ? `*Estimasi Jarak:* ± ${distance} dari toko` : null,
-        userMapsPinUrl ? `*Titik Lokasi Maps:* ${userMapsPinUrl}` : null
+        `*Alamat Pengiriman Lengkap:*`,
+        `- Wilayah / Titik Sistem: ${systemBaseAddress || "[Belum diatur]"}`,
+        `- Jalan & No. Rumah: ${streetAddress.trim() || "[Belum diisi]"}`,
+        `- Detail Patokan: ${addressDetail.trim() || "[Belum diisi]"}`,
+        distance ? `- Estimasi Jarak: +/- ${distance} dari toko` : null,
+        userMapsPinUrl ? `- Titik Google Maps: ${userMapsPinUrl}` : null
       );
     }
 
@@ -270,34 +304,62 @@ export function StoreOrderBuilder({
       dialogAlert({
         title: "Nomor WhatsApp Belum Tersedia",
         message:
-          "Toko ini belum menyertakan nomor WhatsApp delivery. Kamu tetap bisa memesan lewat tombol GoFood, ShopeeFood, atau GrabFood yang tersedia!",
+          "Toko ini belum menyertakan nomor WhatsApp delivery. Kamu tetap bisa memesan lewat tombol GoFood, ShopeeFood, atau GrabFood yang tersedia.",
         variant: "warning",
         confirmText: "Mengerti",
       });
       return;
     }
 
-    if (!customerName.trim()) {
-      setValidationError("Mohon isi Nama kamu terlebih dahulu agar toko tahu siapa yang memesan.");
-      const nameInput = document.getElementById("cust-name");
-      nameInput?.focus();
+    if (!customerName.trim() || customerName.trim().length < 2) {
+      setValidationError("Nama Pemesan wajib diisi (minimal 2 huruf).");
+      document.getElementById("cust-name")?.focus();
       return;
     }
 
-    // Wajib atur posisi dulu sebelum pesan delivery
-    if (orderMethod === "delivery" && !systemBaseAddress) {
-      setValidationError(
-        "Wajib atur posisi/lokasi pengiriman terlebih dahulu (lewat tombol GPS/Lokasi atau ketik di bawah) supaya alamat otomatis terisi."
-      );
+    const cleanPhoneDigits = customerPhone.replace(/[^0-9]/g, "");
+    if (!cleanPhoneDigits || cleanPhoneDigits.length < 9) {
+      setValidationError("Nomor HP / WhatsApp Pemesan wajib diisi dengan nomor aktif yang valid.");
+      document.getElementById("cust-phone")?.focus();
       return;
     }
 
-    // Jika user mengetik alamat manual tapi belum tersimpan di LocationContext navbar, sinkronkan otomatis
+    if (orderMethod === "delivery") {
+      if (!systemBaseAddress) {
+        setValidationError(
+          "Titik Lokasi / Wilayah pengiriman wajib diatur terlebih dahulu (klik tombol GPS/Lokasi atau ketik wilayah)."
+        );
+        document.getElementById("cust-region")?.focus();
+        return;
+      }
+
+      if (!streetAddress.trim() || streetAddress.trim().length < 4) {
+        setValidationError(
+          "Alamat Jalan, RT/RW, atau Nomor Rumah wajib diisi dengan lengkap."
+        );
+        document.getElementById("cust-street")?.focus();
+        return;
+      }
+
+      if (!addressDetail.trim() || addressDetail.trim().length < 3) {
+        setValidationError(
+          "Detail Patokan Lokasi (warna pagar, ciri bangunan, atau patokan terdekat) wajib diisi."
+        );
+        document.getElementById("cust-addr-detail")?.focus();
+        return;
+      }
+    }
+
     if (!location && manualAddressOverride.trim()) {
       setCustomLocation(manualAddressOverride.trim());
     }
 
-    saveCustomerInfo(customerName.trim(), addressDetail.trim());
+    saveCustomerInfo(
+      customerName.trim(),
+      customerPhone.trim(),
+      streetAddress.trim(),
+      addressDetail.trim()
+    );
 
     const message = buildWhatsAppMessage();
     const encoded = encodeURIComponent(message);
@@ -327,7 +389,7 @@ export function StoreOrderBuilder({
           <div className="flex items-start gap-2.5 min-w-0">
             <div
               className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
-                location ? "bg-emerald-600 text-white" : "bg-amber-500 text-white animate-pulse"
+                location ? "bg-emerald-600 text-white" : "bg-amber-500 text-white"
               }`}
             >
               <Icon name="mapPin" size={18} />
@@ -338,8 +400,9 @@ export function StoreOrderBuilder({
                   {location ? "Lokasi Pengiriman Aktif" : "Wajib Atur Lokasi Sebelum Pesan"}
                 </span>
                 {distance && (
-                  <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-white text-emerald-800 border border-emerald-200">
-                    🛵 ± {distance} dari toko
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-white text-emerald-800 border border-emerald-200">
+                    <Icon name="truck" size={12} className="text-emerald-700" />
+                    <span>+/- {distance} dari toko</span>
                   </span>
                 )}
               </div>
@@ -400,7 +463,7 @@ export function StoreOrderBuilder({
                   <ProductThumbnail name={product.name} src={displayPhoto} />
                   {qty > 0 && (
                     <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-teal-700 text-white text-[10px] font-extrabold shadow-xs">
-                      {qty}x di Keranjang
+                      {qty}x
                     </span>
                   )}
                 </div>
@@ -417,7 +480,6 @@ export function StoreOrderBuilder({
 
                   {/* Baris Icon Jembatan ke Agent Food + Tombol Keranjang */}
                   <div className="flex items-center justify-between gap-2 mt-2.5 pt-2 border-t border-slate-100">
-                    {/* Icon Jembatan Cepat ke Agent Food */}
                     <div className="flex items-center gap-1" title="Jembatan ke Aplikasi Food Delivery">
                       <a
                         href={links.shopeefoodUrl}
@@ -451,7 +513,6 @@ export function StoreOrderBuilder({
                       </a>
                     </div>
 
-                    {/* Tombol + Tambah ke Keranjang */}
                     {qty === 0 ? (
                       <button
                         type="button"
@@ -466,10 +527,10 @@ export function StoreOrderBuilder({
                         <button
                           type="button"
                           onClick={() => removeFromCart(product.id)}
-                          className="w-7 h-7 rounded-lg bg-white hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs shadow-2xs transition-colors cursor-pointer"
+                          className="w-7 h-7 rounded-lg bg-white hover:bg-slate-200 text-slate-700 flex items-center justify-center shadow-2xs transition-colors cursor-pointer"
                           aria-label={`Kurangi ${product.name}`}
                         >
-                          -
+                          <Icon name="minus" size={13} />
                         </button>
                         <span className="text-xs font-extrabold text-slate-900 min-w-[1.25rem] text-center">
                           {qty}
@@ -477,10 +538,10 @@ export function StoreOrderBuilder({
                         <button
                           type="button"
                           onClick={() => addToCart(product.id)}
-                          className="w-7 h-7 rounded-lg bg-teal-700 hover:bg-teal-800 text-white flex items-center justify-center font-bold text-xs shadow-2xs transition-colors cursor-pointer"
+                          className="w-7 h-7 rounded-lg bg-teal-700 hover:bg-teal-800 text-white flex items-center justify-center shadow-2xs transition-colors cursor-pointer"
                           aria-label={`Tambah lagi ${product.name}`}
                         >
-                          +
+                          <Icon name="plus" size={13} />
                         </button>
                       </div>
                     )}
@@ -488,7 +549,6 @@ export function StoreOrderBuilder({
                 </div>
               </div>
 
-              {/* Catatan singkat per item saat sudah masuk keranjang */}
               {qty > 0 && (
                 <div className="pt-2 border-t border-teal-100/80 flex items-center gap-2">
                   <Icon name="edit" size={13} className="text-teal-700 shrink-0" />
@@ -508,7 +568,7 @@ export function StoreOrderBuilder({
         })}
       </ul>
 
-      {/* Floating Bottom Cart Bar ala ShopeeFood / GoFood */}
+      {/* Floating Bottom Cart Bar (Full SVG Icons, Zero Emoji) */}
       {totalItems > 0 && (
         <div className="fixed bottom-20 sm:bottom-6 left-4 right-4 z-40 max-w-xl mx-auto">
           <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-2xl shadow-2xl border border-slate-700/80 flex items-center justify-between gap-3 backdrop-blur-md">
@@ -528,12 +588,22 @@ export function StoreOrderBuilder({
                   </p>
                   {distance && (
                     <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-800 text-emerald-400">
-                      ± {distance}
+                      +/- {distance}
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-slate-300 truncate">
-                  {location ? `📍 ${location.name}` : "⚠️ Lokasi pengiriman belum diatur"}
+                <p className="text-[11px] text-slate-300 truncate flex items-center gap-1">
+                  {location ? (
+                    <>
+                      <Icon name="mapPin" size={12} className="text-emerald-400 shrink-0" />
+                      <span className="truncate">{location.name}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Icon name="alertCircle" size={12} className="text-amber-400 shrink-0" />
+                      <span className="truncate">Lokasi pengiriman belum diatur</span>
+                    </>
+                  )}
                 </p>
               </div>
             </div>
@@ -571,7 +641,7 @@ export function StoreOrderBuilder({
                 </div>
                 <div>
                   <h3 className="font-extrabold text-slate-900 text-base">
-                    Keranjang & Metode Pesan
+                    Keranjang & Data Pengiriman
                   </h3>
                   <p className="text-xs text-slate-500">{storeName}</p>
                 </div>
@@ -580,9 +650,10 @@ export function StoreOrderBuilder({
                 <button
                   type="button"
                   onClick={clearCart}
-                  className="px-2.5 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                  className="px-2.5 py-1 text-[11px] font-semibold text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer flex items-center gap-1"
                 >
-                  Kosongkan
+                  <Icon name="trash" size={13} />
+                  <span>Kosongkan</span>
                 </button>
                 <button
                   type="button"
@@ -596,7 +667,7 @@ export function StoreOrderBuilder({
             </div>
 
             {/* Daftar Menu Bernomor (1, 2, 3 dst) */}
-            <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-44 overflow-y-auto pr-1">
               {Object.entries(cart).map(([id, qty], index) => {
                 const item = products.find((p) => p.id === id);
                 if (!item) return null;
@@ -618,17 +689,19 @@ export function StoreOrderBuilder({
                           <button
                             type="button"
                             onClick={() => removeFromCart(id)}
-                            className="text-slate-600 hover:text-slate-900 font-bold px-1 cursor-pointer"
+                            className="text-slate-600 hover:text-slate-900 p-0.5 cursor-pointer"
+                            aria-label={`Kurangi ${item.name}`}
                           >
-                            -
+                            <Icon name="minus" size={12} />
                           </button>
                           <span className="font-extrabold text-slate-900">{qty}x</span>
                           <button
                             type="button"
                             onClick={() => addToCart(id)}
-                            className="text-teal-700 hover:text-teal-900 font-bold px-1 cursor-pointer"
+                            className="text-teal-700 hover:text-teal-900 p-0.5 cursor-pointer"
+                            aria-label={`Tambah ${item.name}`}
                           >
-                            +
+                            <Icon name="plus" size={12} />
                           </button>
                         </div>
                         <span className="font-extrabold text-teal-800 min-w-[4.5rem] text-right">
@@ -697,32 +770,85 @@ export function StoreOrderBuilder({
               </div>
             </div>
 
-            {/* Bagian Wajib Lokasi & Alamat Otomatis Sistem */}
+            {/* Pilihan 2: Info Pemesan (Wajib Diisi) */}
+            <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-3">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                <Icon name="user" size={15} className="text-teal-700" />
+                <span>2. Informasi Pemesan (Wajib Diisi)</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1" htmlFor="cust-name">
+                    Nama Pemesan <span className="text-rose-600">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="cust-name"
+                      type="text"
+                      required
+                      placeholder="Contoh: Budi Santoso"
+                      value={customerName}
+                      onChange={(e) => {
+                        setCustomerName(e.target.value);
+                        setValidationError(null);
+                      }}
+                      className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1" htmlFor="cust-phone">
+                    No. HP / WhatsApp Aktif <span className="text-rose-600">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="cust-phone"
+                      type="tel"
+                      required
+                      placeholder="Contoh: 081234567890"
+                      value={customerPhone}
+                      onChange={(e) => {
+                        setCustomerPhone(e.target.value);
+                        setValidationError(null);
+                      }}
+                      className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Pilihan 3: Detail Alamat Pengiriman Lengkap (Semua Wajib Diisi untuk Delivery) */}
             {orderMethod === "delivery" && (
-              <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-2.5">
+              <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                    <Icon name="mapPin" size={14} className="text-teal-700" />
-                    <span>2. Alamat Pengiriman (Otomatis dari Posisi)</span>
+                    <Icon name="mapPin" size={15} className="text-teal-700" />
+                    <span>3. Detail Alamat Pengiriman (Semua Wajib Diisi)</span>
                   </span>
                   <button
                     type="button"
                     onClick={() => setModalOpen(true)}
-                    className="text-[11px] font-bold text-teal-700 hover:underline cursor-pointer"
+                    className="text-[11px] font-bold text-teal-700 hover:underline cursor-pointer flex items-center gap-1"
                   >
-                    {location ? "Ubah Titik Lokasi" : "Pilih via Peta/GPS"}
+                    <Icon name="mapPin" size={12} />
+                    <span>{location ? "Ubah Titik Lokasi" : "Pilih via Peta/GPS"}</span>
                   </button>
                 </div>
 
+                {/* Titik Lokasi / Wilayah dari Sistem */}
                 {location ? (
                   <div className="p-2.5 rounded-xl bg-white border border-emerald-200 text-xs space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-emerald-800 flex items-center gap-1">
-                        <Icon name="check" size={13} /> Lokasi Terdeteksi Sistem:
+                        <Icon name="check" size={13} />
+                        <span>Wilayah Terdeteksi Sistem:</span>
                       </span>
                       {distance && (
                         <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
-                          ± {distance}
+                          +/- {distance}
                         </span>
                       )}
                     </div>
@@ -731,81 +857,96 @@ export function StoreOrderBuilder({
                 ) : (
                   <div className="space-y-2">
                     <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-[11px] text-amber-900 flex items-center justify-between gap-2">
-                      <span>Posisi belum diatur di navbar. Atur otomatis lewat GPS atau ketik manual:</span>
+                      <span className="flex items-center gap-1.5">
+                        <Icon name="alertCircle" size={14} className="text-amber-700 shrink-0" />
+                        <span>Titik wilayah belum diatur di navbar. Atur otomatis lewat GPS atau isi di bawah:</span>
+                      </span>
                       <button
                         type="button"
                         onClick={detectGpsLocation}
                         disabled={detecting}
-                        className="px-2.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold shrink-0 cursor-pointer"
+                        className="px-2.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold shrink-0 cursor-pointer flex items-center gap-1"
                       >
-                        {detecting ? "Mencari…" : "📍 Pakai GPS"}
+                        <Icon name="mapPin" size={12} />
+                        <span>{detecting ? "Mencari…" : "Pakai GPS"}</span>
                       </button>
                     </div>
-                    <input
-                      type="text"
-                      placeholder="Atau ketik alamat lengkap / nama jalan & kecamatan di sini..."
-                      value={manualAddressOverride}
-                      onChange={(e) => {
-                        setManualAddressOverride(e.target.value);
-                        setValidationError(null);
-                      }}
-                      className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
-                    />
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1" htmlFor="cust-region">
+                        Kecamatan / Kelurahan / Kota <span className="text-rose-600">*</span>
+                      </label>
+                      <input
+                        id="cust-region"
+                        type="text"
+                        required
+                        placeholder="Contoh: Kec. Bojongsoang, Kab. Bandung"
+                        value={manualAddressOverride}
+                        onChange={(e) => {
+                          setManualAddressOverride(e.target.value);
+                          setValidationError(null);
+                        }}
+                        className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                      />
+                    </div>
                   </div>
                 )}
 
+                {/* Nama Jalan, RT/RW, & Nomor Rumah (Wajib) */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1" htmlFor="cust-street">
+                    Nama Jalan, RT/RW, & Nomor Rumah <span className="text-rose-600">*</span>
+                  </label>
+                  <input
+                    id="cust-street"
+                    type="text"
+                    required
+                    placeholder="Contoh: Jl. Melati No. 12, RT 03 / RW 05, Komplek Griya Asri"
+                    value={streetAddress}
+                    onChange={(e) => {
+                      setStreetAddress(e.target.value);
+                      setValidationError(null);
+                    }}
+                    className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                  />
+                </div>
+
+                {/* Detail Patokan Lokasi (Wajib) */}
                 <div>
                   <label
-                    className="block text-[11px] font-semibold text-slate-600 mb-1"
+                    className="block text-[11px] font-bold text-slate-700 mb-1"
                     htmlFor="cust-addr-detail"
                   >
-                    Detail Patokan / Nomor Rumah (Opsional)
+                    Detail Patokan Lokasi / Ciri Rumah <span className="text-rose-600">*</span>
                   </label>
                   <input
                     id="cust-addr-detail"
                     type="text"
-                    placeholder="Contoh: Rumah No. 12, pagar hitam, dekat masjid..."
+                    required
+                    placeholder="Contoh: Pagar warna hitam, samping masjid Al-Ikhlas"
                     value={addressDetail}
-                    onChange={(e) => setAddressDetail(e.target.value)}
+                    onChange={(e) => {
+                      setAddressDetail(e.target.value);
+                      setValidationError(null);
+                    }}
                     className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
                   />
                 </div>
               </div>
             )}
 
-            {/* Input Nama & Catatan */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <div>
-                <label className="block text-xs font-bold text-slate-800 mb-1" htmlFor="cust-name">
-                  Nama Pemesan <span className="text-rose-600">*</span>
-                </label>
-                <input
-                  id="cust-name"
-                  type="text"
-                  required
-                  placeholder="Contoh: Budi"
-                  value={customerName}
-                  onChange={(e) => {
-                    setCustomerName(e.target.value);
-                    setValidationError(null);
-                  }}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-800 mb-1" htmlFor="order-notes">
-                  Catatan Tambahan
-                </label>
-                <input
-                  id="order-notes"
-                  type="text"
-                  placeholder="Contoh: Minta sendok, sambal pisah..."
-                  value={orderNotes}
-                  onChange={(e) => setOrderNotes(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
-                />
-              </div>
+            {/* Catatan Tambahan Pesanan */}
+            <div>
+              <label className="block text-xs font-bold text-slate-800 mb-1" htmlFor="order-notes">
+                Catatan Tambahan Pesanan (Opsional)
+              </label>
+              <input
+                id="order-notes"
+                type="text"
+                placeholder="Contoh: Minta sendok plastik, sambal dipisah..."
+                value={orderNotes}
+                onChange={(e) => setOrderNotes(e.target.value)}
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+              />
             </div>
 
             {/* Pratinjau Template Format WhatsApp Otomatis */}

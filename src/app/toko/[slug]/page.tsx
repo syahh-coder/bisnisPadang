@@ -220,7 +220,10 @@ export default async function StorePage({ params, searchParams }: Props) {
             <FoodAgentIcon agent="shopeefood" size={24} />
             <div className="min-w-0">
               <p className="text-xs font-extrabold leading-tight truncate">ShopeeFood</p>
-              <p className="text-[10px] text-orange-700 font-semibold truncate">Buka Toko ↗</p>
+              <p className="text-[10px] text-orange-700 font-semibold truncate inline-flex items-center gap-1">
+                <span>Buka Toko</span>
+                <Icon name="externalLink" size={10} />
+              </p>
             </div>
           </a>
 
@@ -233,7 +236,10 @@ export default async function StorePage({ params, searchParams }: Props) {
             <FoodAgentIcon agent="gofood" size={24} />
             <div className="min-w-0">
               <p className="text-xs font-extrabold leading-tight truncate">GoFood</p>
-              <p className="text-[10px] text-emerald-700 font-semibold truncate">Buka Toko ↗</p>
+              <p className="text-[10px] text-emerald-700 font-semibold truncate inline-flex items-center gap-1">
+                <span>Buka Toko</span>
+                <Icon name="externalLink" size={10} />
+              </p>
             </div>
           </a>
 
@@ -246,7 +252,10 @@ export default async function StorePage({ params, searchParams }: Props) {
             <FoodAgentIcon agent="grabfood" size={24} />
             <div className="min-w-0">
               <p className="text-xs font-extrabold leading-tight truncate">GrabFood</p>
-              <p className="text-[10px] text-green-700 font-semibold truncate">Buka Toko ↗</p>
+              <p className="text-[10px] text-green-700 font-semibold truncate inline-flex items-center gap-1">
+                <span>Buka Toko</span>
+                <Icon name="externalLink" size={10} />
+              </p>
             </div>
           </a>
         </div>
