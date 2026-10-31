@@ -102,6 +102,9 @@ export default async function ManagePage({
         phone: found.phone,
         latitude: found.latitude,
         longitude: found.longitude,
+        gofood_url: found.gofood_url ?? null,
+        shopeefood_url: found.shopeefood_url ?? null,
+        grabfood_url: found.grabfood_url ?? null,
       };
       products = found.products.map((p, idx) => ({
         id: p.id || `p-${idx}`,

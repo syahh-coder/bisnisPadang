@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { ownedStore } from "@/lib/portal/owner";
 import { todayWib, validDate } from "@/lib/portal/format";
 import { field, phoneNumber, uuid, type FormState } from "@/lib/affiliation";
+import { serializeDeliveryInfo } from "@/lib/stores/links";
 import { updateDemoStore, addDemoProduct, updateDemoProduct, deleteDemoProduct } from "@/lib/catalog/demo";
 
 const denied = { error: "Toko tidak tersedia untuk akun Anda. Muat ulang halaman dan coba lagi." };
@@ -15,13 +16,29 @@ export async function saveOwnedStore(id: string, _: FormState, form: FormData): 
   if (!context) return denied;
   const name = field(form, "name"), slug = field(form, "slug"), manager = field(form, "manager_name"), category = field(form, "category_id");
   const rawPhone = field(form, "phone"), phone = rawPhone ? phoneNumber(rawPhone) : "";
-  const address = field(form, "address"), delivery = field(form, "delivery_info"), lat = field(form, "latitude"), lng = field(form, "longitude");
+  const address = field(form, "address"), rawDelivery = field(form, "delivery_info"), lat = field(form, "latitude"), lng = field(form, "longitude");
+  const gofoodUrl = field(form, "gofood_url"), shopeefoodUrl = field(form, "shopeefood_url"), grabfoodUrl = field(form, "grabfood_url");
+  const delivery = serializeDeliveryInfo(rawDelivery, {
+    gofood_url: gofoodUrl,
+    shopeefood_url: shopeefoodUrl,
+    grabfood_url: grabfoodUrl,
+  });
   if (!name || name.length > 160 || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug) || slug.length > 160 || manager.length > 160 || !uuid.test(category) || phone === null || !address || address.length > 1000 || delivery.length > 1000 || Boolean(lat) !== Boolean(lng) || (lat !== "" && (!Number.isFinite(Number(lat)) || Math.abs(Number(lat)) > 90)) || (lng !== "" && (!Number.isFinite(Number(lng)) || Math.abs(Number(lng)) > 180))) {
     return { error: "Periksa nama, slug, kategori, nomor WA, alamat, dan koordinat toko." };
   }
 
   if (!context.client) {
-    updateDemoStore(id, { name, slug, manager_name: manager, phone: phone || "081267891234", address, delivery_info: delivery });
+    updateDemoStore(id, {
+      name,
+      slug,
+      manager_name: manager,
+      phone: phone || "081267891234",
+      address,
+      delivery_info: rawDelivery,
+      gofood_url: gofoodUrl || null,
+      shopeefood_url: shopeefoodUrl || null,
+      grabfood_url: grabfoodUrl || null,
+    });
     refresh();
     return { success: "Data toko tersimpan (Mode Demo)." };
   }

@@ -204,6 +204,88 @@ const fallbackDatabase: LocationSearchResult[] = [
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+  const latParam = searchParams.get("lat");
+  const lonParam = searchParams.get("lon");
+
+  // Reverse geocoding untuk GPS otomatis (ubah koordinat jadi alamat jalan/kecamatan lengkap)
+  if (latParam !== null && lonParam !== null) {
+    const lat = parseFloat(latParam);
+    const lon = parseFloat(lonParam);
+    if (Number.isFinite(lat) && Number.isFinite(lon)) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 2500);
+        const revUrl = `https://nominatim.openstreetmap.org/reverse?lat=${encodeURIComponent(
+          lat
+        )}&lon=${encodeURIComponent(lon)}&format=json&addressdetails=1`;
+
+        const res = await fetch(revUrl, {
+          signal: controller.signal,
+          headers: {
+            "User-Agent": "TokoLokal-App/1.0 (halo@tokolokal.id)",
+            "Accept-Language": "id,en;q=0.9",
+          },
+          next: { revalidate: 3600 },
+        });
+        clearTimeout(timeout);
+
+        if (res.ok) {
+          const data = await res.json();
+          const addr = data?.address || {};
+          const road = addr.road || addr.pedestrian || addr.residential || addr.neighbourhood || "";
+          const suburb = addr.suburb || addr.village || addr.town || addr.city_district || addr.district || "";
+          const city = addr.city || addr.regency || addr.county || "";
+          const state = addr.state || "";
+
+          const parts = [road, suburb, city, state].filter(Boolean);
+          if (parts.length > 0) {
+            return NextResponse.json({
+              address: parts.join(", "),
+              latitude: lat,
+              longitude: lon,
+            });
+          }
+          if (data?.display_name) {
+            const shortName = String(data.display_name)
+              .split(",")
+              .slice(0, 4)
+              .map((s) => s.trim())
+              .join(", ");
+            return NextResponse.json({
+              address: shortName,
+              latitude: lat,
+              longitude: lon,
+            });
+          }
+        }
+      } catch {
+        // Fallback ke area lokal terdekat jika offline
+      }
+
+      // Cari area terdekat dari fallbackDatabase
+      let nearest = fallbackDatabase[0];
+      let minDist = Infinity;
+      for (const item of fallbackDatabase) {
+        const d = Math.hypot(item.latitude - lat, item.longitude - lon);
+        if (d < minDist) {
+          minDist = d;
+          nearest = item;
+        }
+      }
+
+      const fallbackAddress =
+        minDist < 0.25
+          ? `Sekitar ${nearest.full_name} (${lat.toFixed(4)}, ${lon.toFixed(4)})`
+          : `Titik GPS (${lat.toFixed(5)}, ${lon.toFixed(5)})`;
+
+      return NextResponse.json({
+        address: fallbackAddress,
+        latitude: lat,
+        longitude: lon,
+      });
+    }
+  }
+
   const q = searchParams.get("q")?.trim() || "";
 
   if (q.length < 2) {

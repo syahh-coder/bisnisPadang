@@ -6,9 +6,9 @@ import { Suspense } from "react";
 import { VisitTracker } from "@/components/visit-tracker";
 import { Icon } from "@/components/icon";
 import { getStoreDetail } from "@/lib/stores/server";
-import { contactLinks, mapLinks, safeCatalogReturn } from "@/lib/stores/links";
+import { contactLinks, mapLinks, parseDeliveryChannels, safeCatalogReturn } from "@/lib/stores/links";
 import { NoticeBanner } from "@/components/notice-banner";
-import { StoreOrderBuilder } from "@/components/store-order-builder";
+import { StoreOrderBuilder, FoodAgentIcon } from "@/components/store-order-builder";
 import { ShareButton } from "@/components/share-button";
 import { publicPhotoUrl } from "@/lib/supabase/public";
 import { StoreDistanceBadge } from "@/components/location-context";
@@ -57,6 +57,11 @@ export default async function StorePage({ params, searchParams }: Props) {
   const { store } = result;
   const contact = contactLinks(store.phone);
   const maps = mapLinks(store.address, store.latitude, store.longitude);
+  const channels = parseDeliveryChannels(store.delivery_info, store.name, {
+    gofood_url: store.gofood_url,
+    shopeefood_url: store.shopeefood_url,
+    grabfood_url: store.grabfood_url,
+  });
 
   return (
     <div className="max-w-3xl mx-auto pb-20 px-4 sm:px-0">
@@ -174,7 +179,76 @@ export default async function StorePage({ params, searchParams }: Props) {
             <Icon name="shoppingBag" size={15} className="text-teal-700" />
             <span>Layanan Delivery</span>
           </div>
-          <p className="text-sm font-bold text-slate-900">{store.delivery_info || "Tersedia via kurir lokal / ojek online"}</p>
+          <p className="text-sm font-bold text-slate-900">
+            {channels.cleanDeliveryInfo || "Tersedia via kurir lokal / ojek online"}
+          </p>
+        </div>
+      </div>
+
+      {/* Jembatan Agent Food & Delivery Toko */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 mt-3 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+          <div>
+            <h2 className="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+              <Icon name="truck" size={16} className="text-teal-700" />
+              <span>Jembatan Pemesanan & Food Delivery</span>
+            </h2>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              Pilih menu di bawah untuk pesan via Kurir WA Toko, atau buka langsung di aplikasi Food Agent favoritmu:
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <a
+            href="#menu-toko"
+            className="p-2.5 rounded-xl border border-emerald-300 bg-emerald-50/70 hover:bg-emerald-100/80 text-emerald-950 flex items-center gap-2.5 transition-all shadow-2xs"
+          >
+            <FoodAgentIcon agent="whatsapp" size={24} />
+            <div className="min-w-0">
+              <p className="text-xs font-extrabold leading-tight truncate">Delivery Toko</p>
+              <p className="text-[10px] text-emerald-700 font-semibold truncate">Keranjang ke WA</p>
+            </div>
+          </a>
+
+          <a
+            href={channels.shopeefoodUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2.5 rounded-xl border border-orange-200 bg-orange-50/60 hover:bg-orange-100/70 text-orange-950 flex items-center gap-2.5 transition-all shadow-2xs"
+          >
+            <FoodAgentIcon agent="shopeefood" size={24} />
+            <div className="min-w-0">
+              <p className="text-xs font-extrabold leading-tight truncate">ShopeeFood</p>
+              <p className="text-[10px] text-orange-700 font-semibold truncate">Buka Toko ↗</p>
+            </div>
+          </a>
+
+          <a
+            href={channels.gofoodUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2.5 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/60 text-emerald-950 flex items-center gap-2.5 transition-all shadow-2xs"
+          >
+            <FoodAgentIcon agent="gofood" size={24} />
+            <div className="min-w-0">
+              <p className="text-xs font-extrabold leading-tight truncate">GoFood</p>
+              <p className="text-[10px] text-emerald-700 font-semibold truncate">Buka Toko ↗</p>
+            </div>
+          </a>
+
+          <a
+            href={channels.grabfoodUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2.5 rounded-xl border border-green-200 bg-green-50/50 hover:bg-green-100/60 text-green-950 flex items-center gap-2.5 transition-all shadow-2xs"
+          >
+            <FoodAgentIcon agent="grabfood" size={24} />
+            <div className="min-w-0">
+              <p className="text-xs font-extrabold leading-tight truncate">GrabFood</p>
+              <p className="text-[10px] text-green-700 font-semibold truncate">Buka Toko ↗</p>
+            </div>
+          </a>
         </div>
       </div>
 
@@ -185,7 +259,9 @@ export default async function StorePage({ params, searchParams }: Props) {
             <h2 id="menu-toko" className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
               Daftar Menu & Produk
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">Pilih menu untuk langsung memesan ke WhatsApp toko</p>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Masukkan menu ke keranjang untuk kirim pesanan otomatis ke WA Delivery Toko, atau klik icon aplikasi food agent
+            </p>
           </div>
           <span className="text-xs font-semibold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-lg">
             {store.products.length} menu
@@ -198,11 +274,17 @@ export default async function StorePage({ params, searchParams }: Props) {
             photo_url: p.photo_path?.startsWith("http") ? p.photo_path : publicPhotoUrl(p.photo_path),
           }))}
           storeName={store.name}
+          storeSlug={store.slug}
           storePhone={store.phone}
           whatsappUrl={contact ? contact.whatsapp : null}
           storeAddress={store.address}
           latitude={store.latitude}
           longitude={store.longitude}
+          agentLinks={{
+            gofoodUrl: channels.gofoodUrl,
+            shopeefoodUrl: channels.shopeefoodUrl,
+            grabfoodUrl: channels.grabfoodUrl,
+          }}
         />
       </section>
 

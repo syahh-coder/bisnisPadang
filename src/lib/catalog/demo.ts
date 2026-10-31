@@ -28,6 +28,9 @@ export type DemoStore = StoreSummary & {
   products: DemoProduct[];
   manager_name?: string;
   category_id?: string;
+  gofood_url?: string | null;
+  shopeefood_url?: string | null;
+  grabfood_url?: string | null;
 };
 
 // Data toko universal (multi-daerah di Indonesia, bersih, tanpa spam)
@@ -49,6 +52,9 @@ const initialStores: DemoStore[] = [
     rating: 4.9,
     reviews_count: 142,
     opening_hours: "09:00 - 21:00 WIB",
+    gofood_url: "https://gofood.co.id/search?q=Warung+Bu+Ani",
+    shopeefood_url: "https://shopee.co.id/m/shopeefood",
+    grabfood_url: "https://food.grab.com/id/id/restaurants?search=Warung+Bu+Ani",
     products: [
       { id: "p-101-1", name: "Nasi Liwet Komplit Spesial", price: 25000, photo_url: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=240&fit=crop&q=80" },
       { id: "p-101-2", name: "Ayam Goreng Lengkuas Gurih", price: 18000, photo_url: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=240&fit=crop&q=80" },
@@ -66,7 +72,7 @@ const initialStores: DemoStore[] = [
     category_id: "00000000-0000-4000-8000-000000000002",
     manager_name: "Rian Hendrawan",
     address: "Jl. Ahmad Yani No. 5, Sumur Bandung, Bandung",
-    delivery_info: "Delivery via Gojek/Grab atau Ambil Langsung di Tempat",
+    delivery_info: "Delivery via Kurir Toko / GoFood / ShopeeFood",
     photo_path: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
     phone: "081398765432",
     latitude: -6.9175,
@@ -74,6 +80,9 @@ const initialStores: DemoStore[] = [
     rating: 4.8,
     reviews_count: 98,
     opening_hours: "08:00 - 23:00 WIB",
+    gofood_url: "https://gofood.co.id/search?q=Kopi+Sudut+Nusantara",
+    shopeefood_url: "https://shopee.co.id/m/shopeefood",
+    grabfood_url: "https://food.grab.com/id/id/restaurants?search=Kopi+Sudut+Nusantara",
     products: [
       { id: "p-102-1", name: "Kopi Susu Gula Aren", price: 18000, photo_url: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=240&fit=crop&q=80" },
       { id: "p-102-2", name: "Americano Cold Brew", price: 16000, photo_url: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=240&fit=crop&q=80" },
@@ -122,6 +131,9 @@ const initialStores: DemoStore[] = [
     rating: 4.7,
     reviews_count: 65,
     opening_hours: "06:00 - 18:00 WIB",
+    gofood_url: "https://gofood.co.id/search?q=Toko+Sembako+Jaya",
+    shopeefood_url: "https://shopee.co.id/m/shopeefood",
+    grabfood_url: "https://food.grab.com/id/id/restaurants?search=Toko+Sembako+Jaya",
     products: [
       { id: "p-104-1", name: "Beras Organik Premium 5 kg", price: 72000 },
       { id: "p-104-2", name: "Minyak Goreng Sawit 2 L", price: 34000 },
@@ -146,6 +158,9 @@ const initialStores: DemoStore[] = [
     rating: 4.9,
     reviews_count: 210,
     opening_hours: "11:00 - 21:30 WIB",
+    gofood_url: "https://gofood.co.id/search?q=Bakso+Mang+Ujang",
+    shopeefood_url: "https://shopee.co.id/m/shopeefood",
+    grabfood_url: "https://food.grab.com/id/id/restaurants?search=Bakso+Mang+Ujang",
     products: [
       { id: "p-105-1", name: "Bakso Urat Granat Pedas", price: 18000, photo_url: "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=240&fit=crop&q=80" },
       { id: "p-105-2", name: "Mie Ayam Bakso Spesial", price: 16000 },
@@ -236,6 +251,9 @@ export function getDemoStore(slug: string): StoreDetail | null {
     latitude: store.latitude,
     longitude: store.longitude,
     photo_url: store.photo_path,
+    gofood_url: store.gofood_url ?? null,
+    shopeefood_url: store.shopeefood_url ?? null,
+    grabfood_url: store.grabfood_url ?? null,
     products: store.products.map((p, idx) => ({
       id: p.id || `${store.id}-${idx}`,
       name: p.name,

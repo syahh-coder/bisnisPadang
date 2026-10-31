@@ -13,6 +13,9 @@ export type StoreDetail = StoreSummary & {
   latitude: number | null;
   longitude: number | null;
   photo_url: string | null;
+  gofood_url?: string | null;
+  shopeefood_url?: string | null;
+  grabfood_url?: string | null;
   products: Product[];
 };
 

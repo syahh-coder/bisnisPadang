@@ -11,6 +11,7 @@ import {
 } from "@/app/portal/toko/actions";
 import type { StoreRecord, Choice } from "@/lib/admin";
 import type { DailySale } from "@/lib/portal/format";
+import { parseDeliveryChannels } from "@/lib/stores/links";
 import { PhotoInput } from "@/components/photo-input";
 import { useDialog } from "@/components/dialog";
 import { useToast } from "@/components/toast";
@@ -26,6 +27,11 @@ function Feedback({ error, success }: { error?: string; success?: string }) {
 
 export function OwnerInfoForm({ store, categories }: { store: StoreRecord; categories: Choice[] }) {
   const [state, action, pending] = useActionState(saveOwnedStore.bind(null, store.id), {});
+  const parsed = parseDeliveryChannels(store.delivery_info, store.name, {
+    gofood_url: store.gofood_url,
+    shopeefood_url: store.shopeefood_url,
+    grabfood_url: store.grabfood_url,
+  });
   const [fields, setFields] = useState({
     name: store.name,
     slug: store.slug,
@@ -33,7 +39,10 @@ export function OwnerInfoForm({ store, categories }: { store: StoreRecord; categ
     category_id: store.category_id,
     phone: store.phone,
     address: store.address,
-    delivery_info: store.delivery_info,
+    delivery_info: parsed.cleanDeliveryInfo,
+    gofood_url: parsed.hasCustomGofood ? parsed.gofoodUrl : "",
+    shopeefood_url: parsed.hasCustomShopeefood ? parsed.shopeefoodUrl : "",
+    grabfood_url: parsed.hasCustomGrabfood ? parsed.grabfoodUrl : "",
     latitude: String(store.latitude ?? ""),
     longitude: String(store.longitude ?? ""),
   });
@@ -80,6 +89,22 @@ export function OwnerInfoForm({ store, categories }: { store: StoreRecord; categ
         Info delivery
         <textarea name="delivery_info" maxLength={1000} rows={2} {...bind("delivery_info")} />
       </label>
+      <fieldset>
+        <legend>Jembatan Aplikasi Food Delivery (opsional)</legend>
+        <p className="form-hint">Tempel link toko Anda di GoFood, ShopeeFood, atau GrabFood agar pembeli bisa memilih jalur pesan.</p>
+        <label>
+          Link ShopeeFood Toko
+          <input name="shopeefood_url" type="url" maxLength={300} placeholder="https://shopee.co.id/..." {...bind("shopeefood_url")} />
+        </label>
+        <label>
+          Link GoFood Toko
+          <input name="gofood_url" type="url" maxLength={300} placeholder="https://gofood.co.id/..." {...bind("gofood_url")} />
+        </label>
+        <label>
+          Link GrabFood Toko
+          <input name="grabfood_url" type="url" maxLength={300} placeholder="https://food.grab.com/..." {...bind("grabfood_url")} />
+        </label>
+      </fieldset>
       <fieldset>
         <legend>Lokasi peta (opsional)</legend>
         <p className="form-hint">Isi kedua koordinat untuk lokasi tepat. Jika kosong, peta memakai alamat toko.</p>

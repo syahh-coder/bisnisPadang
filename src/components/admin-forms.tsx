@@ -4,13 +4,33 @@ import { useActionState, useState, type ChangeEvent } from "react";
 import { saveStore, changeBookingStatus, savePhoto, saveProduct } from "@/app/portal/admin/actions";
 import { statuses, type Booking } from "@/lib/affiliation";
 import type { StoreRecord, Choice } from "@/lib/admin";
+import { parseDeliveryChannels } from "@/lib/stores/links";
 import { PhotoInput } from "@/components/photo-input";
 
 function Feedback({ error, success }: { error?: string; success?: string }) { return <>{error && <p role="alert">{error}</p>}{success && <p role="status">{success}</p>}</>; }
 
 export function StoreForm({ store, request, categories, owners }: { store?: StoreRecord; request?: Booking; categories: Choice[]; owners: Choice[] }) {
   const [state, action, pending] = useActionState(saveStore, {});
-  const [fields, setFields] = useState({ name: store?.name ?? "", slug: store?.slug ?? "", manager_name: store?.manager_name || request?.manager_name || owners.find((owner) => owner.id === store?.owner_id)?.name || "", owner_id: store?.owner_id ?? "", category_id: store?.category_id ?? "", phone: store?.phone || request?.whatsapp || "", address: store?.address || request?.address || "", delivery_info: store?.delivery_info ?? "", latitude: String(store?.latitude ?? ""), longitude: String(store?.longitude ?? "") });
+  const parsed = parseDeliveryChannels(store?.delivery_info, store?.name || "", {
+    gofood_url: store?.gofood_url,
+    shopeefood_url: store?.shopeefood_url,
+    grabfood_url: store?.grabfood_url,
+  });
+  const [fields, setFields] = useState({
+    name: store?.name ?? "",
+    slug: store?.slug ?? "",
+    manager_name: store?.manager_name || request?.manager_name || owners.find((owner) => owner.id === store?.owner_id)?.name || "",
+    owner_id: store?.owner_id ?? "",
+    category_id: store?.category_id ?? "",
+    phone: store?.phone || request?.whatsapp || "",
+    address: store?.address || request?.address || "",
+    delivery_info: parsed.cleanDeliveryInfo,
+    gofood_url: parsed.hasCustomGofood ? parsed.gofoodUrl : "",
+    shopeefood_url: parsed.hasCustomShopeefood ? parsed.shopeefoodUrl : "",
+    grabfood_url: parsed.hasCustomGrabfood ? parsed.grabfoodUrl : "",
+    latitude: String(store?.latitude ?? ""),
+    longitude: String(store?.longitude ?? ""),
+  });
   const bind = (name: keyof typeof fields) => ({ value: fields[name], onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setFields((old) => ({ ...old, [name]: event.target.value })) });
   return <form action={action} className="editor-form" aria-label={store ? "Edit toko" : "Tambah toko"}>
     <input type="hidden" name="id" value={store?.id ?? ""} /><input type="hidden" name="request_id" value={request?.id ?? ""} />
@@ -22,6 +42,7 @@ export function StoreForm({ store, request, categories, owners }: { store?: Stor
     <label>Nomor WhatsApp<input name="phone" type="tel" required maxLength={24} {...bind("phone")} /></label>
     <label>Alamat toko<textarea name="address" rows={3} required minLength={5} maxLength={1000} {...bind("address")} /></label>
     <label>Info delivery<textarea name="delivery_info" rows={2} maxLength={1000} {...bind("delivery_info")} /></label>
+    <fieldset><legend>Jembatan Aplikasi Food Delivery (opsional)</legend><p className="form-hint">Tempel link toko di ShopeeFood, GoFood, atau GrabFood sebagai jembatan pemesanan.</p><label>Link ShopeeFood Toko<input name="shopeefood_url" type="url" maxLength={300} placeholder="https://shopee.co.id/..." {...bind("shopeefood_url")} /></label><label>Link GoFood Toko<input name="gofood_url" type="url" maxLength={300} placeholder="https://gofood.co.id/..." {...bind("gofood_url")} /></label><label>Link GrabFood Toko<input name="grabfood_url" type="url" maxLength={300} placeholder="https://food.grab.com/..." {...bind("grabfood_url")} /></label></fieldset>
     <fieldset><legend>Lokasi peta (opsional)</legend><p className="form-hint">Isi kedua koordinat untuk lokasi tepat. Jika kosong, peta menggunakan alamat toko.</p><div className="form-pair"><label>Lintang<input name="latitude" type="number" step="any" min={-90} max={90} {...bind("latitude")} /></label><label>Bujur<input name="longitude" type="number" step="any" min={-180} max={180} {...bind("longitude")} /></label></div></fieldset>
     <Feedback {...state} /><button className="button button--primary" disabled={pending}>{pending ? "Menyimpan…" : "Simpan toko"}</button>
   </form>;

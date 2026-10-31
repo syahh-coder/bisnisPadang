@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { adminClient } from "@/lib/admin";
 import { MAX_PHOTO_BYTES } from "@/lib/media";
 import { field, phoneNumber, statuses, uuid, type FormState } from "@/lib/affiliation";
+import { serializeDeliveryInfo } from "@/lib/stores/links";
 import {
   addDemoStore,
   addDemoProduct,
@@ -25,7 +26,15 @@ export async function saveStore(_: FormState, form: FormData): Promise<FormState
   const slug = field(form, "slug");
   const phone = phoneNumber(field(form, "phone"));
   const address = field(form, "address");
-  const delivery = field(form, "delivery_info");
+  const rawDelivery = field(form, "delivery_info");
+  const gofoodUrl = field(form, "gofood_url");
+  const shopeefoodUrl = field(form, "shopeefood_url");
+  const grabfoodUrl = field(form, "grabfood_url");
+  const delivery = serializeDeliveryInfo(rawDelivery, {
+    gofood_url: gofoodUrl,
+    shopeefood_url: shopeefoodUrl,
+    grabfood_url: grabfoodUrl,
+  });
   const category = field(form, "category_id");
   const latitude = field(form, "latitude");
   const longitude = field(form, "longitude");
@@ -64,7 +73,10 @@ export async function saveStore(_: FormState, form: FormData): Promise<FormState
       category_slug: "makanan",
       category_id: category,
       address,
-      delivery_info: delivery,
+      delivery_info: rawDelivery,
+      gofood_url: gofoodUrl || null,
+      shopeefood_url: shopeefoodUrl || null,
+      grabfood_url: grabfoodUrl || null,
       photo_path: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
       phone: phone || "081234567890",
       latitude: latitude ? Number(latitude) : -6.2,

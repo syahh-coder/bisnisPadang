@@ -5,6 +5,7 @@ import { NoticeBanner } from "@/components/notice-banner";
 import { Icon, type IconName } from "@/components/icon";
 import { StoreDistanceBadge } from "@/components/location-context";
 import { catalogHref, PAGE_SIZE, type CatalogFilters, type CatalogResult } from "@/lib/catalog/types";
+import { stripDeliveryChannels } from "@/lib/stores/links";
 
 const categoryIcons: Record<string, IconName> = {
   makanan: "utensils",
@@ -215,10 +216,10 @@ export function Catalog({
 
                     <div className="flex flex-wrap items-center gap-1.5 mt-2.5 min-h-[28px]">
                       <StoreDistanceBadge lat={store.latitude} lon={store.longitude} />
-                      {store.delivery_info && (
+                      {stripDeliveryChannels(store.delivery_info) && (
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/60 max-w-full">
                           <Icon name="truck" size={13} className="text-emerald-700 shrink-0" />
-                          <span className="truncate">{store.delivery_info}</span>
+                          <span className="truncate">{stripDeliveryChannels(store.delivery_info)}</span>
                         </div>
                       )}
                     </div>

@@ -65,11 +65,25 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
 
     setDetecting(true);
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const lat = pos.coords.latitude;
         const lon = pos.coords.longitude;
+        let resolvedName = `Titik GPS (${lat.toFixed(4)}, ${lon.toFixed(4)})`;
+
+        try {
+          const res = await fetch(`/api/location/search?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.address) {
+              resolvedName = data.address;
+            }
+          }
+        } catch {
+          // gunakan fallback koordinat jika offline
+        }
+
         const newLoc: UserLocation = {
-          name: "Lokasi GPS Anda",
+          name: resolvedName,
           latitude: lat,
           longitude: lon,
           isAuto: true,
