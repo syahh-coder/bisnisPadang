@@ -6,69 +6,165 @@ import { ownedStore } from "@/lib/portal/owner";
 import { todayWib, validDate } from "@/lib/portal/format";
 import { field, phoneNumber, uuid, type FormState } from "@/lib/affiliation";
 import { serializeDeliveryInfo } from "@/lib/stores/links";
-import { updateDemoStore, addDemoProduct, updateDemoProduct, deleteDemoProduct } from "@/lib/catalog/demo";
+import {
+  updateDemoStore,
+  addDemoProduct,
+  updateDemoProduct,
+  deleteDemoProduct,
+  saveDemoSale,
+  deleteDemoSale,
+} from "@/lib/catalog/demo";
 
 const denied = { error: "Toko tidak tersedia untuk akun Anda. Muat ulang halaman dan coba lagi." };
-function refresh() { revalidatePath("/", "layout"); }
+function refresh() {
+  revalidatePath("/", "layout");
+}
+
+async function fileToDataUrl(file: File): Promise<string> {
+  const bytes = await file.arrayBuffer();
+  const base64 = Buffer.from(bytes).toString("base64");
+  return `data:${file.type};base64,${base64}`;
+}
 
 export async function saveOwnedStore(id: string, _: FormState, form: FormData): Promise<FormState> {
   const context = await ownedStore(id);
   if (!context) return denied;
-  const name = field(form, "name"), slug = field(form, "slug"), manager = field(form, "manager_name"), category = field(form, "category_id");
-  const rawPhone = field(form, "phone"), phone = rawPhone ? phoneNumber(rawPhone) : "";
-  const address = field(form, "address"), rawDelivery = field(form, "delivery_info"), lat = field(form, "latitude"), lng = field(form, "longitude");
-  const gofoodUrl = field(form, "gofood_url"), shopeefoodUrl = field(form, "shopeefood_url"), grabfoodUrl = field(form, "grabfood_url");
+  const name = field(form, "name"),
+    slug = field(form, "slug"),
+    manager = field(form, "manager_name"),
+    category = field(form, "category_id");
+  const rawPhone = field(form, "phone"),
+    phone = rawPhone ? phoneNumber(rawPhone) : "";
+  const address = field(form, "address"),
+    rawDelivery = field(form, "delivery_info"),
+    openingHours = field(form, "opening_hours"),
+    lat = field(form, "latitude"),
+    lng = field(form, "longitude");
+  const gofoodUrl = field(form, "gofood_url"),
+    shopeefoodUrl = field(form, "shopeefood_url"),
+    grabfoodUrl = field(form, "grabfood_url");
+
   const delivery = serializeDeliveryInfo(rawDelivery, {
     gofood_url: gofoodUrl,
     shopeefood_url: shopeefoodUrl,
     grabfood_url: grabfoodUrl,
+    opening_hours: openingHours,
   });
-  if (!name || name.length > 160 || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug) || slug.length > 160 || manager.length > 160 || !uuid.test(category) || phone === null || !address || address.length > 1000 || delivery.length > 1000 || Boolean(lat) !== Boolean(lng) || (lat !== "" && (!Number.isFinite(Number(lat)) || Math.abs(Number(lat)) > 90)) || (lng !== "" && (!Number.isFinite(Number(lng)) || Math.abs(Number(lng)) > 180))) {
+
+  if (
+    !name ||
+    name.length > 160 ||
+    !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug) ||
+    slug.length > 160 ||
+    manager.length > 160 ||
+    !uuid.test(category) ||
+    phone === null ||
+    !address ||
+    address.length > 1000 ||
+    delivery.length > 1000 ||
+    Boolean(lat) !== Boolean(lng) ||
+    (lat !== "" && (!Number.isFinite(Number(lat)) || Math.abs(Number(lat)) > 90)) ||
+    (lng !== "" && (!Number.isFinite(Number(lng)) || Math.abs(Number(lng)) > 180))
+  ) {
     return { error: "Periksa nama, slug, kategori, nomor WA, alamat, dan koordinat toko." };
   }
 
+  // Selalu sinkronkan ke memori demo agar apabila mode pratinjau aktif, datanya 100% identik
+  updateDemoStore(id, {
+    name,
+    slug,
+    manager_name: manager,
+    category_id: category,
+    phone: phone || "",
+    address,
+    delivery_info: rawDelivery,
+    opening_hours: openingHours || "08:00 - 22:00 WIB (Setiap Hari)",
+    gofood_url: gofoodUrl || null,
+    shopeefood_url: shopeefoodUrl || null,
+    grabfood_url: grabfoodUrl || null,
+    latitude: lat === "" ? null : Number(lat),
+    longitude: lng === "" ? null : Number(lng),
+  });
+
   if (!context.client) {
-    updateDemoStore(id, {
+    refresh();
+    return { success: "Seluruh perubahan info toko & link delivery berhasil disimpan." };
+  }
+
+  const result = await context.client
+    .from("stores")
+    .update({
       name,
       slug,
       manager_name: manager,
-      phone: phone || "081267891234",
+      category_id: category,
+      phone,
       address,
-      delivery_info: rawDelivery,
-      gofood_url: gofoodUrl || null,
-      shopeefood_url: shopeefoodUrl || null,
-      grabfood_url: grabfoodUrl || null,
-    });
-    refresh();
-    return { success: "Data toko tersimpan (Mode Demo)." };
-  }
+      delivery_info: delivery,
+      latitude: lat === "" ? null : Number(lat),
+      longitude: lng === "" ? null : Number(lng),
+    })
+    .eq("id", id)
+    .eq("owner_id", context.account.id)
+    .select("id");
 
-  const result = await context.client.from("stores").update({ name, slug, manager_name: manager, category_id: category, phone, address, delivery_info: delivery, latitude: lat === "" ? null : Number(lat), longitude: lng === "" ? null : Number(lng) }).eq("id", id).eq("owner_id", context.account.id).select("id");
-  if (result.error || !result.data?.length) return { error: result.error?.code === "23505" ? "Slug sudah digunakan toko lain. Pilih slug berbeda." : "Data toko belum tersimpan. Coba kembali." };
+  if (result.error || !result.data?.length) {
+    return {
+      error:
+        result.error?.code === "23505"
+          ? "Slug sudah digunakan toko lain. Pilih slug berbeda."
+          : "Data toko belum tersimpan. Coba kembali.",
+    };
+  }
   refresh();
   return { success: "Data toko tersimpan." };
 }
 
-export async function saveOwnedProduct(storeId: string, productId: string | null, _: FormState, form: FormData): Promise<FormState> {
+export async function saveOwnedProduct(
+  storeId: string,
+  productId: string | null,
+  _: FormState,
+  form: FormData
+): Promise<FormState> {
   const context = await ownedStore(storeId);
   if (!context) return denied;
-  const name = field(form, "name"), price = field(form, "price"), order = field(form, "sort_order");
-  if ((productId && !uuid.test(productId)) || !name || name.length > 160 || !/^\d{1,12}(\.\d{1,2})?$/.test(price) || !/^-?\d{1,10}$/.test(order) || Math.abs(Number(order)) > 2147483647) {
+  const name = field(form, "name"),
+    price = field(form, "price"),
+    order = field(form, "sort_order");
+
+  if (
+    !name ||
+    name.length > 160 ||
+    !/^\d{1,12}(\.\d{1,2})?$/.test(price) ||
+    !/^-?\d{1,10}$/.test(order) ||
+    Math.abs(Number(order)) > 2147483647
+  ) {
     return { error: "Periksa nama, harga tanpa pemisah ribuan, dan urutan menu." };
   }
 
   if (!context.client) {
     if (productId) {
-      updateDemoProduct(storeId, productId, { name, price: Number(price) });
+      updateDemoProduct(storeId, productId, {
+        name,
+        price: Number(price),
+        sort_order: Number(order),
+      });
     } else {
-      addDemoProduct(storeId, { name, price: Number(price) });
+      addDemoProduct(storeId, {
+        name,
+        price: Number(price),
+        sort_order: Number(order),
+      });
     }
     refresh();
-    return { success: "Menu tersimpan (Mode Demo)." };
+    return { success: productId ? "Menu berhasil diperbarui." : "Menu baru berhasil ditambahkan." };
   }
 
+  if (productId && !uuid.test(productId)) return denied;
   const data = { name, price: Number(price), sort_order: Number(order) };
-  const result = productId ? await context.client.from("products").update(data).eq("id", productId).eq("store_id", storeId).select("id") : await context.client.from("products").insert({ ...data, store_id: storeId }).select("id");
+  const result = productId
+    ? await context.client.from("products").update(data).eq("id", productId).eq("store_id", storeId).select("id")
+    : await context.client.from("products").insert({ ...data, store_id: storeId }).select("id");
   if (result.error || !result.data?.length) return { error: "Menu belum tersimpan. Muat ulang dan coba lagi." };
   refresh();
   return { success: "Menu tersimpan." };
@@ -78,43 +174,90 @@ export async function deleteOwnedProduct(storeId: string, productId: string, _: 
   const context = await ownedStore(storeId);
   if (!context) return denied;
 
+  deleteDemoProduct(storeId, productId);
+
   if (!context.client) {
-    deleteDemoProduct(storeId, productId);
     refresh();
-    return { success: "Menu dihapus (Mode Demo)." };
+    return { success: "Menu dihapus." };
   }
 
   if (!uuid.test(productId)) return denied;
-  const result = await context.client.from("products").delete().eq("id", productId).eq("store_id", storeId).select("id");
+  const result = await context.client
+    .from("products")
+    .delete()
+    .eq("id", productId)
+    .eq("store_id", storeId)
+    .select("id");
   if (result.error || !result.data?.length) return { error: "Menu belum dihapus. Muat ulang dan coba lagi." };
   refresh();
   return { success: "Menu dihapus." };
 }
 
-export async function saveOwnedPhoto(storeId: string, productId: string | null, _: FormState, form: FormData): Promise<FormState> {
+export async function saveOwnedPhoto(
+  storeId: string,
+  productId: string | null,
+  _: FormState,
+  form: FormData
+): Promise<FormState> {
   const context = await ownedStore(storeId);
   if (!context) return denied;
 
   const file = form.get("photo");
-  const extensions: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/avif": "avif", "image/gif": "gif" };
-  if (!(file instanceof File) || !file.size || file.size > MAX_PHOTO_BYTES || !extensions[file.type]) return { error: "Pilih foto JPG, PNG, WebP, AVIF, atau GIF, maksimal 4 MB." };
+  const extensions: Record<string, string> = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+    "image/avif": "avif",
+    "image/gif": "gif",
+  };
+  if (!(file instanceof File) || !file.size || file.size > MAX_PHOTO_BYTES || !extensions[file.type]) {
+    return { error: "Pilih foto JPG, PNG, WebP, AVIF, atau GIF, maksimal 4 MB." };
+  }
 
   if (!context.client) {
+    const dataUrl = await fileToDataUrl(file);
+    if (productId) {
+      updateDemoProduct(storeId, productId, { photo_url: dataUrl });
+    } else {
+      updateDemoStore(storeId, { photo_path: dataUrl });
+    }
     refresh();
-    return { success: "Foto toko tersimpan (Mode Demo)." };
+    return { success: "Foto berhasil disimpan dan diperbarui di halaman toko." };
   }
 
   if (productId) {
     if (!uuid.test(productId)) return denied;
-    const product = await context.client.from("products").select("id").eq("id", productId).eq("store_id", storeId).maybeSingle();
+    const product = await context.client
+      .from("products")
+      .select("id")
+      .eq("id", productId)
+      .eq("store_id", storeId)
+      .maybeSingle();
     if (product.error || !product.data) return { error: "Menu tidak ditemukan." };
   }
 
   const path = `stores/${storeId}/${randomUUID()}.${extensions[file.type]}`;
-  const uploaded = await context.client.storage.from("store-media").upload(path, file, { contentType: file.type, upsert: false });
+  const uploaded = await context.client.storage
+    .from("store-media")
+    .upload(path, file, { contentType: file.type, upsert: false });
   if (uploaded.error) return { error: "Foto belum terunggah. Periksa berkas lalu coba lagi." };
-  const updated = productId ? await context.client.from("products").update({ photo_path: path }).eq("id", productId).eq("store_id", storeId).select("id") : await context.client.from("stores").update({ photo_path: path }).eq("id", storeId).eq("owner_id", context.account.id).select("id");
-  if (updated.error || !updated.data?.length) { await context.client.storage.from("store-media").remove([path]); return { error: "Foto belum tersimpan. Coba kembali." }; }
+  const updated = productId
+    ? await context.client
+        .from("products")
+        .update({ photo_path: path })
+        .eq("id", productId)
+        .eq("store_id", storeId)
+        .select("id")
+    : await context.client
+        .from("stores")
+        .update({ photo_path: path })
+        .eq("id", storeId)
+        .eq("owner_id", context.account.id)
+        .select("id");
+  if (updated.error || !updated.data?.length) {
+    await context.client.storage.from("store-media").remove([path]);
+    return { error: "Foto belum tersimpan. Coba kembali." };
+  }
   refresh();
   return { success: "Foto tersimpan." };
 }
@@ -124,31 +267,67 @@ export async function removeOwnedPhoto(storeId: string, productId: string | null
   if (!context) return denied;
 
   if (!context.client) {
+    if (productId) {
+      updateDemoProduct(storeId, productId, { photo_url: null });
+    } else {
+      updateDemoStore(storeId, { photo_path: null });
+    }
     refresh();
-    return { success: "Foto dilepas (Mode Demo)." };
+    return { success: "Foto dilepas dari halaman toko." };
   }
 
   if (productId && !uuid.test(productId)) return denied;
-  const result = productId ? await context.client.from("products").update({ photo_path: null }).eq("id", productId).eq("store_id", storeId).select("id") : await context.client.from("stores").update({ photo_path: null }).eq("id", storeId).eq("owner_id", context.account.id).select("id");
+  const result = productId
+    ? await context.client
+        .from("products")
+        .update({ photo_path: null })
+        .eq("id", productId)
+        .eq("store_id", storeId)
+        .select("id")
+    : await context.client
+        .from("stores")
+        .update({ photo_path: null })
+        .eq("id", storeId)
+        .eq("owner_id", context.account.id)
+        .select("id");
   if (result.error || !result.data?.length) return { error: "Foto belum dilepas. Coba lagi." };
   refresh();
   return { success: "Foto dilepas dari halaman toko." };
 }
 
-export async function saveDailySales(storeId: string, date: string, _: FormState, form: FormData): Promise<FormState> {
+export async function saveDailySales(
+  storeId: string,
+  date: string,
+  _: FormState,
+  form: FormData
+): Promise<FormState> {
   const context = await ownedStore(storeId);
   if (!context) return denied;
-  const revenue = field(form, "revenue"), count = field(form, "sales_count");
-  if (!validDate(date) || date > todayWib() || !/^\d{1,12}(\.\d{1,2})?$/.test(revenue) || !/^\d{1,10}$/.test(count) || Number(count) > 2147483647) {
+  const revenue = field(form, "revenue"),
+    count = field(form, "sales_count");
+  if (
+    !validDate(date) ||
+    date > todayWib() ||
+    !/^\d{1,12}(\.\d{1,2})?$/.test(revenue) ||
+    !/^\d{1,10}$/.test(count) ||
+    Number(count) > 2147483647
+  ) {
     return { error: "Isi omset dan jumlah penjualan dengan angka nol atau lebih. Tanggal maksimal hari ini (WIB)." };
   }
 
+  saveDemoSale(storeId, date, Number(revenue), Number(count));
+
   if (!context.client) {
     refresh();
-    return { success: `Omset Rp ${Number(revenue).toLocaleString("id-ID")} berhasil dicatat!` };
+    return { success: `Omset Rp ${Number(revenue).toLocaleString("id-ID")} berhasil dicatat.` };
   }
 
-  const result = await context.client.rpc("save_daily_sales", { shop_id: storeId, sales_date: date, total_revenue: Number(revenue), total_sales: Number(count) });
+  const result = await context.client.rpc("save_daily_sales", {
+    shop_id: storeId,
+    sales_date: date,
+    total_revenue: Number(revenue),
+    total_sales: Number(count),
+  });
   if (result.error || !result.data) return { error: "Catatan belum tersimpan. Coba lagi." };
   refresh();
   return { success: "Omset dan penjualan tersimpan." };
@@ -158,9 +337,11 @@ export async function deleteDailySales(storeId: string, date: string, _: FormSta
   const context = await ownedStore(storeId);
   if (!context || !validDate(date)) return denied;
 
+  deleteDemoSale(storeId, date);
+
   if (!context.client) {
     refresh();
-    return { success: "Catatan dihapus (Mode Demo)." };
+    return { success: "Catatan dihapus." };
   }
 
   const result = await context.client.from("daily_sales").delete().eq("store_id", storeId).eq("date", date).select("id");

@@ -102,6 +102,7 @@ export default async function ManagePage({
         phone: found.phone,
         latitude: found.latitude,
         longitude: found.longitude,
+        opening_hours: found.opening_hours ?? null,
         gofood_url: found.gofood_url ?? null,
         shopeefood_url: found.shopeefood_url ?? null,
         grabfood_url: found.grabfood_url ?? null,
@@ -110,7 +111,7 @@ export default async function ManagePage({
         id: p.id || `p-${idx}`,
         name: p.name,
         price: p.price,
-        sort_order: idx,
+        sort_order: p.sort_order ?? idx,
       }));
     }
   }
@@ -245,7 +246,8 @@ export default async function ManagePage({
                   className="inline-flex items-center gap-1 text-xs font-semibold text-teal-700 hover:underline"
                   href={booking.store_id ? `/portal/admin/kelola?toko=${booking.store_id}` : `/portal/admin/kelola?permohonan=${booking.id}`}
                 >
-                  <span>{booking.store_id ? "Edit Toko Terkait →" : "Jadikan Toko Mitra →"}</span>
+                  <span>{booking.store_id ? "Edit Toko Terkait" : "Jadikan Toko Mitra"}</span>
+                  <Icon name="chevronRight" size={14} />
                 </Link>
               </div>
             </div>

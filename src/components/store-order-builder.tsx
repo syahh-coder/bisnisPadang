@@ -16,9 +16,9 @@ export interface OrderProduct {
 }
 
 export interface AgentFoodLinks {
-  gofoodUrl: string;
-  shopeefoodUrl: string;
-  grabfoodUrl: string;
+  gofoodUrl?: string | null;
+  shopeefoodUrl?: string | null;
+  grabfoodUrl?: string | null;
 }
 
 interface StoreOrderBuilderProps {
@@ -148,12 +148,12 @@ export function StoreOrderBuilder({
   const { alert: dialogAlert } = useDialog();
   const distance = getDistanceTo(latitude, longitude);
 
-  const encodedStore = encodeURIComponent(storeName.trim());
   const links: AgentFoodLinks = agentLinks || {
-    gofoodUrl: `https://gofood.co.id/search?q=${encodedStore}`,
-    shopeefoodUrl: `https://shopee.co.id/search?keyword=${encodedStore}`,
-    grabfoodUrl: `https://food.grab.com/id/id/restaurants?search=${encodedStore}`,
+    gofoodUrl: null,
+    shopeefoodUrl: null,
+    grabfoodUrl: null,
   };
+  const hasAnyAgentLink = Boolean(links.shopeefoodUrl || links.gofoodUrl || links.grabfoodUrl);
 
   // Load saved cart & user profile from localStorage
   useEffect(() => {
@@ -478,40 +478,50 @@ export function StoreOrderBuilder({
                     </p>
                   </div>
 
-                  {/* Baris Icon Jembatan ke Agent Food + Tombol Keranjang */}
+                  {/* Baris Icon Jembatan ke Agent Food (Hanya yang dimiliki toko) + Tombol Keranjang */}
                   <div className="flex items-center justify-between gap-2 mt-2.5 pt-2 border-t border-slate-100">
-                    <div className="flex items-center gap-1" title="Jembatan ke Aplikasi Food Delivery">
-                      <a
-                        href={links.shopeefoodUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={`Pesan ${product.name} via ShopeeFood`}
-                        aria-label={`ShopeeFood ${product.name}`}
-                        className="p-1 rounded-lg hover:bg-orange-50 border border-transparent hover:border-orange-200 transition-all hover:scale-105"
-                      >
-                        <FoodAgentIcon agent="shopeefood" size={18} />
-                      </a>
-                      <a
-                        href={links.gofoodUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={`Pesan ${product.name} via GoFood`}
-                        aria-label={`GoFood ${product.name}`}
-                        className="p-1 rounded-lg hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition-all hover:scale-105"
-                      >
-                        <FoodAgentIcon agent="gofood" size={18} />
-                      </a>
-                      <a
-                        href={links.grabfoodUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={`Pesan ${product.name} via GrabFood`}
-                        aria-label={`GrabFood ${product.name}`}
-                        className="p-1 rounded-lg hover:bg-green-50 border border-transparent hover:border-green-200 transition-all hover:scale-105"
-                      >
-                        <FoodAgentIcon agent="grabfood" size={18} />
-                      </a>
-                    </div>
+                    {hasAnyAgentLink ? (
+                      <div className="flex items-center gap-1" title="Tersedia di Aplikasi Food Delivery">
+                        {links.shopeefoodUrl && (
+                          <a
+                            href={links.shopeefoodUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={`Pesan ${product.name} via ShopeeFood`}
+                            aria-label={`ShopeeFood ${product.name}`}
+                            className="p-1 rounded-lg hover:bg-orange-50 border border-transparent hover:border-orange-200 transition-all hover:scale-105"
+                          >
+                            <FoodAgentIcon agent="shopeefood" size={18} />
+                          </a>
+                        )}
+                        {links.gofoodUrl && (
+                          <a
+                            href={links.gofoodUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={`Pesan ${product.name} via GoFood`}
+                            aria-label={`GoFood ${product.name}`}
+                            className="p-1 rounded-lg hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition-all hover:scale-105"
+                          >
+                            <FoodAgentIcon agent="gofood" size={18} />
+                          </a>
+                        )}
+                        {links.grabfoodUrl && (
+                          <a
+                            href={links.grabfoodUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={`Pesan ${product.name} via GrabFood`}
+                            aria-label={`GrabFood ${product.name}`}
+                            className="p-1 rounded-lg hover:bg-green-50 border border-transparent hover:border-green-200 transition-all hover:scale-105"
+                          >
+                            <FoodAgentIcon agent="grabfood" size={18} />
+                          </a>
+                        )}
+                      </div>
+                    ) : (
+                      <span />
+                    )}
 
                     {qty === 0 ? (
                       <button
@@ -987,41 +997,49 @@ export function StoreOrderBuilder({
               <span>Kirim Pesanan ke WA Delivery Toko</span>
             </button>
 
-            {/* Jembatan Alternatif: Pesan Lewat GoFood / ShopeeFood / GrabFood */}
-            <div className="pt-3 border-t border-slate-200/90">
-              <p className="text-[11px] font-bold text-slate-500 text-center mb-2">
-                Atau pesan langsung lewat jembatan aplikasi Food Delivery resmi toko:
-              </p>
-              <div className="grid grid-cols-3 gap-2">
-                <a
-                  href={links.shopeefoodUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-2 px-2.5 rounded-xl border border-orange-200 bg-orange-50/60 hover:bg-orange-100/70 text-orange-950 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
-                >
-                  <FoodAgentIcon agent="shopeefood" size={16} />
-                  <span>ShopeeFood</span>
-                </a>
-                <a
-                  href={links.gofoodUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-2 px-2.5 rounded-xl border border-emerald-200 bg-emerald-50/60 hover:bg-emerald-100/70 text-emerald-950 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
-                >
-                  <FoodAgentIcon agent="gofood" size={16} />
-                  <span>GoFood</span>
-                </a>
-                <a
-                  href={links.grabfoodUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-2 px-2.5 rounded-xl border border-green-200 bg-green-50/60 hover:bg-green-100/70 text-green-950 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
-                >
-                  <FoodAgentIcon agent="grabfood" size={16} />
-                  <span>GrabFood</span>
-                </a>
+            {/* Jembatan Alternatif: Hanya tampilkan aplikasi Food Delivery yang dimiliki toko */}
+            {hasAnyAgentLink && (
+              <div className="pt-3 border-t border-slate-200/90">
+                <p className="text-[11px] font-bold text-slate-500 text-center mb-2">
+                  Atau pesan langsung lewat jembatan aplikasi Food Delivery resmi toko:
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {links.shopeefoodUrl && (
+                    <a
+                      href={links.shopeefoodUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 min-w-[110px] py-2 px-2.5 rounded-xl border border-orange-200 bg-orange-50/60 hover:bg-orange-100/70 text-orange-950 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <FoodAgentIcon agent="shopeefood" size={16} />
+                      <span>ShopeeFood</span>
+                    </a>
+                  )}
+                  {links.gofoodUrl && (
+                    <a
+                      href={links.gofoodUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 min-w-[110px] py-2 px-2.5 rounded-xl border border-emerald-200 bg-emerald-50/60 hover:bg-emerald-100/70 text-emerald-950 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <FoodAgentIcon agent="gofood" size={16} />
+                      <span>GoFood</span>
+                    </a>
+                  )}
+                  {links.grabfoodUrl && (
+                    <a
+                      href={links.grabfoodUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 min-w-[110px] py-2 px-2.5 rounded-xl border border-green-200 bg-green-50/60 hover:bg-green-100/70 text-green-950 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <FoodAgentIcon agent="grabfood" size={16} />
+                      <span>GrabFood</span>
+                    </a>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

@@ -9,11 +9,14 @@ import { field, phoneNumber, statuses, uuid, type FormState } from "@/lib/affili
 import { serializeDeliveryInfo } from "@/lib/stores/links";
 import {
   addDemoStore,
+  updateDemoStore,
   addDemoProduct,
+  updateDemoProduct,
   updateDemoBookingStatus,
   deleteDemoStore,
   clearAllDemoStores,
   loadSampleStores,
+  demoCategories,
 } from "@/lib/catalog/demo";
 
 export async function saveStore(_: FormState, form: FormData): Promise<FormState> {
@@ -27,6 +30,7 @@ export async function saveStore(_: FormState, form: FormData): Promise<FormState
   const phone = phoneNumber(field(form, "phone"));
   const address = field(form, "address");
   const rawDelivery = field(form, "delivery_info");
+  const openingHours = field(form, "opening_hours");
   const gofoodUrl = field(form, "gofood_url");
   const shopeefoodUrl = field(form, "shopeefood_url");
   const grabfoodUrl = field(form, "grabfood_url");
@@ -34,6 +38,7 @@ export async function saveStore(_: FormState, form: FormData): Promise<FormState
     gofood_url: gofoodUrl,
     shopeefood_url: shopeefoodUrl,
     grabfood_url: grabfoodUrl,
+    opening_hours: openingHours,
   });
   const category = field(form, "category_id");
   const latitude = field(form, "latitude");
@@ -62,28 +67,50 @@ export async function saveStore(_: FormState, form: FormData): Promise<FormState
   }
 
   const storeId = id || randomUUID();
+  const matchedCat = demoCategories.find((c) => c.id === category) || demoCategories[0];
 
   if (!client) {
+    if (id && updateDemoStore(id, {
+      slug,
+      name,
+      manager_name: manager,
+      category_id: category,
+      category_name: matchedCat.name,
+      category_slug: matchedCat.slug,
+      address,
+      delivery_info: rawDelivery,
+      opening_hours: openingHours || "08:00 - 22:00 WIB (Setiap Hari)",
+      gofood_url: gofoodUrl || null,
+      shopeefood_url: shopeefoodUrl || null,
+      grabfood_url: grabfoodUrl || null,
+      phone: phone || "",
+      latitude: latitude ? Number(latitude) : null,
+      longitude: longitude ? Number(longitude) : null,
+    })) {
+      revalidatePath("/", "layout");
+      redirect(`/portal/admin/kelola?toko=${id}&tersimpan=1`);
+    }
+
     addDemoStore({
       id: storeId,
       slug,
       name,
       manager_name: manager,
-      category_name: "Makanan",
-      category_slug: "makanan",
+      category_name: matchedCat.name,
+      category_slug: matchedCat.slug,
       category_id: category,
       address,
       delivery_info: rawDelivery,
+      opening_hours: openingHours || "08:00 - 22:00 WIB (Setiap Hari)",
       gofood_url: gofoodUrl || null,
       shopeefood_url: shopeefoodUrl || null,
       grabfood_url: grabfoodUrl || null,
-      photo_path: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
-      phone: phone || "081234567890",
-      latitude: latitude ? Number(latitude) : -6.2,
-      longitude: longitude ? Number(longitude) : 106.8,
+      photo_path: null,
+      phone: phone || "",
+      latitude: latitude ? Number(latitude) : null,
+      longitude: longitude ? Number(longitude) : null,
       rating: 5.0,
       reviews_count: 1,
-      opening_hours: "09:00 - 21:00 WIB",
       products: [],
     });
     revalidatePath("/", "layout");
@@ -112,7 +139,7 @@ export async function changeBookingStatus(id: string, _: FormState, form: FormDa
   if (!client) {
     updateDemoBookingStatus(id, status);
     revalidatePath("/portal/admin/kelola");
-    return { success: `Status berhasil diubah menjadi ${status} (Mode Demo).` };
+    return { success: `Status berhasil diubah menjadi ${status}.` };
   }
 
   const result = await client.from("affiliation_requests").update({ status }).eq("id", id).select("id");
@@ -133,8 +160,11 @@ export async function savePhoto(id: string, _: FormState, form: FormData): Promi
   }
 
   if (!client) {
+    const bytes = await file.arrayBuffer();
+    const dataUrl = `data:${file.type};base64,${Buffer.from(bytes).toString("base64")}`;
+    updateDemoStore(id, { photo_path: dataUrl });
     revalidatePath("/", "layout");
-    return { success: "Foto toko tersimpan (Mode Demo)." };
+    return { success: "Foto toko berhasil disimpan." };
   }
 
   const existing = await client.from("stores").select("id").eq("id", id).maybeSingle();
@@ -158,16 +188,21 @@ export async function saveProduct(storeId: string, productId: string | null, _: 
   const rawPrice = field(form, "price");
   const order = Number(field(form, "sort_order"));
 
-  if (!uuid.test(storeId) || (productId && !uuid.test(productId)) || !name || name.length > 160 || !/^\d{1,12}(\.\d{1,2})?$/.test(rawPrice) || !Number.isSafeInteger(order) || Math.abs(order) > 2147483647) {
+  if (!uuid.test(storeId) || !name || name.length > 160 || !/^\d{1,12}(\.\d{1,2})?$/.test(rawPrice) || !Number.isSafeInteger(order) || Math.abs(order) > 2147483647) {
     return { error: "Periksa nama, harga (angka tanpa pemisah ribuan), dan urutan menu." };
   }
 
   if (!client) {
-    addDemoProduct(storeId, { name, price: Number(rawPrice) });
+    if (productId) {
+      updateDemoProduct(storeId, productId, { name, price: Number(rawPrice), sort_order: order });
+    } else {
+      addDemoProduct(storeId, { name, price: Number(rawPrice), sort_order: order });
+    }
     revalidatePath("/", "layout");
-    return { success: "Menu tersimpan (Mode Demo)." };
+    return { success: "Menu tersimpan." };
   }
 
+  if (productId && !uuid.test(productId)) return { error: "ID menu tidak valid." };
   const data = { name, price: Number(rawPrice), sort_order: order };
   const result = productId ? await client.from("products").update(data).eq("id", productId).eq("store_id", storeId).select("id") : await client.from("products").insert({ ...data, store_id: storeId }).select("id");
   if (result.error || !result.data?.length) return { error: "Menu belum tersimpan. Coba kembali." };

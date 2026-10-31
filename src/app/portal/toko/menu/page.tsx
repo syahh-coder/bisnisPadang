@@ -8,6 +8,7 @@ import { OwnerProductForm, OwnerPhotoForm, DeleteProductForm, type OwnerProduct 
 import { publicPhotoUrl } from "@/lib/supabase/public";
 import { StorePhoto } from "@/components/store-photo";
 import { getDemoStore } from "@/lib/catalog/demo";
+import { Icon } from "@/components/icon";
 
 export default async function StoreMenuPage({
   searchParams,
@@ -17,15 +18,22 @@ export default async function StoreMenuPage({
   const params = await searchParams;
   const context = await ownerContext(params.toko);
   const heading = (
-    <div className="page-heading">
-      <h1>Menu / Produk Toko</h1>
-      <p>Atur nama, harga, urutan, dan foto katalog menu toko Anda.</p>
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+      <div>
+        <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md">
+          Manajemen Katalog Produk
+        </span>
+        <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1.5">Menu & Produk Toko</h1>
+        <p className="text-xs text-slate-500 mt-0.5">
+          Atur nama menu, harga, urutan tampil, dan foto produk. Menu yang disimpan langsung tampil di keranjang pesanan halaman toko.
+        </p>
+      </div>
     </div>
   );
 
   if (context.status !== "ready") {
     return (
-      <section className="page-view">
+      <section className="max-w-4xl mx-auto py-6 px-4 sm:px-0 space-y-6">
         {heading}
         <OwnerUnavailable status={context.status} />
       </section>
@@ -73,60 +81,113 @@ export default async function StoreMenuPage({
   }
 
   return (
-    <section className="page-view max-w-4xl mx-auto py-6 px-4 sm:px-0 space-y-6">
+    <section className="max-w-4xl mx-auto py-6 px-4 sm:px-0 space-y-6">
       {heading}
       <OwnerStorePicker store={store} stores={stores} path="/portal/toko/menu" />
 
       {/* Tambah Menu Baru */}
-      <section className="dashboard-section bg-white rounded-2xl border border-slate-200/90 shadow-sm p-6" aria-label="Tambah menu baru">
-        <h2 className="section-title text-lg font-bold text-slate-900 mb-4">Tambah Menu Baru</h2>
+      <section className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6" aria-label="Tambah menu baru">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900">Tambah Menu Baru</h2>
+            <p className="text-xs text-slate-500 mt-0.5">Tambahkan makanan, minuman, produk, atau layanan baru ke toko Anda.</p>
+          </div>
+          <Link
+            href={`/portal/toko/info?toko=${store.id}`}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors"
+          >
+            <Icon name="truck" size={14} />
+            <span>Atur Info & Delivery</span>
+          </Link>
+        </div>
         <OwnerProductForm key={`${store.id}-new-${productsCount}`} storeId={store.id} />
       </section>
 
       {/* Daftar Menu Tersimpan */}
-      <section className="admin-section bg-white rounded-2xl border border-slate-200/90 shadow-sm p-6 space-y-4" aria-labelledby="menu-list">
-        <h2 className="section-title text-lg font-bold text-slate-900" id="menu-list">
-          Menu Tersimpan <span className="text-slate-400 font-normal">({productsCount})</span>
-        </h2>
+      <section className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 space-y-4" aria-labelledby="menu-list">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h2 className="text-lg font-bold text-slate-900" id="menu-list">
+            Daftar Menu Tersimpan <span className="text-teal-700 font-extrabold">({productsCount})</span>
+          </h2>
+          <span className="text-xs text-slate-500">Klik menu untuk mengedit atau menghapus</span>
+        </div>
 
         {!productsData.length ? (
-          <p className="notice p-4 rounded-xl bg-slate-50 text-slate-500 text-sm">Belum ada menu yang tersimpan.</p>
+          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/70 text-center space-y-2">
+            <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-400 flex items-center justify-center mx-auto">
+              <Icon name="shoppingBag" size={20} />
+            </div>
+            <p className="text-sm font-bold text-slate-800">Belum Ada Menu yang Tersimpan</p>
+            <p className="text-xs text-slate-500 max-w-md mx-auto">
+              Saat menu kosong, halaman publik toko Anda hanya menampilkan profil toko dan kontak tanpa daftar menu. Gunakan formulir di atas untuk menambahkan menu pertama.
+            </p>
+          </div>
         ) : (
           <div className="space-y-3">
-            {productsData.map((product) => (
-              <details key={product.id} className="menu-editor border border-slate-200 rounded-xl p-4 bg-slate-50/50">
-                <summary className="font-semibold text-slate-900 flex items-center justify-between cursor-pointer">
-                  <span>{product.name}</span>
-                  <span className="text-teal-700 font-bold text-sm">{rupiah(Number(product.price))}</span>
+            {productsData.map((product, index) => (
+              <details
+                key={product.id}
+                open={index === 0}
+                className="group border border-slate-200 rounded-xl p-4 bg-slate-50/50 hover:bg-slate-50 transition-colors"
+              >
+                <summary className="font-bold text-slate-900 flex items-center justify-between cursor-pointer list-none">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-lg bg-teal-700 text-white text-xs font-extrabold flex items-center justify-center shrink-0">
+                      {index + 1}
+                    </span>
+                    <span className="text-sm">{product.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-teal-800 font-extrabold text-sm bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-200/60">
+                      {rupiah(Number(product.price))}
+                    </span>
+                    <Icon name="chevronDown" size={16} className="text-slate-400 group-open:rotate-180 transition-transform" />
+                  </div>
                 </summary>
                 <div className="pt-4 mt-3 border-t border-slate-200 space-y-4">
                   <OwnerProductForm key={product.id} storeId={store.id} product={product} />
                   {product.photo_path && (
-                    <div className="menu-photo-preview max-w-xs">
+                    <div className="max-w-xs">
                       <StorePhoto key={product.photo_path} src={publicPhotoUrl(product.photo_path)} name={product.name} />
                     </div>
                   )}
-                  <OwnerPhotoForm storeId={store.id} productId={product.id} hasPhoto={Boolean(product.photo_path)} />
-                  <DeleteProductForm storeId={store.id} productId={product.id} />
+                  <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200/70">
+                    <OwnerPhotoForm storeId={store.id} productId={product.id} hasPhoto={Boolean(product.photo_path)} />
+                    <DeleteProductForm storeId={store.id} productId={product.id} />
+                  </div>
                 </div>
               </details>
             ))}
           </div>
         )}
 
-        <div className="pagination flex items-center justify-between text-xs text-slate-500 pt-4 border-t border-slate-100">
-          {page > 1 ? (
-            <Link className="button" href={`/portal/toko/menu?toko=${store.id}&halaman=${page - 1}`}>
-              Sebelumnya
-            </Link>
-          ) : <span />}
-          <span>Halaman {page}</span>
-          {page * 20 < productsCount ? (
-            <Link className="button" href={`/portal/toko/menu?toko=${store.id}&halaman=${page + 1}`}>
-              Berikutnya
-            </Link>
-          ) : <span />}
-        </div>
+        {productsCount > 20 && (
+          <div className="flex items-center justify-between text-xs text-slate-500 pt-4 border-t border-slate-100">
+            {page > 1 ? (
+              <Link
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-slate-200 bg-white font-semibold text-slate-700 hover:bg-slate-50"
+                href={`/portal/toko/menu?toko=${store.id}&halaman=${page - 1}`}
+              >
+                <Icon name="chevronLeft" size={14} />
+                <span>Sebelumnya</span>
+              </Link>
+            ) : (
+              <span />
+            )}
+            <span>Halaman {page}</span>
+            {page * 20 < productsCount ? (
+              <Link
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-slate-200 bg-white font-semibold text-slate-700 hover:bg-slate-50"
+                href={`/portal/toko/menu?toko=${store.id}&halaman=${page + 1}`}
+              >
+                <span>Berikutnya</span>
+                <Icon name="chevronRight" size={14} />
+              </Link>
+            ) : (
+              <span />
+            )}
+          </div>
+        )}
       </section>
     </section>
   );

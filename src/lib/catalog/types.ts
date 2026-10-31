@@ -16,6 +16,10 @@ export type StoreSummary = {
   longitude?: number | null;
   rating?: number | null;
   reviews_count?: number | null;
+  opening_hours?: string | null;
+  gofood_url?: string | null;
+  shopeefood_url?: string | null;
+  grabfood_url?: string | null;
 };
 
 export type CatalogFilters = { query: string; category: string; page: number };

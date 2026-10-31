@@ -2,10 +2,10 @@ import Link from "next/link";
 import { EmptyState } from "@/components/empty-state";
 import { SearchForm } from "./search-form";
 import { NoticeBanner } from "@/components/notice-banner";
-import { Icon, type IconName } from "@/components/icon";
+import { Icon, FoodAgentIcon, type IconName } from "@/components/icon";
 import { StoreDistanceBadge } from "@/components/location-context";
 import { catalogHref, PAGE_SIZE, type CatalogFilters, type CatalogResult } from "@/lib/catalog/types";
-import { stripDeliveryChannels } from "@/lib/stores/links";
+import { parseDeliveryChannels } from "@/lib/stores/links";
 
 const categoryIcons: Record<string, IconName> = {
   makanan: "utensils",
@@ -216,12 +216,51 @@ export function Catalog({
 
                     <div className="flex flex-wrap items-center gap-1.5 mt-2.5 min-h-[28px]">
                       <StoreDistanceBadge lat={store.latitude} lon={store.longitude} />
-                      {stripDeliveryChannels(store.delivery_info) && (
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/60 max-w-full">
-                          <Icon name="truck" size={13} className="text-emerald-700 shrink-0" />
-                          <span className="truncate">{stripDeliveryChannels(store.delivery_info)}</span>
-                        </div>
-                      )}
+                      {(() => {
+                        const ch = parseDeliveryChannels(store.delivery_info, store.name, {
+                          opening_hours: store.opening_hours,
+                          gofood_url: store.gofood_url,
+                          shopeefood_url: store.shopeefood_url,
+                          grabfood_url: store.grabfood_url,
+                        });
+                        return (
+                          <>
+                            {ch.cleanDeliveryInfo && (
+                              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-50 text-emerald-800 border border-emerald-200/60 max-w-full">
+                                <Icon name="truck" size={13} className="text-emerald-700 shrink-0" />
+                                <span className="truncate">{ch.cleanDeliveryInfo}</span>
+                              </div>
+                            )}
+                            {ch.gofoodUrl && (
+                              <span
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-green-50 text-green-800 border border-green-200"
+                                title="Tersedia di GoFood"
+                              >
+                                <FoodAgentIcon agent="gofood" size={11} />
+                                <span>GoFood</span>
+                              </span>
+                            )}
+                            {ch.shopeefoodUrl && (
+                              <span
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-orange-50 text-orange-800 border border-orange-200"
+                                title="Tersedia di ShopeeFood"
+                              >
+                                <FoodAgentIcon agent="shopeefood" size={11} />
+                                <span>ShopeeFood</span>
+                              </span>
+                            )}
+                            {ch.grabfoodUrl && (
+                              <span
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200"
+                                title="Tersedia di GrabFood"
+                              >
+                                <FoodAgentIcon agent="grabfood" size={11} />
+                                <span>GrabFood</span>
+                              </span>
+                            )}
+                          </>
+                        );
+                      })()}
                     </div>
                   </div>
 
@@ -256,14 +295,16 @@ export function Catalog({
         <nav className="flex items-center justify-center gap-2 mt-10" aria-label="Halaman daftar toko">
           {filters.page > 1 ? (
             <Link
-              className="px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+              className="inline-flex items-center gap-1 px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
               href={catalogHref(path, { ...filters, page: filters.page - 1 })}
             >
-              ← Sebelumnya
+              <Icon name="chevronLeft" size={14} />
+              <span>Sebelumnya</span>
             </Link>
           ) : (
-            <span className="px-4 py-2 rounded-xl border border-slate-100 bg-slate-50 text-xs text-slate-300 cursor-not-allowed">
-              ← Sebelumnya
+            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-xl border border-slate-100 bg-slate-50 text-xs text-slate-300 cursor-not-allowed">
+              <Icon name="chevronLeft" size={14} />
+              <span>Sebelumnya</span>
             </span>
           )}
 
@@ -273,14 +314,16 @@ export function Catalog({
 
           {filters.page * PAGE_SIZE < catalog.total ? (
             <Link
-              className="px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+              className="inline-flex items-center gap-1 px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
               href={catalogHref(path, { ...filters, page: filters.page + 1 })}
             >
-              Berikutnya →
+              <span>Berikutnya</span>
+              <Icon name="chevronRight" size={14} />
             </Link>
           ) : (
-            <span className="px-4 py-2 rounded-xl border border-slate-100 bg-slate-50 text-xs text-slate-300 cursor-not-allowed">
-              Berikutnya →
+            <span className="inline-flex items-center gap-1 px-4 py-2 rounded-xl border border-slate-100 bg-slate-50 text-xs text-slate-300 cursor-not-allowed">
+              <span>Berikutnya</span>
+              <Icon name="chevronRight" size={14} />
             </span>
           )}
         </nav>

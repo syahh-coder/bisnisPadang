@@ -30,6 +30,7 @@ export type StoreRecord = {
   latitude: number | null;
   longitude: number | null;
   photo_path: string | null;
+  opening_hours?: string | null;
   gofood_url?: string | null;
   shopeefood_url?: string | null;
   grabfood_url?: string | null;

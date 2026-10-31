@@ -15,6 +15,7 @@ export function StoreForm({ store, request, categories, owners }: { store?: Stor
     gofood_url: store?.gofood_url,
     shopeefood_url: store?.shopeefood_url,
     grabfood_url: store?.grabfood_url,
+    opening_hours: store?.opening_hours,
   });
   const [fields, setFields] = useState({
     name: store?.name ?? "",
@@ -24,10 +25,11 @@ export function StoreForm({ store, request, categories, owners }: { store?: Stor
     category_id: store?.category_id ?? "",
     phone: store?.phone || request?.whatsapp || "",
     address: store?.address || request?.address || "",
+    opening_hours: parsed.openingHours,
     delivery_info: parsed.cleanDeliveryInfo,
-    gofood_url: parsed.hasCustomGofood ? parsed.gofoodUrl : "",
-    shopeefood_url: parsed.hasCustomShopeefood ? parsed.shopeefoodUrl : "",
-    grabfood_url: parsed.hasCustomGrabfood ? parsed.grabfoodUrl : "",
+    gofood_url: parsed.gofoodUrl ?? "",
+    shopeefood_url: parsed.shopeefoodUrl ?? "",
+    grabfood_url: parsed.grabfoodUrl ?? "",
     latitude: String(store?.latitude ?? ""),
     longitude: String(store?.longitude ?? ""),
   });
@@ -41,8 +43,9 @@ export function StoreForm({ store, request, categories, owners }: { store?: Stor
     <label>Kategori<select name="category_id" {...bind("category_id")} required><option value="">Pilih kategori</option>{categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select></label>
     <label>Nomor WhatsApp<input name="phone" type="tel" required maxLength={24} {...bind("phone")} /></label>
     <label>Alamat toko<textarea name="address" rows={3} required minLength={5} maxLength={1000} {...bind("address")} /></label>
+    <label>Jam operasional<input name="opening_hours" maxLength={120} placeholder="Contoh: 08:00 - 22:00 WIB (Setiap Hari)" {...bind("opening_hours")} /></label>
     <label>Info delivery<textarea name="delivery_info" rows={2} maxLength={1000} {...bind("delivery_info")} /></label>
-    <fieldset><legend>Jembatan Aplikasi Food Delivery (opsional)</legend><p className="form-hint">Tempel link toko di ShopeeFood, GoFood, atau GrabFood sebagai jembatan pemesanan.</p><label>Link ShopeeFood Toko<input name="shopeefood_url" type="url" maxLength={300} placeholder="https://shopee.co.id/..." {...bind("shopeefood_url")} /></label><label>Link GoFood Toko<input name="gofood_url" type="url" maxLength={300} placeholder="https://gofood.co.id/..." {...bind("gofood_url")} /></label><label>Link GrabFood Toko<input name="grabfood_url" type="url" maxLength={300} placeholder="https://food.grab.com/..." {...bind("grabfood_url")} /></label></fieldset>
+    <fieldset><legend>Jembatan Aplikasi Food Delivery (Hanya muncul jika diisi)</legend><p className="form-hint">Kosongkan jika toko tidak memiliki akun ShopeeFood, GoFood, atau GrabFood.</p><label>Link ShopeeFood Toko<input name="shopeefood_url" type="url" maxLength={300} placeholder="https://shopee.co.id/..." {...bind("shopeefood_url")} /></label><label>Link GoFood Toko<input name="gofood_url" type="url" maxLength={300} placeholder="https://gofood.co.id/..." {...bind("gofood_url")} /></label><label>Link GrabFood Toko<input name="grabfood_url" type="url" maxLength={300} placeholder="https://food.grab.com/..." {...bind("grabfood_url")} /></label></fieldset>
     <fieldset><legend>Lokasi peta (opsional)</legend><p className="form-hint">Isi kedua koordinat untuk lokasi tepat. Jika kosong, peta menggunakan alamat toko.</p><div className="form-pair"><label>Lintang<input name="latitude" type="number" step="any" min={-90} max={90} {...bind("latitude")} /></label><label>Bujur<input name="longitude" type="number" step="any" min={-180} max={180} {...bind("longitude")} /></label></div></fieldset>
     <Feedback {...state} /><button className="button button--primary" disabled={pending}>{pending ? "Menyimpan…" : "Simpan toko"}</button>
   </form>;

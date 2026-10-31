@@ -4,19 +4,23 @@ export interface DeliveryPlatformLinks {
   gofood_url?: string | null;
   shopeefood_url?: string | null;
   grabfood_url?: string | null;
+  opening_hours?: string | null;
 }
 
 export interface ParsedDeliveryChannels {
   cleanDeliveryInfo: string;
-  gofoodUrl: string;
-  shopeefoodUrl: string;
-  grabfoodUrl: string;
+  openingHours: string;
+  gofoodUrl: string | null;
+  shopeefoodUrl: string | null;
+  grabfoodUrl: string | null;
   hasCustomGofood: boolean;
   hasCustomShopeefood: boolean;
   hasCustomGrabfood: boolean;
+  hasAnyAgentLink: boolean;
 }
 
 const CHANNELS_DELIMITER = " ||CHANNELS:";
+export const DEFAULT_OPENING_HOURS = "08:00 - 22:00 WIB (Setiap Hari)";
 
 export function serializeDeliveryInfo(
   deliveryInfo: string,
@@ -28,6 +32,7 @@ export function serializeDeliveryInfo(
   if (links?.gofood_url?.trim()) payload.gofood = links.gofood_url.trim();
   if (links?.shopeefood_url?.trim()) payload.shopeefood = links.shopeefood_url.trim();
   if (links?.grabfood_url?.trim()) payload.grabfood = links.grabfood_url.trim();
+  if (links?.opening_hours?.trim()) payload.hours = links.opening_hours.trim();
 
   if (Object.keys(payload).length === 0) {
     return cleanText;
@@ -46,7 +51,7 @@ export function stripDeliveryChannels(rawDeliveryInfo: string | null | undefined
 
 export function parseDeliveryChannels(
   rawDeliveryInfo: string | null | undefined,
-  storeName: string,
+  _storeName?: string,
   explicit?: DeliveryPlatformLinks
 ): ParsedDeliveryChannels {
   let cleanDeliveryInfo = rawDeliveryInfo || "";
@@ -64,20 +69,34 @@ export function parseDeliveryChannels(
     }
   }
 
-  const customGofood = explicit?.gofood_url?.trim() || embedded.gofood || "";
-  const customShopeefood = explicit?.shopeefood_url?.trim() || embedded.shopeefood || "";
-  const customGrabfood = explicit?.grabfood_url?.trim() || embedded.grabfood || "";
+  const gofoodUrl =
+    explicit?.gofood_url !== undefined
+      ? explicit.gofood_url?.trim() || null
+      : embedded.gofood?.trim() || null;
 
-  const encodedQuery = encodeURIComponent(storeName.trim());
+  const shopeefoodUrl =
+    explicit?.shopeefood_url !== undefined
+      ? explicit.shopeefood_url?.trim() || null
+      : embedded.shopeefood?.trim() || null;
+
+  const grabfoodUrl =
+    explicit?.grabfood_url !== undefined
+      ? explicit.grabfood_url?.trim() || null
+      : embedded.grabfood?.trim() || null;
+
+  const openingHours =
+    explicit?.opening_hours?.trim() || embedded.hours?.trim() || DEFAULT_OPENING_HOURS;
 
   return {
     cleanDeliveryInfo,
-    gofoodUrl: customGofood || `https://gofood.co.id/search?q=${encodedQuery}`,
-    shopeefoodUrl: customShopeefood || `https://shopee.co.id/search?keyword=${encodedQuery}`,
-    grabfoodUrl: customGrabfood || `https://food.grab.com/id/id/restaurants?search=${encodedQuery}`,
-    hasCustomGofood: Boolean(customGofood),
-    hasCustomShopeefood: Boolean(customShopeefood),
-    hasCustomGrabfood: Boolean(customGrabfood),
+    openingHours,
+    gofoodUrl,
+    shopeefoodUrl,
+    grabfoodUrl,
+    hasCustomGofood: Boolean(gofoodUrl),
+    hasCustomShopeefood: Boolean(shopeefoodUrl),
+    hasCustomGrabfood: Boolean(grabfoodUrl),
+    hasAnyAgentLink: Boolean(gofoodUrl || shopeefoodUrl || grabfoodUrl),
   };
 }
 
@@ -90,8 +109,15 @@ export function contactLinks(phone: string) {
 }
 
 export function mapLinks(address: string, latitude: number | null, longitude: number | null) {
-  const validCoordinates = typeof latitude === "number" && Number.isFinite(latitude) && latitude >= -90 && latitude <= 90
-    && typeof longitude === "number" && Number.isFinite(longitude) && longitude >= -180 && longitude <= 180;
+  const validCoordinates =
+    typeof latitude === "number" &&
+    Number.isFinite(latitude) &&
+    latitude >= -90 &&
+    latitude <= 90 &&
+    typeof longitude === "number" &&
+    Number.isFinite(longitude) &&
+    longitude >= -180 &&
+    longitude <= 180;
   const query = validCoordinates ? `${latitude},${longitude}` : address;
   const params = new URLSearchParams({ q: query, z: "15", output: "embed" });
   return {
@@ -106,7 +132,10 @@ export function safeCatalogReturn(value: string | string[] | undefined) {
   if (!raw || raw.length > 512) return "/";
   try {
     const url = new URL(raw, "https://toko-lokal.invalid");
-    if (url.origin !== "https://toko-lokal.invalid" || !["/", "/pencarian"].includes(url.pathname)) return "/";
+    if (url.origin !== "https://toko-lokal.invalid" || !["/", "/pencarian"].includes(url.pathname))
+      return "/";
     return catalogHref(url.pathname, readFilters(Object.fromEntries(url.searchParams)));
-  } catch { return "/"; }
+  } catch {
+    return "/";
+  }
 }

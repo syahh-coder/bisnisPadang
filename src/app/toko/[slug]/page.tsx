@@ -61,6 +61,7 @@ export default async function StorePage({ params, searchParams }: Props) {
     gofood_url: store.gofood_url,
     shopeefood_url: store.shopeefood_url,
     grabfood_url: store.grabfood_url,
+    opening_hours: store.opening_hours,
   });
 
   return (
@@ -171,7 +172,7 @@ export default async function StorePage({ params, searchParams }: Props) {
             <Icon name="clock" size={15} className="text-teal-700" />
             <span>Jam Operasional</span>
           </div>
-          <p className="text-sm font-bold text-slate-900">08:00 - 22:00 WIB (Setiap Hari)</p>
+          <p className="text-sm font-bold text-slate-900">{channels.openingHours}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
@@ -180,86 +181,96 @@ export default async function StorePage({ params, searchParams }: Props) {
             <span>Layanan Delivery</span>
           </div>
           <p className="text-sm font-bold text-slate-900">
-            {channels.cleanDeliveryInfo || "Tersedia via kurir lokal / ojek online"}
+            {channels.cleanDeliveryInfo || "Ambil di toko / hubungi WhatsApp toko"}
           </p>
         </div>
       </div>
 
-      {/* Jembatan Agent Food & Delivery Toko */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 mt-3 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-          <div>
-            <h2 className="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
-              <Icon name="truck" size={16} className="text-teal-700" />
-              <span>Jembatan Pemesanan & Food Delivery</span>
-            </h2>
-            <p className="text-[11px] text-slate-500 mt-0.5">
-              Pilih menu di bawah untuk pesan via Kurir WA Toko, atau buka langsung di aplikasi Food Agent favoritmu:
-            </p>
+      {/* Jembatan Agent Food & Delivery Toko (Hanya tampil jika toko memang punya link GoFood / ShopeeFood / GrabFood) */}
+      {channels.hasAnyAgentLink && (
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 mt-3 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div>
+              <h2 className="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+                <Icon name="truck" size={16} className="text-teal-700" />
+                <span>Tersedia di Aplikasi Food Delivery</span>
+              </h2>
+              <p className="text-[11px] text-slate-500 mt-0.5">
+                Pesan langsung dari keranjang di bawah ke WA Delivery Toko, atau lewat mitra resmi toko ini:
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2.5">
+            {contact && (
+              <a
+                href="#menu-toko"
+                className="flex-1 min-w-[140px] p-2.5 rounded-xl border border-emerald-300 bg-emerald-50/70 hover:bg-emerald-100/80 text-emerald-950 flex items-center gap-2.5 transition-all shadow-2xs"
+              >
+                <FoodAgentIcon agent="whatsapp" size={24} />
+                <div className="min-w-0">
+                  <p className="text-xs font-extrabold leading-tight truncate">Delivery Toko</p>
+                  <p className="text-[10px] text-emerald-700 font-semibold truncate">Keranjang ke WA</p>
+                </div>
+              </a>
+            )}
+
+            {channels.shopeefoodUrl && (
+              <a
+                href={channels.shopeefoodUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 min-w-[140px] p-2.5 rounded-xl border border-orange-200 bg-orange-50/60 hover:bg-orange-100/70 text-orange-950 flex items-center gap-2.5 transition-all shadow-2xs"
+              >
+                <FoodAgentIcon agent="shopeefood" size={24} />
+                <div className="min-w-0">
+                  <p className="text-xs font-extrabold leading-tight truncate">ShopeeFood</p>
+                  <p className="text-[10px] text-orange-700 font-semibold truncate inline-flex items-center gap-1">
+                    <span>Buka Toko</span>
+                    <Icon name="externalLink" size={10} />
+                  </p>
+                </div>
+              </a>
+            )}
+
+            {channels.gofoodUrl && (
+              <a
+                href={channels.gofoodUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 min-w-[140px] p-2.5 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/60 text-emerald-950 flex items-center gap-2.5 transition-all shadow-2xs"
+              >
+                <FoodAgentIcon agent="gofood" size={24} />
+                <div className="min-w-0">
+                  <p className="text-xs font-extrabold leading-tight truncate">GoFood</p>
+                  <p className="text-[10px] text-emerald-700 font-semibold truncate inline-flex items-center gap-1">
+                    <span>Buka Toko</span>
+                    <Icon name="externalLink" size={10} />
+                  </p>
+                </div>
+              </a>
+            )}
+
+            {channels.grabfoodUrl && (
+              <a
+                href={channels.grabfoodUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 min-w-[140px] p-2.5 rounded-xl border border-green-200 bg-green-50/50 hover:bg-green-100/60 text-green-950 flex items-center gap-2.5 transition-all shadow-2xs"
+              >
+                <FoodAgentIcon agent="grabfood" size={24} />
+                <div className="min-w-0">
+                  <p className="text-xs font-extrabold leading-tight truncate">GrabFood</p>
+                  <p className="text-[10px] text-green-700 font-semibold truncate inline-flex items-center gap-1">
+                    <span>Buka Toko</span>
+                    <Icon name="externalLink" size={10} />
+                  </p>
+                </div>
+              </a>
+            )}
           </div>
         </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <a
-            href="#menu-toko"
-            className="p-2.5 rounded-xl border border-emerald-300 bg-emerald-50/70 hover:bg-emerald-100/80 text-emerald-950 flex items-center gap-2.5 transition-all shadow-2xs"
-          >
-            <FoodAgentIcon agent="whatsapp" size={24} />
-            <div className="min-w-0">
-              <p className="text-xs font-extrabold leading-tight truncate">Delivery Toko</p>
-              <p className="text-[10px] text-emerald-700 font-semibold truncate">Keranjang ke WA</p>
-            </div>
-          </a>
-
-          <a
-            href={channels.shopeefoodUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2.5 rounded-xl border border-orange-200 bg-orange-50/60 hover:bg-orange-100/70 text-orange-950 flex items-center gap-2.5 transition-all shadow-2xs"
-          >
-            <FoodAgentIcon agent="shopeefood" size={24} />
-            <div className="min-w-0">
-              <p className="text-xs font-extrabold leading-tight truncate">ShopeeFood</p>
-              <p className="text-[10px] text-orange-700 font-semibold truncate inline-flex items-center gap-1">
-                <span>Buka Toko</span>
-                <Icon name="externalLink" size={10} />
-              </p>
-            </div>
-          </a>
-
-          <a
-            href={channels.gofoodUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2.5 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/60 text-emerald-950 flex items-center gap-2.5 transition-all shadow-2xs"
-          >
-            <FoodAgentIcon agent="gofood" size={24} />
-            <div className="min-w-0">
-              <p className="text-xs font-extrabold leading-tight truncate">GoFood</p>
-              <p className="text-[10px] text-emerald-700 font-semibold truncate inline-flex items-center gap-1">
-                <span>Buka Toko</span>
-                <Icon name="externalLink" size={10} />
-              </p>
-            </div>
-          </a>
-
-          <a
-            href={channels.grabfoodUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2.5 rounded-xl border border-green-200 bg-green-50/50 hover:bg-green-100/60 text-green-950 flex items-center gap-2.5 transition-all shadow-2xs"
-          >
-            <FoodAgentIcon agent="grabfood" size={24} />
-            <div className="min-w-0">
-              <p className="text-xs font-extrabold leading-tight truncate">GrabFood</p>
-              <p className="text-[10px] text-green-700 font-semibold truncate inline-flex items-center gap-1">
-                <span>Buka Toko</span>
-                <Icon name="externalLink" size={10} />
-              </p>
-            </div>
-          </a>
-        </div>
-      </div>
+      )}
 
       {/* Menu & Product Section with WhatsApp Order Builder */}
       <section className="mt-8" aria-labelledby="menu-toko">

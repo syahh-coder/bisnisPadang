@@ -31,6 +31,7 @@ export function OwnerInfoForm({ store, categories }: { store: StoreRecord; categ
     gofood_url: store.gofood_url,
     shopeefood_url: store.shopeefood_url,
     grabfood_url: store.grabfood_url,
+    opening_hours: store.opening_hours,
   });
   const [fields, setFields] = useState({
     name: store.name,
@@ -39,10 +40,11 @@ export function OwnerInfoForm({ store, categories }: { store: StoreRecord; categ
     category_id: store.category_id,
     phone: store.phone,
     address: store.address,
+    opening_hours: parsed.openingHours,
     delivery_info: parsed.cleanDeliveryInfo,
-    gofood_url: parsed.hasCustomGofood ? parsed.gofoodUrl : "",
-    shopeefood_url: parsed.hasCustomShopeefood ? parsed.shopeefoodUrl : "",
-    grabfood_url: parsed.hasCustomGrabfood ? parsed.grabfoodUrl : "",
+    gofood_url: parsed.gofoodUrl ?? "",
+    shopeefood_url: parsed.shopeefoodUrl ?? "",
+    grabfood_url: parsed.grabfoodUrl ?? "",
     latitude: String(store.latitude ?? ""),
     longitude: String(store.longitude ?? ""),
   });
@@ -86,22 +88,40 @@ export function OwnerInfoForm({ store, categories }: { store: StoreRecord; categ
         <textarea name="address" required maxLength={1000} rows={3} {...bind("address")} />
       </label>
       <label>
-        Info delivery
-        <textarea name="delivery_info" maxLength={1000} rows={2} {...bind("delivery_info")} />
+        Jam operasional toko
+        <input
+          name="opening_hours"
+          maxLength={120}
+          placeholder="Contoh: 08:00 - 22:00 WIB (Setiap Hari)"
+          {...bind("opening_hours")}
+        />
+      </label>
+      <label>
+        Info delivery toko
+        <textarea
+          name="delivery_info"
+          maxLength={1000}
+          rows={2}
+          placeholder="Contoh: Delivery kurir toko radius 5 km (Gratis ongkir min. Rp 30.000)"
+          {...bind("delivery_info")}
+        />
+        <span className="form-hint">Kosongkan jika toko tidak menyediakan kurir lokal sendiri.</span>
       </label>
       <fieldset>
-        <legend>Jembatan Aplikasi Food Delivery (opsional)</legend>
-        <p className="form-hint">Tempel link toko Anda di GoFood, ShopeeFood, atau GrabFood agar pembeli bisa memilih jalur pesan.</p>
+        <legend>Jembatan Aplikasi Food Delivery (Hanya tampil jika diisi)</legend>
+        <p className="form-hint">
+          Isi hanya aplikasi yang memang dimiliki toko Anda. Jika dikosongkan, tombol/icon aplikasi tersebut tidak akan muncul di halaman toko maupun menu.
+        </p>
         <label>
-          Link ShopeeFood Toko
+          Link ShopeeFood Toko <span className="muted">(opsional)</span>
           <input name="shopeefood_url" type="url" maxLength={300} placeholder="https://shopee.co.id/..." {...bind("shopeefood_url")} />
         </label>
         <label>
-          Link GoFood Toko
+          Link GoFood Toko <span className="muted">(opsional)</span>
           <input name="gofood_url" type="url" maxLength={300} placeholder="https://gofood.co.id/..." {...bind("gofood_url")} />
         </label>
         <label>
-          Link GrabFood Toko
+          Link GrabFood Toko <span className="muted">(opsional)</span>
           <input name="grabfood_url" type="url" maxLength={300} placeholder="https://food.grab.com/..." {...bind("grabfood_url")} />
         </label>
       </fieldset>

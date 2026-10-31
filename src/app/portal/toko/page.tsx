@@ -6,7 +6,9 @@ import { dateLabel } from "@/lib/affiliation";
 import { OwnerUnavailable, OwnerStorePicker } from "@/components/owner-context";
 import { DailySalesForm, DeleteSalesForm } from "@/components/owner-forms";
 import { visitSources, sourceLabels, type VisitSummary } from "@/lib/visits";
-import { Icon } from "@/components/icon";
+import { getDemoSales, getDemoStore } from "@/lib/catalog/demo";
+import { Icon, FoodAgentIcon } from "@/components/icon";
+import { parseDeliveryChannels } from "@/lib/stores/links";
 
 export default async function StorePortalPage({
   searchParams,
@@ -49,10 +51,11 @@ export default async function StorePortalPage({
   let records: DailySale[] = [];
   let visits: VisitSummary[] = [];
   let visitsFailed = false;
+  let productsCount = 0;
 
   if (client) {
     try {
-      const [result, visitsResult] = await Promise.all([
+      const [result, visitsResult, prodCountRes] = await Promise.all([
         client
           .from("daily_sales")
           .select("id,date,revenue,sales_count")
@@ -61,7 +64,9 @@ export default async function StorePortalPage({
           .lte("date", date)
           .order("date"),
         client.rpc("store_visit_summary", { shop_id: store.id }),
+        client.from("products").select("id", { count: "exact", head: true }).eq("store_id", store.id),
       ]);
+      productsCount = prodCountRes.count ?? 0;
       visits = (visitsResult.data ?? []) as VisitSummary[];
       visitsFailed =
         Boolean(visitsResult.error) ||
@@ -82,12 +87,17 @@ export default async function StorePortalPage({
       { visit_date: date, source: "search", visits: 42 },
       { visit_date: date, source: "direct", visits: 15 },
     ];
-    records = [
-      { id: "1", date, revenue: 385000, sales_count: 15 },
-      { id: "2", date: dates[1], revenue: 450000, sales_count: 18 },
-      { id: "3", date: dates[2], revenue: 320000, sales_count: 12 },
-    ];
+    records = getDemoSales(store.id, dates);
+    const demoStore = getDemoStore(store.slug);
+    productsCount = demoStore?.products.length ?? 0;
   }
+
+  const channels = parseDeliveryChannels(store.delivery_info, store.name, {
+    opening_hours: store.opening_hours,
+    gofood_url: store.gofood_url,
+    shopeefood_url: store.shopeefood_url,
+    grabfood_url: store.grabfood_url,
+  });
 
   const entry = records.find((r) => r.date === date);
   const totalCents = records.reduce((sum, r) => sum + Math.round(r.revenue * 100), 0);
@@ -102,7 +112,7 @@ export default async function StorePortalPage({
             Dashboard Pemilik
           </span>
           <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight mt-1.5">{store.name}</h1>
-          <p className="text-xs text-slate-500 mt-0.5">Kelola omset, transaksi, dan pantau kunjungan harian toko Anda.</p>
+          <p className="text-xs text-slate-500 mt-0.5">Kelola profil toko, menu, info delivery, omset, dan pantau kunjungan harian toko Anda.</p>
         </div>
         <Link
           href={`/toko/${store.slug}`}
@@ -115,6 +125,114 @@ export default async function StorePortalPage({
       </div>
 
       <OwnerStorePicker store={store} stores={stores} path="/portal/toko" />
+
+      {/* Quick Store & Menu Control Center */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between space-y-4">
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-slate-900">
+                <Icon name="truck" size={16} className="text-teal-700" />
+                <span>Profil Toko, Jam Buka & Delivery</span>
+              </span>
+              <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
+                Tersinkronisasi
+              </span>
+            </div>
+
+            <div className="text-xs text-slate-600 space-y-1.5 bg-slate-50 p-3 rounded-xl border border-slate-100">
+              <p className="flex items-center justify-between gap-2">
+                <span className="text-slate-500">Jam Operasional:</span>
+                <span className="font-bold text-slate-800">{channels.openingHours || "Setiap Hari, 08.00 - 21.00 WIB"}</span>
+              </p>
+              <p className="flex items-center justify-between gap-2">
+                <span className="text-slate-500">Kurir Toko / WA:</span>
+                <span className="font-bold text-emerald-700 truncate max-w-[200px]">
+                  {channels.cleanDeliveryInfo || "Antar langsung & Ambil di toko"}
+                </span>
+              </p>
+              <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/70">
+                <span className="text-slate-500">Food Delivery Agent:</span>
+                <div className="flex items-center gap-1.5">
+                  {channels.gofoodUrl && (
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-green-100 text-green-800 text-[10px] font-bold">
+                      <FoodAgentIcon agent="gofood" size={11} />
+                      <span>GoFood</span>
+                    </span>
+                  )}
+                  {channels.shopeefoodUrl && (
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-orange-100 text-orange-800 text-[10px] font-bold">
+                      <FoodAgentIcon agent="shopeefood" size={11} />
+                      <span>ShopeeFood</span>
+                    </span>
+                  )}
+                  {channels.grabfoodUrl && (
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                      <FoodAgentIcon agent="grabfood" size={11} />
+                      <span>GrabFood</span>
+                    </span>
+                  )}
+                  {!channels.hasAnyAgentLink && (
+                    <span className="text-[11px] font-medium text-slate-400">Tidak memakai aplikasi</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <Link
+            href={`/portal/toko/info?toko=${store.id}`}
+            className="w-full py-2.5 px-4 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs transition-colors"
+          >
+            <Icon name="edit" size={14} />
+            <span>Edit Info Toko, Jam Buka & Link Delivery</span>
+          </Link>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between space-y-4">
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-slate-900">
+                <Icon name="shoppingBag" size={16} className="text-teal-700" />
+                <span>Katalog Menu & Produk Toko</span>
+              </span>
+              <span className="px-2.5 py-0.5 rounded-md bg-teal-50 text-teal-800 border border-teal-200 text-[11px] font-extrabold">
+                {productsCount} Menu
+              </span>
+            </div>
+
+            <div className="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-1.5">
+              {productsCount > 0 ? (
+                <>
+                  <p className="font-semibold text-slate-800">
+                    Toko Anda memiliki {productsCount} menu/produk aktif yang siap dipesan pelanggan.
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    Pelanggan dapat memasukkan menu ke keranjang dan checkout langsung ke WhatsApp Anda dengan format nomor urut otomatis.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="font-semibold text-amber-800">
+                    Belum ada menu yang ditambahkan (Tampilan Menu Kosong di halaman toko).
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    Tambahkan menu makanan, minuman, atau layanan agar pelanggan bisa memesan dari halaman toko Anda.
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+
+          <Link
+            href={`/portal/toko/menu?toko=${store.id}`}
+            className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs transition-colors"
+          >
+            <Icon name="plus" size={14} />
+            <span>Tambah / Edit Menu & Harga ({productsCount})</span>
+          </Link>
+        </div>
+      </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">

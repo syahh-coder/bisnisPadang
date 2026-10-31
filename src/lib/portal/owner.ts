@@ -4,28 +4,49 @@ import { requireRole } from "@/lib/auth/server";
 import { createSessionSupabase } from "@/lib/supabase/session";
 import { uuid } from "@/lib/affiliation";
 import type { StoreRecord } from "@/lib/admin";
+import { getAllDemoStores, demoCategories } from "@/lib/catalog/demo";
 
-const defaultDemoStore: StoreRecord = {
-  id: "00000000-0000-4000-8000-000000000101",
-  slug: "warung-bu-ani",
-  name: "Warung Bu Ani",
-  address: "Jl. Melati No. 12, Kebayoran Baru, Jakarta Selatan",
-  delivery_info: "Delivery radius 5 km (Gratis ongkir min. Rp 30.000)",
-  photo_path: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
-  category_id: "00000000-0000-4000-8000-000000000001",
-  owner_id: "00000000-0000-4000-8000-000000000101",
-  manager_name: "Ibu Ani",
-  phone: "081267891234",
-  latitude: -6.2435,
-  longitude: 106.8021,
-};
+function demoStoresAsRecords(ownerId: string): StoreRecord[] {
+  return getAllDemoStores().map((s) => ({
+    id: s.id,
+    slug: s.slug,
+    name: s.name,
+    address: s.address,
+    delivery_info: s.delivery_info,
+    photo_path: s.photo_path,
+    category_id: s.category_id || demoCategories[0].id,
+    owner_id: ownerId,
+    manager_name: s.manager_name || "Pemilik Toko",
+    phone: s.phone,
+    latitude: s.latitude ?? null,
+    longitude: s.longitude ?? null,
+    opening_hours: s.opening_hours ?? null,
+    gofood_url: s.gofood_url ?? null,
+    shopeefood_url: s.shopeefood_url ?? null,
+    grabfood_url: s.grabfood_url ?? null,
+  }));
+}
 
 export const ownerContext = cache(async (requested?: string) => {
   const account = await requireRole("toko");
   const client = await createSessionSupabase();
 
+  const resolveDemoFallback = () => {
+    const demoStores = demoStoresAsRecords(account.id);
+    if (!demoStores.length) return { status: "missing" as const };
+    const selected = requested ? demoStores.find((s) => s.id === requested) : demoStores[0];
+    if (!selected) return { status: "missing" as const };
+    return {
+      status: "ready" as const,
+      account,
+      client: null as any,
+      store: selected,
+      stores: demoStores,
+    };
+  };
+
   if (!client) {
-    return { status: "ready" as const, account, client: null as any, store: defaultDemoStore, stores: [defaultDemoStore] };
+    return resolveDemoFallback();
   }
 
   const stores: StoreRecord[] = [];
@@ -39,17 +60,17 @@ export const ownerContext = cache(async (requested?: string) => {
         .order("id")
         .range(offset, offset + 999);
       if (result.error) {
-        return { status: "ready" as const, account, client: null as any, store: defaultDemoStore, stores: [defaultDemoStore] };
+        return resolveDemoFallback();
       }
       stores.push(...(result.data as StoreRecord[]));
       if (result.data.length < 1000) break;
     }
   } catch {
-    return { status: "ready" as const, account, client: null as any, store: defaultDemoStore, stores: [defaultDemoStore] };
+    return resolveDemoFallback();
   }
 
   if (!stores.length) {
-    return { status: "ready" as const, account, client: null as any, store: defaultDemoStore, stores: [defaultDemoStore] };
+    return resolveDemoFallback();
   }
 
   const store = requested ? stores.find((s) => s.id === requested) : stores[0];
@@ -62,11 +83,16 @@ export async function ownedStore(id: string) {
   if (!uuid.test(id)) return null;
   const client = await createSessionSupabase();
   if (!client) {
-    if (id === defaultDemoStore.id) return { client: null as any, account };
-    return null;
+    const found = getAllDemoStores().some((s) => s.id === id);
+    return found ? { client: null as any, account } : null;
   }
   try {
-    const result = await client.from("stores").select("id").eq("id", id).eq("owner_id", account.id).maybeSingle();
+    const result = await client
+      .from("stores")
+      .select("id")
+      .eq("id", id)
+      .eq("owner_id", account.id)
+      .maybeSingle();
     return !result.error && result.data ? { client, account } : { client: null as any, account };
   } catch {
     return { client: null as any, account };

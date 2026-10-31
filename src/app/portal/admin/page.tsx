@@ -2,7 +2,8 @@ import Link from "next/link";
 import { adminClient, pageNumber } from "@/lib/admin";
 import { demoCategories, getAllDemoStores, getDemoBookings } from "@/lib/catalog/demo";
 import { DeleteStoreButton, CatalogResetControls } from "@/components/admin-store-actions";
-import { Icon } from "@/components/icon";
+import { Icon, FoodAgentIcon } from "@/components/icon";
+import { parseDeliveryChannels } from "@/lib/stores/links";
 
 export default async function AdminPage({
   searchParams,
@@ -63,6 +64,10 @@ export default async function AdminPage({
       phone: s.phone,
       address: s.address,
       delivery_info: s.delivery_info,
+      opening_hours: s.opening_hours,
+      gofood_url: s.gofood_url,
+      shopeefood_url: s.shopeefood_url,
+      grabfood_url: s.grabfood_url,
       category_id: s.category_id || "00000000-0000-4000-8000-000000000001",
     }));
     totalCount = stores.length;
@@ -139,8 +144,9 @@ export default async function AdminPage({
           <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Permohonan Afiliasi</span>
           <div className="flex items-baseline justify-between mt-2">
             <span className="text-2xl font-extrabold text-teal-800">{bookingsCount}</span>
-            <Link href="/portal/admin/kelola" className="text-[10px] font-bold text-teal-700 hover:underline">
-              Kelola →
+            <Link href="/portal/admin/kelola" className="inline-flex items-center gap-0.5 text-[10px] font-bold text-teal-700 hover:underline">
+              <span>Kelola</span>
+              <Icon name="chevronRight" size={12} />
             </Link>
           </div>
         </div>
@@ -157,8 +163,9 @@ export default async function AdminPage({
           <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Alat Promosi QR</span>
           <div className="flex items-baseline justify-between mt-2">
             <span className="text-2xl font-extrabold text-slate-900">Aktif</span>
-            <Link href="/portal/admin/qr" className="text-[10px] font-bold text-teal-700 hover:underline">
-              Buka QR →
+            <Link href="/portal/admin/qr" className="inline-flex items-center gap-0.5 text-[10px] font-bold text-teal-700 hover:underline">
+              <span>Buka QR</span>
+              <Icon name="chevronRight" size={12} />
             </Link>
           </div>
         </div>
@@ -270,11 +277,45 @@ export default async function AdminPage({
                             <span className="text-slate-400 font-mono">-</span>
                           )}
                         </td>
-                        <td className="py-3 px-4">
+                         <td className="py-3 px-4">
                           <p className="text-slate-700 line-clamp-1">{store.address}</p>
-                          <p className="text-slate-400 text-[11px] mt-0.5 line-clamp-1">
-                            {store.delivery_info || "Belum diatur"}
-                          </p>
+                          {(() => {
+                            const ch = parseDeliveryChannels(store.delivery_info, store.name, {
+                              opening_hours: store.opening_hours,
+                              gofood_url: store.gofood_url,
+                              shopeefood_url: store.shopeefood_url,
+                              grabfood_url: store.grabfood_url,
+                            });
+                            return (
+                              <div className="space-y-1 mt-0.5">
+                                <p className="text-slate-400 text-[11px] line-clamp-1">
+                                  {ch.cleanDeliveryInfo || "Belum diatur"}
+                                </p>
+                                {ch.hasAnyAgentLink && (
+                                  <div className="flex items-center gap-1 flex-wrap">
+                                    {ch.gofoodUrl && (
+                                      <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-green-50 text-green-800 border border-green-200 text-[9px] font-bold">
+                                        <FoodAgentIcon agent="gofood" size={10} />
+                                        <span>GoFood</span>
+                                      </span>
+                                    )}
+                                    {ch.shopeefoodUrl && (
+                                      <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-orange-50 text-orange-800 border border-orange-200 text-[9px] font-bold">
+                                        <FoodAgentIcon agent="shopeefood" size={10} />
+                                        <span>ShopeeFood</span>
+                                      </span>
+                                    )}
+                                    {ch.grabfoodUrl && (
+                                      <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[9px] font-bold">
+                                        <FoodAgentIcon agent="grabfood" size={10} />
+                                        <span>GrabFood</span>
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
                         </td>
                         <td className="py-3 px-4">
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
