@@ -14,10 +14,10 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
   return (
     <div className="max-w-md mx-auto py-8 sm:py-14 px-4">
       <div className="text-center mb-8">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-700 to-emerald-500 text-white flex items-center justify-center mx-auto mb-3 shadow-sm">
+        <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mx-auto mb-3 shadow-xs">
           <Icon name="account" size={24} />
         </div>
-        <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Portal Akun</h1>
+        <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Portal Akun Luvio</h1>
         <p className="text-slate-500 text-xs sm:text-sm mt-1">
           Masuk untuk mengelola data toko, menu, omset harian, atau QR afiliasi.
         </p>

@@ -56,7 +56,7 @@ export function SiteHeader() {
 
           <Link
             href="/join-afiliasi"
-            className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-xs hover:shadow active:scale-[0.98] transition-all shrink-0"
+            className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-xs hover:shadow-sm active:scale-[0.98] transition-all shrink-0"
           >
             <Icon name="sparkles" size={14} />
             <span className="whitespace-nowrap">Daftar Toko</span>

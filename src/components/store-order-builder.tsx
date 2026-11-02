@@ -584,7 +584,7 @@ export function StoreOrderBuilder({
           <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-2xl shadow-2xl border border-slate-700/80 flex items-center justify-between gap-3 backdrop-blur-md">
             <div className="flex items-center gap-3 min-w-0">
               <div className="relative">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-slate-950 flex items-center justify-center font-extrabold text-sm shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-extrabold text-sm shadow-sm">
                   <Icon name="shoppingBag" size={20} />
                 </div>
                 <span

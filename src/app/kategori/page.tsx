@@ -13,43 +13,33 @@ const categoryMeta: Record<
   {
     icon: IconName;
     badge: string;
-    bgGradient: string;
-    borderColor: string;
     description: string;
-    popularTags: string[];
+    popularItems: string[];
   }
 > = {
   makanan: {
     icon: "utensils",
     badge: "Kuliner & Jajanan",
-    bgGradient: "from-amber-50 to-orange-50",
-    borderColor: "border-amber-200",
     description: "Aneka kuliner lezat, warung makan, resto keluarga, camilan tradisional, dan makanan siap santap.",
-    popularTags: ["Nasi Liwet", "Bakso & Mie", "Ayam Goreng", "Gulai & Rendang", "Jajanan Pasar"],
+    popularItems: ["Nasi Liwet", "Bakso & Mie", "Ayam Goreng", "Gulai & Rendang", "Jajanan"],
   },
   minuman: {
     icon: "coffee",
     badge: "Kopi & Minuman",
-    bgGradient: "from-emerald-50 to-teal-50",
-    borderColor: "border-emerald-200",
     description: "Kedai kopi kekinian, kopi susu gula aren, matcha, jus buah segar, dan aneka minuman pelepas dahaga.",
-    popularTags: ["Kopi Susu Aren", "Cold Brew", "Matcha Latte", "Es Teh Segar", "Pastry & Croissant"],
+    popularItems: ["Kopi Susu Aren", "Cold Brew", "Matcha Latte", "Es Teh Segar", "Pastry"],
   },
   jasa: {
     icon: "briefcase",
     badge: "Layanan & Servis",
-    bgGradient: "from-blue-50 to-indigo-50",
-    borderColor: "border-blue-200",
-    description: "Laundry kiloan & express, penjahit pakaian, reparasi elektronik, pangkas rambut, dan layanan harian.",
-    popularTags: ["Cuci Kering Lipat", "Cuci Setrika Wangi", "Bedcover Jumbo", "Express 4 Jam", "Antar Jemput"],
+    description: "Laundry kiloan & express, penjahit pakaian, reparasi elektronik, pangkas rambut, dan jasa harian.",
+    popularItems: ["Cuci Kering Lipat", "Setrika Wangi", "Bedcover Jumbo", "Express 4 Jam"],
   },
   belanja: {
     icon: "shoppingBag",
     badge: "Kebutuhan Harian",
-    bgGradient: "from-purple-50 to-pink-50",
-    borderColor: "border-purple-200",
-    description: "Toko sembako terpercaya, bahan pokok dapur, sayur & bumbu segar, hingga aneka kebutuhan rumah tangga.",
-    popularTags: ["Beras Premium", "Minyak Goreng", "Gula Pasir", "Telur Ayam", "Sembako Lengkap"],
+    description: "Toko sembako terpercaya, bahan pokok dapur, sayur & bumbu segar, hingga kebutuhan rumah tangga.",
+    popularItems: ["Beras Premium", "Minyak Goreng", "Gula Pasir", "Telur Ayam", "Sembako Lengkap"],
   },
 };
 
@@ -57,31 +47,29 @@ export default function CategoriesPage() {
   const stores = getAllDemoStores();
 
   return (
-    <div className="max-w-4xl mx-auto py-6 sm:py-10 px-4 sm:px-0 space-y-8">
+    <div className="max-w-4xl mx-auto py-6 sm:py-8 px-4 sm:px-0 space-y-6">
       {/* Header */}
-      <div className="text-center max-w-xl mx-auto">
-        <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-teal-100/90 text-teal-900 mb-3 shadow-2xs">
-          <Icon name="layoutGrid" size={14} className="text-teal-700" />
-          <span>Pilihan Kategori Favorit</span>
+      <div className="text-center max-w-xl mx-auto space-y-2">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/70">
+          <Icon name="layoutGrid" size={13} className="text-emerald-700" />
+          <span>Kategori Pilihan Luvio</span>
         </span>
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
-          Temukan yang Kamu Butuhkan
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          Pilih Kategori Makanan & Usaha
         </h1>
-        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          Mulai dari makanan enak, kedai kopi santai, laundry kilat, hingga kebutuhan belanja harian dari usaha lokal terpercaya.
+        <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+          Temukan kuliner lezat, minuman segar, layanan harian, dan kebutuhan belanja dari toko terdekat.
         </p>
       </div>
 
-      {/* Grid Kategori */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+      {/* Grid Kategori Clean Natural-Tech */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
         {demoCategories.map((cat) => {
           const meta = categoryMeta[cat.slug] ?? {
             icon: "store" as IconName,
             badge: "Pilihan Usaha",
-            bgGradient: "from-slate-50 to-slate-100",
-            borderColor: "border-slate-200",
-            description: "Jelajahi aneka ragam produk dan layanan dari toko lokal terpercaya.",
-            popularTags: ["Toko Lokal", "Produk Unggulan", "Layanan Mitra"],
+            description: "Jelajahi aneka ragam produk dan layanan dari toko terpercaya.",
+            popularItems: ["Produk Unggulan", "Layanan Mitra"],
           };
 
           const storeCount = stores.filter(
@@ -92,44 +80,46 @@ export default function CategoriesPage() {
             <Link
               key={cat.id}
               href={`/pencarian?kategori=${cat.slug}`}
-              className={`group block p-6 rounded-3xl bg-gradient-to-br ${meta.bgGradient} border ${meta.borderColor} hover:shadow-md hover:scale-[1.01] transition-all duration-200`}
+              className="group bg-white rounded-2xl border border-slate-200/90 hover:border-emerald-500/60 shadow-xs hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-200 p-5 sm:p-6 flex flex-col justify-between"
             >
-              <div className="flex items-start justify-between gap-4 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-white shadow-xs border border-white flex items-center justify-center text-teal-800 group-hover:scale-110 transition-transform">
-                  <Icon name={meta.icon} size={24} />
+              <div>
+                <div className="flex items-start justify-between gap-3 mb-3.5">
+                  <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-200 shadow-2xs">
+                    <Icon name={meta.icon} size={22} />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200/60">
+                      {meta.badge}
+                    </span>
+                    <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200/50">
+                      {storeCount} Toko
+                    </span>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white/80 text-slate-700 border border-white/60">
-                    {meta.badge}
-                  </span>
-                  <p className="text-[11px] text-slate-500 font-medium mt-1">
-                    {storeCount > 0 ? `${storeCount} Toko Tersedia` : "Jelajahi Pilihan"}
-                  </p>
+
+                <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors mb-1.5">
+                  {cat.name}
+                </h2>
+                <p className="text-xs text-slate-500 leading-relaxed mb-4 line-clamp-2">
+                  {meta.description}
+                </p>
+
+                {/* Tag / Item Populer */}
+                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
+                  {meta.popularItems.map((item) => (
+                    <span
+                      key={item}
+                      className="px-2.5 py-1 rounded-lg text-[10px] font-semibold bg-slate-50 text-slate-600 border border-slate-200/60 group-hover:bg-slate-100/80 transition-colors"
+                    >
+                      {item}
+                    </span>
+                  ))}
                 </div>
               </div>
 
-              <h2 className="text-xl font-extrabold text-slate-900 group-hover:text-teal-800 transition-colors mb-2">
-                {cat.name}
-              </h2>
-              <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                {meta.description}
-              </p>
-
-              {/* Tag Populer */}
-              <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-900/5">
-                {meta.popularTags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-white/70 text-slate-700 border border-white/60"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="mt-4 flex items-center gap-1 text-xs font-bold text-teal-800 group-hover:translate-x-1 transition-transform">
-                <span>Lihat semua {cat.name.toLowerCase()}</span>
-                <Icon name="arrowRight" size={16} />
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-800">
+                <span>Jelajahi {cat.name}</span>
+                <Icon name="arrowRight" size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
           );
@@ -137,21 +127,21 @@ export default function CategoriesPage() {
       </div>
 
       {/* CTA Box for Business Owners */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
-        <div className="space-y-1.5 text-center sm:text-left">
+      <div className="p-6 sm:p-7 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-5 shadow-sm border border-slate-800">
+        <div className="space-y-1 text-center sm:text-left">
           <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-amber-400">
-            <Icon name="sparkles" size={13} /> Punya Usaha Sendiri?
+            <Icon name="sparkles" size={13} /> Punya Usaha Kuliner / Toko?
           </span>
-          <h3 className="text-lg sm:text-xl font-bold">Daftarkan Tokomu Sekarang, 100% Gratis</h3>
-          <p className="text-xs sm:text-sm text-slate-300 max-w-md">
-            Bikin tokomu punya katalog online keren, dapatkan QR code siap cetak untuk kasir/meja, dan terima pesanan langsung via WhatsApp tanpa potongan komisi!
+          <h3 className="text-base sm:text-lg font-bold">Daftarkan Tokomu di Luvio — 100% Gratis</h3>
+          <p className="text-xs text-slate-400 max-w-md">
+            Miliki katalog menu online, terima order langsung via WhatsApp tanpa potongan biaya komisi, dan dapatkan QR stand kasir.
           </p>
         </div>
         <Link
           href="/join-afiliasi"
-          className="px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs sm:text-sm shadow-md whitespace-nowrap transition-all active:scale-95"
+          className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md whitespace-nowrap active:scale-95 transition-all duration-150 shrink-0"
         >
-          Buka Toko Online Gratis
+          Buka Toko Gratis
         </Link>
       </div>
     </div>
