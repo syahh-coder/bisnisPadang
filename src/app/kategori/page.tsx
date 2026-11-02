@@ -125,25 +125,6 @@ export default function CategoriesPage() {
           );
         })}
       </div>
-
-      {/* CTA Box for Business Owners */}
-      <div className="p-6 sm:p-7 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-5 shadow-sm border border-slate-800">
-        <div className="space-y-1 text-center sm:text-left">
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-amber-400">
-            <Icon name="sparkles" size={13} /> Punya Usaha Kuliner / Toko?
-          </span>
-          <h3 className="text-base sm:text-lg font-bold">Daftarkan Tokomu di Luvio — 100% Gratis</h3>
-          <p className="text-xs text-slate-400 max-w-md">
-            Miliki katalog menu online, terima order langsung via WhatsApp tanpa potongan biaya komisi, dan dapatkan QR stand kasir.
-          </p>
-        </div>
-        <Link
-          href="/join-afiliasi"
-          className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md whitespace-nowrap active:scale-95 transition-all duration-150 shrink-0"
-        >
-          Buka Toko Gratis
-        </Link>
-      </div>
     </div>
   );
 }
