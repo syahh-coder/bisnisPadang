@@ -578,62 +578,47 @@ export function StoreOrderBuilder({
         })}
       </ul>
 
-      {/* Floating Bottom Cart Bar (Full SVG Icons, Zero Emoji, Snappy Spring Pop) */}
+      {/* Floating Pop-up Cart Icon (FAB) */}
       {totalItems > 0 && (
-        <div className="fixed bottom-20 sm:bottom-6 left-4 right-4 z-40 max-w-xl mx-auto animate-slide-up-snappy">
-          <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-2xl shadow-2xl border border-slate-700/80 flex items-center justify-between gap-3 backdrop-blur-md">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="relative">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-extrabold text-sm shadow-sm">
-                  <Icon name="shoppingBag" size={20} />
-                </div>
-                <span
-                  key={totalItems}
-                  className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber-500 text-slate-950 text-[11px] font-extrabold flex items-center justify-center shadow animate-badge-pop"
-                >
-                  {totalItems}
-                </span>
+        <aside className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40 animate-slide-up-snappy">
+          <button
+            type="button"
+            onClick={() => {
+              setValidationError(null);
+              setDrawerOpen(true);
+            }}
+            className="group flex items-center gap-2.5 p-2 sm:p-2.5 pr-4 rounded-full bg-slate-900/95 hover:bg-slate-900 text-white shadow-2xl border border-slate-700/80 backdrop-blur-md active:scale-95 hover:scale-105 transition-all duration-200 cursor-pointer"
+            aria-label={`Buka Keranjang (${totalItems} item, ${rupiah.format(totalPrice)})`}
+          >
+            <div className="relative flex items-center justify-center">
+              <div className="w-11 h-11 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xs group-hover:bg-emerald-500 transition-colors">
+                <Icon name="shoppingBag" size={21} />
               </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <p className="font-extrabold text-sm sm:text-base text-white">
-                    {rupiah.format(totalPrice)}
-                  </p>
-                  {distance && (
-                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-800 text-emerald-400">
-                      +/- {distance}
-                    </span>
-                  )}
-                </div>
-                <p className="text-[11px] text-slate-300 truncate flex items-center gap-1">
-                  {location ? (
-                    <>
-                      <Icon name="mapPin" size={12} className="text-emerald-400 shrink-0" />
-                      <span className="truncate">{location.name}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Icon name="alertCircle" size={12} className="text-amber-400 shrink-0" />
-                      <span className="truncate">Lokasi pengiriman belum diatur</span>
-                    </>
-                  )}
-                </p>
-              </div>
+              <span
+                key={totalItems}
+                className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-amber-500 text-slate-950 text-[11px] font-black flex items-center justify-center shadow-md animate-badge-pop"
+              >
+                {totalItems}
+              </span>
             </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                setValidationError(null);
-                setDrawerOpen(true);
-              }}
-              className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-extrabold shadow-md flex items-center gap-1.5 active:scale-95 transition-all duration-150 cursor-pointer shrink-0"
-            >
-              <span>Checkout ({totalItems})</span>
-              <Icon name="arrowRight" size={15} />
-            </button>
-          </div>
-        </div>
+            <div className="text-left">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] text-emerald-400 font-extrabold uppercase tracking-wider">
+                  Keranjang
+                </span>
+                {distance && (
+                  <span className="text-[9px] px-1 py-0.2 rounded bg-slate-800 text-slate-300 font-semibold">
+                    {distance}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs sm:text-sm font-black text-white leading-tight">
+                {rupiah.format(totalPrice)}
+              </p>
+            </div>
+          </button>
+        </aside>
       )}
 
       {/* Modal Keranjang & Multi-Cara Checkout */}
@@ -649,7 +634,7 @@ export function StoreOrderBuilder({
             {/* Header Keranjang */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-800 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-800 flex items-center justify-center">
                   <Icon name="shoppingBag" size={19} />
                 </div>
                 <div>
@@ -680,50 +665,60 @@ export function StoreOrderBuilder({
             </div>
 
             {/* Daftar Menu Bernomor (1, 2, 3 dst) */}
-            <div className="space-y-2 max-h-44 overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
               {Object.entries(cart).map(([id, qty], index) => {
                 const item = products.find((p) => p.id === id);
                 if (!item) return null;
+                const unitPrice = Number(item.price) || 0;
+                const itemTotal = unitPrice * qty;
+
                 return (
                   <div
                     key={id}
-                    className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1.5"
+                    className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2"
                   >
-                    <div className="flex justify-between items-center text-xs">
-                      <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
-                        <span className="w-5 h-5 rounded-md bg-teal-700 text-white font-bold text-[11px] flex items-center justify-center shrink-0">
+                    <div className="flex justify-between items-start text-xs gap-2">
+                      <div className="flex items-start gap-2.5 min-w-0 flex-1">
+                        <span className="w-5 h-5 rounded-md bg-emerald-600 text-white font-extrabold text-[11px] flex items-center justify-center shrink-0 mt-0.5">
                           {index + 1}
                         </span>
-                        <span className="font-bold text-slate-900 truncate">{item.name}</span>
+                        <div className="min-w-0">
+                          <p className="font-bold text-slate-900 text-sm truncate">{item.name}</p>
+                          <p className="text-[11px] text-slate-500 mt-0.5">
+                            @ {rupiah.format(unitPrice)}
+                          </p>
+                        </div>
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex items-center gap-2.5 shrink-0">
                         <div className="inline-flex items-center gap-1.5 bg-white rounded-lg px-1.5 py-0.5 border border-slate-200">
                           <button
                             type="button"
                             onClick={() => removeFromCart(id)}
-                            className="text-slate-600 hover:text-slate-900 p-0.5 cursor-pointer"
+                            className="text-slate-600 hover:text-slate-900 p-0.5 active:scale-90 transition-transform cursor-pointer"
                             aria-label={`Kurangi ${item.name}`}
                           >
                             <Icon name="minus" size={12} />
                           </button>
-                          <span className="font-extrabold text-slate-900">{qty}x</span>
+                          <span className="font-extrabold text-slate-900 min-w-[1.25rem] text-center">
+                            {qty}x
+                          </span>
                           <button
                             type="button"
                             onClick={() => addToCart(id)}
-                            className="text-teal-700 hover:text-teal-900 p-0.5 cursor-pointer"
+                            className="text-emerald-700 hover:text-emerald-900 p-0.5 active:scale-90 transition-transform cursor-pointer"
                             aria-label={`Tambah ${item.name}`}
                           >
                             <Icon name="plus" size={12} />
                           </button>
                         </div>
-                        <span className="font-extrabold text-teal-800 min-w-[4.5rem] text-right">
-                          {rupiah.format((Number(item.price) || 0) * qty)}
+                        <span className="font-extrabold text-emerald-800 text-xs sm:text-sm min-w-[4.8rem] text-right">
+                          {rupiah.format(itemTotal)}
                         </span>
                       </div>
                     </div>
                     {itemNotes[id] && (
-                      <p className="text-[11px] text-slate-500 pl-7 italic">
+                      <p className="text-[11px] text-slate-500 pl-7 italic bg-white/70 p-1.5 rounded-lg border border-slate-100">
                         Catatan: &ldquo;{itemNotes[id]}&rdquo;
                       </p>
                     )}
@@ -732,12 +727,17 @@ export function StoreOrderBuilder({
               })}
             </div>
 
-            {/* Subtotal */}
-            <div className="py-2.5 px-3.5 rounded-xl bg-teal-50/70 border border-teal-200/70 flex justify-between items-center">
-              <span className="text-xs font-bold text-teal-950">
-                Total Harga Menu ({totalItems} item):
-              </span>
-              <span className="text-base font-extrabold text-teal-800">
+            {/* Subtotal & Ringkasan Total Harga */}
+            <div className="py-3 px-4 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex justify-between items-center shadow-2xs">
+              <div>
+                <span className="text-xs font-bold text-emerald-950 block">
+                  Total Harga Menu
+                </span>
+                <span className="text-[11px] text-emerald-700 font-semibold">
+                  {totalItems} item barang terpilih
+                </span>
+              </div>
+              <span className="text-base sm:text-lg font-black text-emerald-800">
                 {rupiah.format(totalPrice)}
               </span>
             </div>
