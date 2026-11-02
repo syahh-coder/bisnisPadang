@@ -208,6 +208,18 @@
 .animate-badge-pop { animation: badge-pop 220ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
 .animate-slide-up-snappy { animation: slide-up-snappy 260ms cubic-bezier(0.16, 1, 0.3, 1) both; }
 
+/* Iconsax Smooth Micro-animation Utilities */
+.icon-sax {
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1), stroke 180ms ease, opacity 180ms ease;
+  will-change: transform;
+}
+.icon-sax:hover {
+  transform: scale(1.08);
+}
+.icon-sax:active {
+  transform: scale(0.92);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }

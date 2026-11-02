@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { ProductThumbnail } from "@/components/product-thumbnail";
-import { Icon } from "@/components/icon";
+import { Icon, FoodAgentIcon } from "@/components/icon";
+
+export { FoodAgentIcon };
 import { useLocation } from "@/components/location-context";
 import { useDialog } from "@/components/dialog";
 
@@ -40,84 +42,6 @@ const rupiah = new Intl.NumberFormat("id-ID", {
   maximumFractionDigits: 0,
 });
 
-/**
- * Custom Vector SVG Icons untuk jembatan ke GoFood, ShopeeFood, GrabFood, & WhatsApp Delivery
- */
-export function FoodAgentIcon({
-  agent,
-  size = 18,
-}: {
-  agent: "gofood" | "shopeefood" | "grabfood" | "whatsapp";
-  size?: number;
-}) {
-  if (agent === "shopeefood") {
-    return (
-      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
-        <rect width="24" height="24" rx="6" fill="#EE4D2D" />
-        <path
-          d="M7 9.5h10l-.8 8.2a1.5 1.5 0 0 1-1.5 1.3H9.3a1.5 1.5 0 0 1-1.5-1.3L7 9.5Z"
-          stroke="#fff"
-          strokeWidth="1.7"
-          strokeLinejoin="round"
-        />
-        <path d="M9.5 9.5V8a2.5 2.5 0 0 1 5 0v1.5" stroke="#fff" strokeWidth="1.7" strokeLinecap="round" />
-        <path
-          d="M10.5 13.5c.4-.5 1.2-.7 2-.4.8.3 1 1.1.3 1.6-.7.5-1.8.6-2.3 1.2"
-          stroke="#fff"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-  }
-
-  if (agent === "gofood") {
-    return (
-      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
-        <rect width="24" height="24" rx="6" fill="#00AA13" />
-        <path
-          d="M8.5 7v5a2 2 0 0 0 4 0V7M10.5 7v10M15.5 7v10M15.5 7c1.5 0 2.5 1.2 2.5 3v2h-2.5"
-          stroke="#fff"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
-  }
-
-  if (agent === "grabfood") {
-    return (
-      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
-        <rect width="24" height="24" rx="6" fill="#00B14F" />
-        <path
-          d="M16.5 9.5A5 5 0 1 0 17 13h-4.5"
-          stroke="#fff"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
-  }
-
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0">
-      <rect width="24" height="24" rx="6" fill="#0F766E" />
-      <path
-        d="M19 11.5a7 7 0 0 1-10.4 6.1L5 19l1.4-3.5A7 7 0 1 1 19 11.5Z"
-        stroke="#fff"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M9.5 10c.3 1.5 1.7 2.9 3.2 3.2l1.1-.8c.3-.2.7-.1.9.1l.8 1.1c.2.3.1.8-.2 1-.9.6-2.2.5-3.5-.2a7.6 7.6 0 0 1-3.1-3.1c-.7-1.3-.8-2.6-.2-3.5.2-.3.7-.4 1-.2l1.1.8c.2.2.3.6.1.9l-.8 1.1Z"
-        fill="#fff"
-      />
-    </svg>
-  );
-}
 
 export function StoreOrderBuilder({
   products,
