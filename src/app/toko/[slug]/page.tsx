@@ -76,7 +76,7 @@ export default async function StorePage({ params, searchParams }: Props) {
       <div className="py-3 flex items-center justify-between">
         <Link
           href={back}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-teal-800 transition-colors py-1"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-emerald-800 active:scale-95 transition-all py-1"
         >
           <Icon name="back" size={16} />
           <span>{back.startsWith("/pencarian") ? "Kembali ke pencarian" : "Kembali ke daftar toko"}</span>
@@ -98,8 +98,8 @@ export default async function StorePage({ params, searchParams }: Props) {
       {/* Store Info Header Card */}
       <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 mt-4">
         <div className="flex flex-wrap items-center gap-2 mb-2">
-          <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200/60 flex items-center gap-1.5">
-            <Icon name="tag" size={13} className="text-teal-700" />
+          <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/60 flex items-center gap-1.5">
+            <Icon name="tag" size={13} className="text-emerald-700" />
             <span>{store.category_name}</span>
           </span>
           <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/60 flex items-center gap-1">
@@ -114,7 +114,7 @@ export default async function StorePage({ params, searchParams }: Props) {
 
         <div className="flex items-center gap-2">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{store.name}</h1>
-          <span className="text-teal-600 shrink-0" title="Toko Terverifikasi">
+          <span className="text-emerald-600 shrink-0" title="Toko Terverifikasi">
             <Icon name="shieldCheck" size={22} />
           </span>
         </div>
@@ -136,7 +136,7 @@ export default async function StorePage({ params, searchParams }: Props) {
                 href={contact.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white text-xs sm:text-sm font-semibold shadow-xs hover:shadow active:scale-[0.98] transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow active:scale-[0.98] transition-all"
               >
                 <Icon name="chat" size={17} />
                 <span>Chat WhatsApp</span>
@@ -169,7 +169,7 @@ export default async function StorePage({ params, searchParams }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
         <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1">
-            <Icon name="clock" size={15} className="text-teal-700" />
+            <Icon name="clock" size={15} className="text-emerald-700" />
             <span>Jam Operasional</span>
           </div>
           <p className="text-sm font-bold text-slate-900">{channels.openingHours}</p>
@@ -177,7 +177,7 @@ export default async function StorePage({ params, searchParams }: Props) {
 
         <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1">
-            <Icon name="shoppingBag" size={15} className="text-teal-700" />
+            <Icon name="shoppingBag" size={15} className="text-emerald-700" />
             <span>Layanan Delivery</span>
           </div>
           <p className="text-sm font-bold text-slate-900">
@@ -192,7 +192,7 @@ export default async function StorePage({ params, searchParams }: Props) {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
             <div>
               <h2 className="text-xs sm:text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
-                <Icon name="truck" size={16} className="text-teal-700" />
+                <Icon name="truck" size={16} className="text-emerald-700" />
                 <span>Tersedia di Aplikasi Food Delivery</span>
               </h2>
               <p className="text-[11px] text-slate-500 mt-0.5">

@@ -20,12 +20,12 @@ export function SiteHeader() {
             className="flex items-center gap-2 sm:gap-2.5 text-slate-900 font-bold text-base sm:text-lg tracking-tight hover:opacity-90 transition-opacity shrink-0"
             aria-label="Toko Lokal — Beranda"
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-teal-700 to-emerald-500 text-white flex items-center justify-center shadow-sm shrink-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs shrink-0">
               <Icon name="store" size={19} />
             </div>
             <div className="flex flex-col">
               <span className="font-extrabold text-slate-900 leading-none">Toko Lokal</span>
-              <span className="text-[10px] uppercase font-semibold tracking-wider text-teal-700 mt-0.5 hidden sm:inline">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 mt-0.5 hidden sm:inline">
                 Pilihan Dekatmu
               </span>
             </div>

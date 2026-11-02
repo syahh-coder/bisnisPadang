@@ -17,13 +17,13 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#0f766e",
+  themeColor: "#059669",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="id">
-      <body className="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-teal-700 selection:text-white">
+      <body className="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col selection:bg-emerald-600 selection:text-white">
         <DialogProvider>
           <ToastProvider>
             <LocationProvider>

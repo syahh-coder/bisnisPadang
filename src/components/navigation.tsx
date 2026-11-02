@@ -25,14 +25,14 @@ export function Navigation({ variant }: { variant: "header" | "bottom" }) {
             <Link
               key={href}
               href={href}
-              className={`flex items-center gap-1.5 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-2.5 lg:px-3.5 py-1.5 rounded-lg text-xs font-semibold active:scale-95 transition-all duration-150 ${
                 isActive
-                  ? "bg-white text-teal-800 shadow-xs"
+                  ? "bg-white text-emerald-800 shadow-xs"
                   : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
               }`}
               aria-current={isActive ? "page" : undefined}
             >
-              <Icon name={icon} size={15} />
+              <Icon name={icon} size={15} className={isActive ? "text-emerald-600" : "text-slate-400"} />
               <span>{label}</span>
             </Link>
           );
@@ -55,14 +55,14 @@ export function Navigation({ variant }: { variant: "header" | "bottom" }) {
             <Link
               key={href}
               href={href}
-              className={`flex-1 flex flex-col items-center justify-center py-1 rounded-xl transition-all ${
+              className={`flex-1 flex flex-col items-center justify-center py-1.5 rounded-xl active:scale-90 transition-all duration-150 ${
                 isActive
-                  ? "text-teal-800 font-bold bg-teal-50"
+                  ? "text-emerald-800 font-bold bg-emerald-50/80 shadow-2xs"
                   : "text-slate-500 hover:text-slate-800"
               }`}
               aria-current={isActive ? "page" : undefined}
             >
-              <Icon name={icon} size={19} className={isActive ? "text-teal-700" : "text-slate-400"} />
+              <Icon name={icon} size={19} className={isActive ? "text-emerald-600" : "text-slate-400"} />
               <span className="text-[10px] font-semibold mt-0.5">{label}</span>
             </Link>
           );

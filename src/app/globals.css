@@ -2,15 +2,17 @@
 
 @theme {
   --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --color-accent: #0f766e;
-  --color-accent-hover: #115e59;
+  --color-accent: #059669;
+  --color-accent-hover: #047857;
+  --color-accent-subtle: #ecfdf5;
   --color-join: #f59e0b;
+  --color-join-hover: #d97706;
   --color-background: #f8fafc;
   --color-surface: #ffffff;
   --color-foreground: #0f172a;
-  --color-muted: #64748b;
+  --color-muted: #475569;
   --color-line: #e2e8f0;
-  --radius-control: 12px;
+  --radius-control: 14px;
   --breakpoint-sm: 640px;
   --breakpoint-lg: 1024px;
 }
@@ -183,11 +185,28 @@
   0% { opacity: 0; transform: scale(0.93) translateY(8px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
+@keyframes cart-bounce {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.22); }
+  70% { transform: scale(0.94); }
+}
+@keyframes badge-pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes slide-up-snappy {
+  0% { transform: translateY(100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
 .animate-toast-in { animation: toast-in 200ms cubic-bezier(0.16, 1, 0.3, 1) both; }
 .animate-fade-in { animation: fade-in 150ms ease-out both; }
 .animate-sheet-in { animation: sheet-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both; }
 .animate-modal-backdrop { animation: modal-backdrop-in 180ms ease-out both; }
 .animate-modal-card { animation: modal-scale-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-cart-bounce { animation: cart-bounce 260ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.animate-badge-pop { animation: badge-pop 220ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.animate-slide-up-snappy { animation: slide-up-snappy 260ms cubic-bezier(0.16, 1, 0.3, 1) both; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

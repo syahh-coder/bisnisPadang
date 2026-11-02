@@ -527,7 +527,7 @@ export function StoreOrderBuilder({
                       <button
                         type="button"
                         onClick={() => addToCart(product.id)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold shadow-2xs transition-all active:scale-95 cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs active:scale-95 transition-all duration-150 cursor-pointer"
                       >
                         <Icon name="plus" size={14} />
                         <span>Keranjang</span>
@@ -537,7 +537,7 @@ export function StoreOrderBuilder({
                         <button
                           type="button"
                           onClick={() => removeFromCart(product.id)}
-                          className="w-7 h-7 rounded-lg bg-white hover:bg-slate-200 text-slate-700 flex items-center justify-center shadow-2xs transition-colors cursor-pointer"
+                          className="w-7 h-7 rounded-lg bg-white hover:bg-slate-200 text-slate-700 flex items-center justify-center shadow-2xs active:scale-90 transition-all duration-100 cursor-pointer"
                           aria-label={`Kurangi ${product.name}`}
                         >
                           <Icon name="minus" size={13} />
@@ -548,7 +548,7 @@ export function StoreOrderBuilder({
                         <button
                           type="button"
                           onClick={() => addToCart(product.id)}
-                          className="w-7 h-7 rounded-lg bg-teal-700 hover:bg-teal-800 text-white flex items-center justify-center shadow-2xs transition-colors cursor-pointer"
+                          className="w-7 h-7 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-2xs active:scale-90 transition-all duration-100 cursor-pointer"
                           aria-label={`Tambah lagi ${product.name}`}
                         >
                           <Icon name="plus" size={13} />
@@ -560,8 +560,8 @@ export function StoreOrderBuilder({
               </div>
 
               {qty > 0 && (
-                <div className="pt-2 border-t border-teal-100/80 flex items-center gap-2">
-                  <Icon name="edit" size={13} className="text-teal-700 shrink-0" />
+                <div className="pt-2 border-t border-emerald-100/80 flex items-center gap-2">
+                  <Icon name="edit" size={13} className="text-emerald-700 shrink-0" />
                   <input
                     type="text"
                     placeholder="Catatan menu ini (misal: pedas, kuah pisah)..."
@@ -569,7 +569,7 @@ export function StoreOrderBuilder({
                     onChange={(e) =>
                       setItemNotes((prev) => ({ ...prev, [product.id]: e.target.value }))
                     }
-                    className="w-full text-[11px] bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-teal-600"
+                    className="w-full text-[11px] bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600"
                   />
                 </div>
               )}
@@ -578,16 +578,19 @@ export function StoreOrderBuilder({
         })}
       </ul>
 
-      {/* Floating Bottom Cart Bar (Full SVG Icons, Zero Emoji) */}
+      {/* Floating Bottom Cart Bar (Full SVG Icons, Zero Emoji, Snappy Spring Pop) */}
       {totalItems > 0 && (
-        <div className="fixed bottom-20 sm:bottom-6 left-4 right-4 z-40 max-w-xl mx-auto">
+        <div className="fixed bottom-20 sm:bottom-6 left-4 right-4 z-40 max-w-xl mx-auto animate-slide-up-snappy">
           <div className="bg-slate-900 text-white p-3.5 sm:p-4 rounded-2xl shadow-2xl border border-slate-700/80 flex items-center justify-between gap-3 backdrop-blur-md">
             <div className="flex items-center gap-3 min-w-0">
               <div className="relative">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 text-slate-950 flex items-center justify-center font-extrabold text-sm shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-slate-950 flex items-center justify-center font-extrabold text-sm shadow-sm">
                   <Icon name="shoppingBag" size={20} />
                 </div>
-                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber-500 text-slate-950 text-[11px] font-extrabold flex items-center justify-center shadow">
+                <span
+                  key={totalItems}
+                  className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber-500 text-slate-950 text-[11px] font-extrabold flex items-center justify-center shadow animate-badge-pop"
+                >
                   {totalItems}
                 </span>
               </div>
@@ -624,7 +627,7 @@ export function StoreOrderBuilder({
                 setValidationError(null);
                 setDrawerOpen(true);
               }}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-xs sm:text-sm font-extrabold shadow-md flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer shrink-0"
+              className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-extrabold shadow-md flex items-center gap-1.5 active:scale-95 transition-all duration-150 cursor-pointer shrink-0"
             >
               <span>Checkout ({totalItems})</span>
               <Icon name="arrowRight" size={15} />
@@ -640,7 +643,7 @@ export function StoreOrderBuilder({
           onClick={() => setDrawerOpen(false)}
         >
           <div
-            className="w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto space-y-4"
+            className="w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto space-y-4 animate-slide-up-snappy sm:animate-modal-card"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Keranjang */}
@@ -991,7 +994,7 @@ export function StoreOrderBuilder({
             <button
               type="button"
               onClick={handleCheckoutWA}
-              className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-sm shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer"
+              className="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-extrabold text-sm shadow-md flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer"
             >
               <FoodAgentIcon agent="whatsapp" size={20} />
               <span>Kirim Pesanan ke WA Delivery Toko</span>
