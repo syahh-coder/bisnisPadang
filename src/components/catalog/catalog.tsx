@@ -47,19 +47,13 @@ export function Catalog({
         </NoticeBanner>
       )}
 
-      {view === "home" && !filtered && (
-        <section className="text-center py-6 sm:py-10 max-w-2xl mx-auto px-2">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
-            Mau Jajan Apa Hari Ini?
-          </h1>
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
-            Temukan kuliner favorit, cek menu & perkiraan jarak toko dari posisimu, lalu pesan langsung ke WhatsApp tanpa biaya admin.
-          </p>
-        </section>
-      )}
+      {/* Screen-reader accessible title for clean minimalist layout */}
+      <h1 className="sr-only">Luvio — Pesan Makanan & Toko Pilihan</h1>
 
       {/* Search Input Bar */}
-      <SearchForm filters={filters} live={view === "search"} />
+      <div className="pt-2">
+        <SearchForm filters={filters} live={view === "search"} />
+      </div>
 
       {/* Category Pills Navigation */}
       {catalog.categories.length > 0 && (
