@@ -42,24 +42,26 @@ export function SiteHeader() {
           <Navigation variant="header" />
         </div>
 
-        {/* Actions (Portal Mitra & Join Afiliasi) */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        {/* Actions (Masuk & Daftar) */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <Link
             href="/akun"
-            className="px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors inline-flex items-center gap-1.5"
-            title="Portal Toko & Admin"
-            aria-label="Portal Mitra"
+            className="group inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-50 hover:bg-emerald-100/90 text-emerald-800 border border-emerald-200 hover:border-emerald-300 shadow-2xs hover:shadow-xs active:scale-[0.98] transition-all"
+            title="Masuk ke Akun Toko / Admin"
+            aria-label="Masuk"
           >
-            <Icon name="account" size={17} className="text-slate-500" />
-            <span className="hidden lg:inline">Portal Mitra</span>
+            <Icon name="account" size={15} className="text-emerald-600 shrink-0" />
+            <span className="tracking-wide">MASUK</span>
           </Link>
 
           <Link
             href="/join-afiliasi"
-            className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-xs hover:shadow-sm active:scale-[0.98] transition-all shrink-0"
+            className="group inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 border border-amber-600/25 shadow-xs hover:shadow-sm active:scale-[0.98] transition-all shrink-0"
+            title="Daftar Toko Baru di Luvio"
+            aria-label="Daftar"
           >
-            <Icon name="sparkles" size={14} />
-            <span className="whitespace-nowrap">Daftar Toko</span>
+            <Icon name="sparkles" size={14} className="text-amber-950 shrink-0" />
+            <span className="tracking-wide whitespace-nowrap">DAFTAR</span>
           </Link>
         </div>
       </div>
