@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (result.status === "not-found") notFound();
   if (result.status === "unavailable") return { title: "Informasi toko belum tersedia", robots: { index: false } };
   return {
-    title: `${result.store.name} — Toko Lokal`,
+    title: `${result.store.name} — Luvio`,
     description: `${result.store.name} — ${result.store.category_name}. ${result.store.address}. Lihat menu, harga, dan pesan langsung via WhatsApp.`,
     ...(result.mode === "demo" ? { robots: { index: false } } : {}),
   };

@@ -6,7 +6,7 @@ import { Icon } from "@/components/icon";
 
 export const metadata: Metadata = {
   title: "Daftarkan Usahamu — Gratis & Tanpa Potongan",
-  description: "Buka profil toko online dan dapatkan QR code eksklusif untuk usahamu secara gratis di Toko Lokal.",
+  description: "Buka profil toko online dan dapatkan QR code eksklusif untuk usahamu secara gratis di Luvio.",
 };
 
 export const dynamic = "force-dynamic";

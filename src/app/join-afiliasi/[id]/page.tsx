@@ -8,7 +8,7 @@ import { dateLabel, uuid, type Booking } from "@/lib/affiliation";
 import { Icon } from "@/components/icon";
 
 export const metadata: Metadata = {
-  title: "Status Janji Temu Afiliasi — Toko Lokal",
+  title: "Status Janji Temu Afiliasi — Luvio",
   robots: { index: false, follow: false },
 };
 
@@ -127,9 +127,9 @@ export default async function ReceiptPage({ params }: { params: Promise<{ id: st
         </div>
 
         <div className="bg-slate-50 rounded-xl p-4 mt-2 text-xs text-slate-600 leading-relaxed flex items-start gap-2.5">
-          <Icon name="info" size={18} className="text-teal-700 shrink-0 mt-0.5" />
+          <Icon name="info" size={18} className="text-emerald-700 shrink-0 mt-0.5" />
           <p>
-            Tim Toko Lokal akan menghubungi nomor WhatsApp Anda untuk konfirmasi pertemuan dan verifikasi data toko. Simpan halaman ini sebagai bukti registrasi.
+            Tim Luvio akan menghubungi nomor WhatsApp Anda untuk konfirmasi pertemuan dan verifikasi data toko. Simpan halaman ini sebagai bukti registrasi.
           </p>
         </div>
 

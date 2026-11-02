@@ -8,9 +8,9 @@ import { DialogProvider } from "@/components/dialog";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Toko Lokal — Temukan Toko & Kuliner Favorit di Sekitarmu", template: "%s | Toko Lokal" },
+  title: { default: "Luvio — Pesan Makanan & Toko Favorit di Sekitarmu", template: "%s | Luvio" },
   description:
-    "Cari kuliner lezat, kedai kopi, kebutuhan harian, dan jasa terbaik di sekitarmu. Cek menu, hitung jarak toko, dan pesan langsung via WhatsApp tanpa ribet.",
+    "Pesan kuliner lezat, minuman favorit, dan kebutuhan harian di Luvio. Cek menu, perkiraan jarak toko, dan pesan langsung via WhatsApp tanpa biaya admin.",
 };
 
 export const viewport: Viewport = {

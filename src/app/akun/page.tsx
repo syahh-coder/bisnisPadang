@@ -5,7 +5,7 @@ import { getAccount } from "@/lib/auth/server";
 import { logout } from "./actions";
 import { Icon } from "@/components/icon";
 
-export const metadata: Metadata = { title: "Akun & Portal Masuk — Toko Lokal", robots: { index: false } };
+export const metadata: Metadata = { title: "Akun & Portal Masuk — Luvio", robots: { index: false } };
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage({ searchParams }: { searchParams: Promise<{ akses?: string }> }) {

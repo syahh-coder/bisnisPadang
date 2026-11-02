@@ -41,7 +41,7 @@ export function Catalog({
         <NoticeBanner
           type="info"
           storageKey="demo_catalog_banner"
-          title="Mode Pratinjau Toko Lokal"
+          title="Mode Pratinjau Luvio"
         >
           Coba simulasi jelajah toko terdekat, pilih menu favorit, dan tes kirim pesanan langsung ke WhatsApp!
         </NoticeBanner>

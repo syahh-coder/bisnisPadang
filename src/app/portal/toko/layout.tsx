@@ -6,7 +6,7 @@ import { logout } from "@/app/akun/actions";
 import { OwnerNavigation } from "@/components/owner-navigation";
 import { Icon } from "@/components/icon";
 
-export const metadata: Metadata = { title: "Portal Toko — Toko Lokal", robots: { index: false } };
+export const metadata: Metadata = { title: "Portal Toko — Luvio", robots: { index: false } };
 export const dynamic = "force-dynamic";
 
 export default async function StorePortalLayout({ children }: { children: React.ReactNode }) {
@@ -18,16 +18,16 @@ export default async function StorePortalLayout({ children }: { children: React.
       <header className="sticky top-0 z-30 w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2 font-bold text-slate-900 text-sm hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 rounded-xl bg-teal-700 text-white flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
               <Icon name="store" size={18} />
             </div>
-            <span>Toko Lokal</span>
+            <span>Luvio Mitra</span>
           </Link>
 
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex flex-col text-right">
               <span className="text-xs font-bold text-slate-900">{account.name || account.email}</span>
-              <span className="text-[10px] text-teal-700 font-semibold">Pemilik Toko</span>
+              <span className="text-[10px] text-emerald-700 font-semibold">Pemilik Toko</span>
             </div>
 
             <form action={logout}>

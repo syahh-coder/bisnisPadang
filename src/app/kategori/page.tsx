@@ -4,7 +4,7 @@ import { demoCategories, getAllDemoStores } from "@/lib/catalog/demo";
 import { Icon, type IconName } from "@/components/icon";
 
 export const metadata: Metadata = {
-  title: "Kategori & Layanan — Toko Lokal",
+  title: "Kategori & Layanan — Luvio",
   description: "Jelajahi beragam kategori kuliner, kopi, jasa, dan kebutuhan harian favorit di sekitarmu.",
 };
 
