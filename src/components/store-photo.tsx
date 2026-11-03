@@ -39,7 +39,7 @@ export function StorePhoto({ src, name }: { src: string | null; name: string }) 
         </>
       ) : (
         <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-tr from-slate-100 to-slate-200 text-slate-400 p-6 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-white shadow-xs flex items-center justify-center text-teal-700 mb-2">
+          <div className="w-14 h-14 rounded-2xl bg-white shadow-xs flex items-center justify-center text-emerald-700 mb-2">
             <Icon name="store" size={28} />
           </div>
           <span className="text-xs font-semibold text-slate-600">{name}</span>

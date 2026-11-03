@@ -115,7 +115,7 @@ export function CatalogResetControls({ storeCount }: { storeCount: number }) {
       type="button"
       onClick={handleLoadSample}
       disabled={isPending}
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-teal-200 text-teal-800 bg-teal-50 hover:bg-teal-100 text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50"
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-200 text-emerald-800 bg-emerald-50 hover:bg-emerald-100 text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50"
     >
       <Icon name="sparkles" size={14} />
       <span>{isPending ? "Memuat..." : "Muat 5 Toko Contoh"}</span>

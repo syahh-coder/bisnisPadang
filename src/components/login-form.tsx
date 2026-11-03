@@ -38,7 +38,7 @@ export function LoginForm({ available }: { available: boolean }) {
             required
             disabled={pending || demoPending}
             placeholder="admin@tokolokal.com / email toko"
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 text-sm"
           />
         </div>
 
@@ -55,13 +55,13 @@ export function LoginForm({ available }: { available: boolean }) {
             required
             disabled={pending || demoPending}
             placeholder="••••••••"
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 text-sm"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full py-2.5 px-4 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold text-sm shadow-sm transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           disabled={pending || demoPending}
         >
           {pending ? (
@@ -86,9 +86,9 @@ export function LoginForm({ available }: { available: boolean }) {
             type="button"
             onClick={() => handleDemo("admin")}
             disabled={pending || demoPending}
-            className="py-2.5 px-3 rounded-xl border border-teal-200 bg-teal-50/70 hover:bg-teal-100/90 text-teal-900 text-xs font-bold transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
+            className="py-2.5 px-3 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-100/90 text-emerald-900 text-xs font-bold transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
           >
-            <Icon name="shieldCheck" size={16} className="text-teal-700" />
+            <Icon name="shieldCheck" size={16} className="text-emerald-700" />
             <span>Masuk Portal Admin</span>
           </button>
 

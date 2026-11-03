@@ -71,9 +71,9 @@ const variantStyles: Record<
   },
   info: {
     icon: "info",
-    iconBg: "bg-teal-100",
-    iconColor: "text-teal-800",
-    confirmButton: "bg-teal-700 hover:bg-teal-800 text-white shadow-teal-700/20",
+    iconBg: "bg-emerald-100",
+    iconColor: "text-emerald-800",
+    confirmButton: "bg-emerald-700 hover:bg-emerald-800 text-white shadow-emerald-700/20",
   },
   success: {
     icon: "check",

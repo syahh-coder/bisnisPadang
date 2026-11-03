@@ -52,7 +52,7 @@ export function AffiliationForm({ slots }: { slots: Slot[] }) {
             placeholder="Contoh: Ibu Ani / Rahmat Syah"
             value={fields.manager}
             onChange={(e) => change("manager", e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 text-sm"
           />
         </div>
       </div>
@@ -72,7 +72,7 @@ export function AffiliationForm({ slots }: { slots: Slot[] }) {
             placeholder="081234567890"
             value={fields.phone}
             onChange={(e) => change("phone", e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 text-sm"
           />
         </div>
         <p className="text-xs text-slate-500 mt-1">Digunakan tim untuk konfirmasi jadwal via WhatsApp.</p>
@@ -93,7 +93,7 @@ export function AffiliationForm({ slots }: { slots: Slot[] }) {
           placeholder="Jl. Nama Jalan No. XX, Kelurahan, Kecamatan, Kota..."
           value={fields.address}
           onChange={(e) => change("address", e.target.value)}
-          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm resize-y"
+          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 text-sm resize-y"
         />
       </div>
 
@@ -108,7 +108,7 @@ export function AffiliationForm({ slots }: { slots: Slot[] }) {
             required
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 text-sm"
           >
             <option value="">Pilih hari & tanggal</option>
             {dates.map((value) => (
@@ -130,7 +130,7 @@ export function AffiliationForm({ slots }: { slots: Slot[] }) {
             required
             disabled={!date}
             defaultValue=""
-            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 disabled:bg-slate-100 disabled:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 disabled:bg-slate-100 disabled:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 text-sm"
           >
             <option value="">{date ? "Pilih slot jam" : "Pilih tanggal dahulu"}</option>
             {times.map((slot) => (
@@ -157,14 +157,14 @@ export function AffiliationForm({ slots }: { slots: Slot[] }) {
           placeholder="Contoh: Toko buka mulai jam 10 pagi, patokan dekat masjid..."
           value={fields.notes}
           onChange={(e) => change("notes", e.target.value)}
-          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600 text-sm resize-y"
+          className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 text-sm resize-y"
         />
       </div>
 
       <div className="pt-2">
         <button
           type="submit"
-          className="w-full py-3 px-6 rounded-xl bg-teal-700 hover:bg-teal-800 active:scale-[0.99] text-white font-semibold shadow-md transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full py-3 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold shadow-md shadow-emerald-700/20 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           disabled={pending || dates.length === 0}
         >
           {pending ? (

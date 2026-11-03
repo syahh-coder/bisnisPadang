@@ -378,7 +378,7 @@ export function StoreOrderBuilder({
               key={product.id}
               className={`bg-white rounded-2xl border p-3.5 flex flex-col justify-between gap-3 transition-all shadow-2xs ${
                 qty > 0
-                  ? "border-teal-600 ring-1 ring-teal-600/20 bg-teal-50/10"
+                  ? "border-emerald-600 ring-1 ring-emerald-600/20 bg-emerald-50/20"
                   : "border-slate-200/90 hover:border-slate-300"
               }`}
             >
@@ -386,7 +386,7 @@ export function StoreOrderBuilder({
                 <div className="w-22 h-22 shrink-0 rounded-xl overflow-hidden bg-slate-100 border border-slate-200/60 relative">
                   <ProductThumbnail name={product.name} src={displayPhoto} />
                   {qty > 0 && (
-                    <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-teal-700 text-white text-[10px] font-extrabold shadow-xs">
+                    <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-emerald-700 text-white text-[10px] font-extrabold shadow-xs">
                       {qty}x
                     </span>
                   )}
@@ -397,7 +397,7 @@ export function StoreOrderBuilder({
                     <h3 className="font-bold text-slate-900 text-sm leading-snug line-clamp-2">
                       {product.name}
                     </h3>
-                    <p className="font-extrabold text-teal-800 text-sm sm:text-base mt-1">
+                    <p className="font-extrabold text-emerald-800 text-sm sm:text-base mt-1">
                       {rupiah.format(Number(product.price) || 0)}
                     </p>
                   </div>
@@ -710,7 +710,7 @@ export function StoreOrderBuilder({
             {/* Pilihan 2: Info Pemesan (Wajib Diisi) */}
             <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-3">
               <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
-                <Icon name="user" size={15} className="text-teal-700" />
+                <Icon name="user" size={15} className="text-emerald-700" />
                 <span>2. Informasi Pemesan (Wajib Diisi)</span>
               </div>
 
@@ -730,7 +730,7 @@ export function StoreOrderBuilder({
                         setCustomerName(e.target.value);
                         setValidationError(null);
                       }}
-                      className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                      className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600"
                     />
                   </div>
                 </div>
@@ -750,7 +750,7 @@ export function StoreOrderBuilder({
                         setCustomerPhone(e.target.value);
                         setValidationError(null);
                       }}
-                      className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                      className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600"
                     />
                   </div>
                 </div>
@@ -762,13 +762,13 @@ export function StoreOrderBuilder({
               <div className="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                    <Icon name="mapPin" size={15} className="text-teal-700" />
+                    <Icon name="mapPin" size={15} className="text-emerald-700" />
                     <span>3. Detail Alamat Pengiriman (Semua Wajib Diisi)</span>
                   </span>
                   <button
                     type="button"
                     onClick={() => setModalOpen(true)}
-                    className="text-[11px] font-bold text-teal-700 hover:underline cursor-pointer flex items-center gap-1"
+                    className="text-[11px] font-bold text-emerald-700 hover:underline cursor-pointer flex items-center gap-1"
                   >
                     <Icon name="mapPin" size={12} />
                     <span>{location ? "Ubah Titik Lokasi" : "Pilih via Peta/GPS"}</span>
@@ -822,7 +822,7 @@ export function StoreOrderBuilder({
                           setManualAddressOverride(e.target.value);
                           setValidationError(null);
                         }}
-                        className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                        className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600"
                       />
                     </div>
                   </div>
@@ -843,7 +843,7 @@ export function StoreOrderBuilder({
                       setStreetAddress(e.target.value);
                       setValidationError(null);
                     }}
-                    className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                    className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600"
                   />
                 </div>
 
@@ -865,7 +865,7 @@ export function StoreOrderBuilder({
                       setAddressDetail(e.target.value);
                       setValidationError(null);
                     }}
-                    className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                    className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600"
                   />
                 </div>
               </div>
@@ -882,7 +882,7 @@ export function StoreOrderBuilder({
                 placeholder="Contoh: Minta sendok plastik, sambal dipisah..."
                 value={orderNotes}
                 onChange={(e) => setOrderNotes(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600"
               />
             </div>
 

@@ -111,7 +111,7 @@
     transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
   }
   .editor-form input:focus, .editor-form select:focus, .editor-form textarea:focus {
-    outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgb(15 118 110 / 15%);
+    outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgb(5 150 105 / 15%);
   }
   .editor-form input[type="file"] { padding: 8px; }
   .editor-form textarea { resize: vertical; }
@@ -152,7 +152,7 @@
   .menu-editor { border-top: 1px solid var(--color-line); padding-block: 8px; }
   .menu-editor summary { display: flex; align-items: center; gap: 12px; min-height: 48px; padding-block: 8px; cursor: pointer; list-style: none; font-weight: 600; overflow-wrap: anywhere; }
   .menu-editor summary::-webkit-details-marker { display: none; }
-  .menu-editor summary::before { content: "+"; display: grid; flex: none; width: 24px; height: 24px; place-items: center; border-radius: 8px; background: #f0fdfa; color: var(--color-accent); font-weight: 700; }
+  .menu-editor summary::before { content: "+"; display: grid; flex: none; width: 24px; height: 24px; place-items: center; border-radius: 8px; background: #ecfdf5; color: var(--color-accent); font-weight: 700; }
   .menu-editor[open] summary::before { content: "\2212"; }
   .menu-editor summary > span:first-of-type { margin-right: auto; }
   .menu-editor summary > span:last-of-type { flex: none; font-size: 13px; }

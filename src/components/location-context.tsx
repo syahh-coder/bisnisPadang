@@ -220,7 +220,7 @@ export function LocationBar({ fullWidth = false }: { fullWidth?: boolean }) {
             {detecting ? "Mendeteksi GPS…" : location ? location.name : "Pilih Lokasi Terdekat"}
           </span>
         </div>
-        <span className="text-[11px] text-teal-700 font-bold shrink-0 flex items-center gap-0.5">
+        <span className="text-[11px] text-emerald-700 font-bold shrink-0 flex items-center gap-0.5">
           Ubah <Icon name="chevronDown" size={12} />
         </span>
       </button>
@@ -334,7 +334,7 @@ function LocationModal() {
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
               <Icon name="mapPin" size={19} />
             </div>
             <div>
@@ -356,16 +356,16 @@ function LocationModal() {
           type="button"
           onClick={detectGpsLocation}
           disabled={detecting}
-          className="w-full py-3 px-4 rounded-2xl bg-teal-50 hover:bg-teal-100/80 border border-teal-200/80 text-teal-900 text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+          className="w-full py-3 px-4 rounded-2xl bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200/80 text-emerald-900 text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
         >
           {detecting ? (
             <>
-              <span className="w-4 h-4 border-2 border-teal-700 border-t-transparent rounded-full animate-spin" />
+              <span className="w-4 h-4 border-2 border-emerald-700 border-t-transparent rounded-full animate-spin" />
               <span>Mencari Koordinat GPS…</span>
             </>
           ) : (
             <>
-              <Icon name="sparkles" size={16} className="text-teal-700" />
+              <Icon name="sparkles" size={16} className="text-emerald-700" />
               <span>Gunakan Lokasi Saya Saat Ini (GPS Otomatis)</span>
             </>
           )}
@@ -392,40 +392,40 @@ function LocationModal() {
                   setCustomLocation(inputVal);
                 }
               }}
-              className="w-full px-3.5 py-3 pr-10 rounded-xl border border-slate-300 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-teal-600"
+              className="w-full px-3.5 py-3 pr-10 rounded-xl border border-slate-300 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600"
               autoFocus
             />
             {loadingSuggestions && (
               <div className="absolute right-3 top-3.5">
-                <span className="w-4 h-4 border-2 border-teal-600 border-t-transparent rounded-full animate-spin block" />
+                <span className="w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin block" />
               </div>
             )}
           </div>
 
           {/* Autocomplete Suggestions List */}
           {suggestions.length > 0 && (
-            <div className="border border-teal-200/80 rounded-2xl overflow-hidden bg-white shadow-md divide-y divide-slate-100 max-h-56 overflow-y-auto">
-              <div className="bg-teal-50/70 px-3 py-1.5 text-[11px] font-bold text-teal-800 flex items-center justify-between">
+            <div className="border border-emerald-200/80 rounded-2xl overflow-hidden bg-white shadow-md divide-y divide-slate-100 max-h-56 overflow-y-auto">
+              <div className="bg-emerald-50/70 px-3 py-1.5 text-[11px] font-bold text-emerald-800 flex items-center justify-between">
                 <span>Pilih Wilayah Akurat Terdekat:</span>
-                <span className="text-[10px] text-teal-600 font-normal">Database Google Maps / OSM</span>
+                <span className="text-[10px] text-emerald-600 font-normal">Database Google Maps / OSM</span>
               </div>
               {suggestions.map((item) => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => handleSelectSuggestion(item)}
-                  className="w-full text-left p-3 hover:bg-teal-50/50 transition-colors flex items-start gap-2.5 cursor-pointer group"
+                  className="w-full text-left p-3 hover:bg-emerald-50/50 transition-colors flex items-start gap-2.5 cursor-pointer group"
                 >
-                  <Icon name="mapPin" size={16} className="text-teal-700 mt-0.5 shrink-0 group-hover:scale-110 transition-transform" />
+                  <Icon name="mapPin" size={16} className="text-emerald-700 mt-0.5 shrink-0 group-hover:scale-110 transition-transform" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-teal-800 transition-colors truncate">
+                    <p className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-emerald-800 transition-colors truncate">
                       {item.title}
                     </p>
                     <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
                       {item.subtitle}
                     </p>
                   </div>
-                  <span className="text-[10px] font-semibold text-teal-700 bg-teal-100/60 px-2 py-0.5 rounded-md shrink-0">
+                  <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded-md shrink-0">
                     Pilih
                   </span>
                 </button>
@@ -441,7 +441,7 @@ function LocationModal() {
               <button
                 type="button"
                 onClick={() => setCustomLocation(inputVal)}
-                className="mt-2 text-xs font-bold text-teal-700 hover:underline cursor-pointer"
+                className="mt-2 text-xs font-bold text-emerald-700 hover:underline cursor-pointer"
               >
                 Gunakan &ldquo;{inputVal}&rdquo; sebagai nama lokasi manual
               </button>
@@ -464,7 +464,7 @@ function LocationModal() {
                   onClick={() => setCityLocation(city)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                     isActive
-                      ? "bg-teal-700 text-white shadow-2xs font-bold"
+                      ? "bg-emerald-700 text-white shadow-2xs font-bold"
                       : "bg-slate-100 hover:bg-slate-200/80 text-slate-700"
                   }`}
                 >

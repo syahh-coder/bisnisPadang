@@ -20,7 +20,7 @@ export function OwnerUnavailable({ status }: { status: "empty" | "missing" | "un
         </span>
       </div>
       {status === "missing" && (
-        <Link className="inline-flex items-center gap-1 font-bold text-teal-800 hover:underline text-xs" href="/portal/toko">
+        <Link className="inline-flex items-center gap-1 font-bold text-emerald-800 hover:underline text-xs" href="/portal/toko">
           <Icon name="chevronLeft" size={14} />
           <span>Kembali ke dashboard</span>
         </Link>
@@ -49,7 +49,7 @@ export function OwnerStorePicker({
     <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-3">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-teal-50 border border-teal-200/80 text-teal-700 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-700 flex items-center justify-center shrink-0">
             <Icon name="store" size={20} />
           </div>
           <div>
@@ -73,7 +73,7 @@ export function OwnerStorePicker({
                 id="owner-store-select"
                 name="toko"
                 defaultValue={store.id}
-                className="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-300 bg-slate-50 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                className="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-300 bg-slate-50 text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600"
               >
                 {stores.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -93,7 +93,7 @@ export function OwnerStorePicker({
           <Link
             href={`/toko/${encodeURIComponent(store.slug)}`}
             target="_blank"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200/80 text-xs font-bold transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 text-xs font-bold transition-colors"
           >
             <span>Lihat Halaman Toko</span>
             <Icon name="externalLink" size={13} />

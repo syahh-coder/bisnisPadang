@@ -216,11 +216,11 @@ export function StoreLocationPicker({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200/80">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-7 h-7 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center shrink-0">
+            <span className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
               <Icon name="mapPin" size={16} />
             </span>
             <h3 className="text-sm font-bold text-slate-900">Titik Lokasi Peta Toko</h3>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
               Akurasi GPS Real
             </span>
           </div>
@@ -234,7 +234,7 @@ export function StoreLocationPicker({
           type="button"
           onClick={handleDetectGps}
           disabled={isGpsLoading}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-teal-200 bg-teal-50 hover:bg-teal-100 text-teal-800 text-xs font-bold transition-all disabled:opacity-60 self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition-all disabled:opacity-60 self-start sm:self-auto"
         >
           <Icon name="sparkles" size={13} className={isGpsLoading ? "animate-spin" : ""} />
           <span>{isGpsLoading ? "Mendeteksi GPS…" : "Gunakan GPS Saya Saat Ini"}</span>
@@ -249,7 +249,7 @@ export function StoreLocationPicker({
             onClick={() => setActiveTab("link")}
             className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "link"
-                ? "bg-teal-700 text-white shadow-xs"
+                ? "bg-emerald-700 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
@@ -261,7 +261,7 @@ export function StoreLocationPicker({
             onClick={() => setActiveTab("search")}
             className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "search"
-                ? "bg-teal-700 text-white shadow-xs"
+                ? "bg-emerald-700 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
@@ -287,14 +287,14 @@ export function StoreLocationPicker({
                   value={gmapsUrl}
                   onChange={(e) => setGmapsUrl(e.target.value)}
                   placeholder="Contoh: https://maps.app.goo.gl/... atau google.com/maps/place/..."
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600"
                 />
               </div>
               <button
                 type="button"
                 onClick={() => handleParseGmapsLink()}
                 disabled={isParsingLink || !gmapsUrl.trim()}
-                className="px-4 py-2 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold shadow-xs transition-all disabled:opacity-50 flex items-center justify-center gap-1.5 shrink-0"
+                className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-all disabled:opacity-50 flex items-center justify-center gap-1.5 shrink-0"
               >
                 {isParsingLink ? (
                   <>
@@ -332,10 +332,10 @@ export function StoreLocationPicker({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Ketik nama toko, nama jalan, kelurahan, atau kecamatan Anda..."
-                className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-600"
+                className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-slate-300 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600"
               />
               {isSearching && (
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-600">
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-600">
                   <Icon name="refresh" size={14} className="animate-spin" />
                 </span>
               )}
@@ -349,14 +349,14 @@ export function StoreLocationPicker({
                     key={item.id}
                     type="button"
                     onClick={() => handleSelectSearchResult(item)}
-                    className="w-full p-2.5 text-left hover:bg-teal-50/70 transition-colors flex items-start gap-2.5"
+                    className="w-full p-2.5 text-left hover:bg-emerald-50/70 transition-colors flex items-start gap-2.5"
                   >
-                    <Icon name="mapPin" size={15} className="text-teal-700 shrink-0 mt-0.5" />
+                    <Icon name="mapPin" size={15} className="text-emerald-700 shrink-0 mt-0.5" />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-bold text-slate-900 truncate">{item.title}</p>
                       <p className="text-[11px] text-slate-500 line-clamp-1">{item.subtitle}</p>
                     </div>
-                    <span className="text-[10px] font-mono text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded shrink-0">
+                    <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded shrink-0">
                       Pilih
                     </span>
                   </button>
@@ -409,7 +409,7 @@ export function StoreLocationPicker({
               href={`https://www.google.com/maps?q=${latitude},${longitude}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-bold text-teal-800 hover:underline"
+              className="inline-flex items-center gap-1 font-bold text-emerald-800 hover:underline"
             >
               <span>Buka Titik di Google Maps</span>
               <Icon name="externalLink" size={12} />

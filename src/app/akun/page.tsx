@@ -34,13 +34,13 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
         {state.status === "ready" ? (
           <div className="space-y-4">
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-sm shrink-0">
+              <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-sm shrink-0">
                 {state.account.name.charAt(0).toUpperCase()}
               </div>
               <div className="min-w-0">
                 <p className="font-bold text-slate-900 text-sm truncate">{state.account.name}</p>
                 <p className="text-xs text-slate-500 truncate">{state.account.email}</p>
-                <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-teal-100 text-teal-800">
+                <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800">
                   Role: {state.account.role === "admin" ? "Admin" : "Pemilik Toko"}
                 </span>
               </div>
@@ -48,7 +48,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
             <Link
               href={`/portal/${state.account.role}`}
-              className="w-full py-2.5 px-4 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold text-xs sm:text-sm shadow-xs transition-colors flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm shadow-xs transition-colors flex items-center justify-center gap-2"
             >
               <Icon name="store" size={16} />
               <span>Buka Portal {state.account.role === "admin" ? "Admin" : "Toko"}</span>
@@ -70,7 +70,7 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
       <p className="text-center mt-6 text-xs text-slate-500">
         Punya usaha dan ingin tokomu tampil di sini?{" "}
-        <Link href="/join-afiliasi" className="font-semibold text-teal-700 hover:underline">
+        <Link href="/join-afiliasi" className="font-semibold text-emerald-700 hover:underline">
           Buka Toko Online Gratis
         </Link>
       </p>
