@@ -71,7 +71,7 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
       action="/pencarian"
       role="search"
       aria-label="Cari toko, makanan, atau produk"
-      className="relative w-full max-w-2xl mx-auto my-4"
+      className="relative w-full max-w-2xl mx-auto my-3"
       aria-busy={pending}
       onSubmit={(event) => {
         event.preventDefault();
@@ -81,8 +81,8 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
       <label className="sr-only" htmlFor="pencarian-toko">
         Cari toko, makanan, atau produk lokal
       </label>
-      <div className="relative flex items-center bg-white rounded-2xl border border-slate-200/90 shadow-sm focus-within:ring-2 focus-within:ring-teal-600 focus-within:border-teal-600 transition-all">
-        <span className="pl-4 pr-2 text-slate-400 shrink-0">
+      <div className="relative flex items-center bg-white rounded-2xl border border-slate-200/90 shadow-md shadow-slate-900/5 focus-within:ring-4 focus-within:ring-emerald-500/15 focus-within:border-emerald-600 transition-all">
+        <span className="pl-4 pr-2 text-emerald-600 shrink-0">
           <Icon name="search" size={20} />
         </span>
         <input
@@ -90,7 +90,7 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
           ref={input}
           name="q"
           type="search"
-          placeholder="Cari toko, makanan, minuman, jasa di sekitarmu..."
+          placeholder="Cari makanan, kopi, jajanan, atau tokomu..."
           maxLength={MAX_QUERY_LENGTH}
           autoComplete="off"
           enterKeyHint="search"
@@ -101,14 +101,14 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
             if (timeout.current) clearTimeout(timeout.current);
             if (live) timeout.current = setTimeout(() => search(query, true), 300);
           }}
-          className="w-full py-3.5 pr-2 text-slate-900 placeholder:text-slate-400 text-sm bg-transparent focus:outline-none"
+          className="w-full py-3.5 pr-2 text-slate-900 placeholder:text-slate-400 text-sm sm:text-base font-medium bg-transparent focus:outline-none"
         />
 
         {value && (
           <button
             type="button"
             onClick={handleClear}
-            className="p-1.5 mr-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-1.5 mr-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
             aria-label="Hapus pencarian"
           >
             <Icon name="close" size={16} />
@@ -116,8 +116,8 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
         )}
 
         {pending && (
-          <span className="pr-3 text-teal-600 shrink-0">
-            <span className="block w-4 h-4 border-2 border-teal-600/30 border-t-teal-600 rounded-full animate-spin" />
+          <span className="pr-3 text-emerald-600 shrink-0">
+            <span className="block w-4 h-4 border-2 border-emerald-600/30 border-t-emerald-600 rounded-full animate-spin" />
           </span>
         )}
 
@@ -125,9 +125,10 @@ export function SearchForm({ filters, live }: { filters: CatalogFilters; live: b
 
         <button
           type="submit"
-          className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 mr-1.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold shadow-xs transition-colors shrink-0"
+          className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 mr-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs sm:text-sm font-bold shadow-xs hover:shadow-sm transition-all shrink-0 cursor-pointer"
         >
           <span>Cari</span>
+          <Icon name="arrowRight" size={14} />
         </button>
       </div>
     </form>

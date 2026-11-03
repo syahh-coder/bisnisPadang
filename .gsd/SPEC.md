@@ -35,3 +35,4 @@ Transform **Luvio** into a world-class local food & marketplace directory that s
 - [ ] Header displays distinct "MASUK" (emerald pill) and "DAFTAR" (amber button) with Iconsax micro-animations.
 - [ ] Zero native browser dialogs in store and admin portals.
 - [ ] `npm run typecheck`, `npm run test:db`, and `npm run build` pass with zero errors.
+

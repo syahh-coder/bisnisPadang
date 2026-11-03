@@ -47,3 +47,4 @@
 - `npm run test:db` 27/27 tests pass.
 - `npm run build` compiles all 19 static and dynamic routes.
 - HTTP 200 checks on `/`, `/pencarian`, `/kategori`, `/toko/[slug]`, `/akun`, `/portal/admin`, `/portal/toko`.
+

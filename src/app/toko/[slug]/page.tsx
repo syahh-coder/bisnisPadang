@@ -7,7 +7,6 @@ import { VisitTracker } from "@/components/visit-tracker";
 import { Icon } from "@/components/icon";
 import { getStoreDetail } from "@/lib/stores/server";
 import { contactLinks, mapLinks, parseDeliveryChannels, safeCatalogReturn } from "@/lib/stores/links";
-import { NoticeBanner } from "@/components/notice-banner";
 import { StoreOrderBuilder, FoodAgentIcon } from "@/components/store-order-builder";
 import { ShareButton } from "@/components/share-button";
 import { publicPhotoUrl } from "@/lib/supabase/public";
@@ -84,11 +83,7 @@ export default async function StorePage({ params, searchParams }: Props) {
         <ShareButton title={store.name} />
       </div>
 
-      {result.mode === "demo" && (
-        <NoticeBanner type="info" storageKey="demo_store_banner" title="Data Toko Contoh">
-          Informasi toko dan menu ini merupakan data pratinjau. Kamu bisa coba langsung simulasi pilih menu favorit dan kirim pesanan ke WhatsApp!
-        </NoticeBanner>
-      )}
+
 
       {/* Store Banner Photo */}
       <div className="relative mt-2">
